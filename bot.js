@@ -74,15 +74,21 @@ bot.on("ready", async () => {
   if (!(process.platform != "linux" && config.ofi != true)) {
     AutoPoster(process.env.TOPGG_TOKEN, bot);
   }
-  /*
+  const Com = require("./deploy/commands");
   try {
-    await bot.application.commands.set(functions.deploy);
+    await bot.application.commands.set(Com);
   } catch (err) {
     if (err.code != 30034) {
       console.error(err);
     }
   }
-  */
+  let myGuilds = bot.guilds.cache.filter(
+    (x) => x.ownerId == "470568283993538561" && x.name == "Zigger Testing"
+  );
+  const devCom = require("./deploy/commandsDev").dev;
+  myGuilds.each((x) => {
+    x.commands.set([devCom]);
+  });
 });
 
 bot.on("guildCreate", async (guild) => {
@@ -118,15 +124,11 @@ bot.on("guildCreate", async (guild) => {
     return;
   });
   console.log("MongoDB - Guilda zapsána.");
-  /*
-  try {
-    await bot.application.commands.set(functions.deploy, guild.id);
-  } catch (err) {
-    if (err.code != 30034) {
-      console.error(err);
-    }
+
+  if (guild.ownerId == "470568283993538561" && guild.name == "Zigger Testing") {
+    const devCom = require("./deploy/commandsDev").dev;
+    guild.commands.set([devCom]);
   }
-  */
 });
 
 bot.on("guildDelete", (guild) => {

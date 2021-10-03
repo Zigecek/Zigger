@@ -1,0 +1,385 @@
+/*****************************************************************************
+__/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_____/\\\\\\\\\\\\__/\\\\\\\\\\\\\\\_        
+ _\////////////\\\__\/////\\\///____/\\\//////////__\/\\\///////////__       
+  ___________/\\\/_______\/\\\______/\\\_____________\/\\\_____________      
+   _________/\\\/_________\/\\\_____\/\\\____/\\\\\\\_\/\\\\\\\\\\\_____     
+    _______/\\\/___________\/\\\_____\/\\\___\/////\\\_\/\\\///////______    
+     _____/\\\/_____________\/\\\_____\/\\\_______\/\\\_\/\\\_____________   
+      ___/\\\/_______________\/\\\_____\/\\\_______\/\\\_\/\\\_____________  
+       __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_\//\\\\\\\\\\\\/__\/\\\\\\\\\\\\\\\_ 
+        _\///////////////__\///////////___\////////////____\///////////////__
+*****************************************************************************/
+
+const Guild = require("../models/guild.js");
+const error = require("../utils/error");
+const template = require("string-placeholder");
+const LMessages = require(`../messages/`);
+
+module.exports = {
+  name: "tempchannel",
+  cooldown: 1,
+  aliases: ["tc", "tempchan"],
+  category: "tempchannel",
+  async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
+    if (args[0] == "create") {
+      if (
+        !message.guild.me.permissions.has("MANAGE_CHANNELS") ||
+        !message.guild.me.permissions.has("MANAGE_ROLES") ||
+        !message.guild.me.permissions.has("VIEW_CHANNEL")
+      ) {
+        message.channel.send(LMessages.botNoPermission);
+        return;
+      }
+
+      let his = Gres.tc.filter((x) => x.userID == message.author.id)[0];
+
+      if (his != null || his != undefined) {
+        message.channel.send(LMessages.tc.alreadyCreated);
+
+        return;
+      }
+
+      let tcConctructor = {
+        userID: "",
+        channelID: "",
+        invitedUserIDs: [],
+        joined: false,
+      };
+
+      function timer(channel) {
+        setTimeout(() => {
+          Guild.findOne(
+            {
+              guildID: channel.guild.id,
+            },
+            (err, Gres) => {
+              if (err) {
+                console.error(err);
+                error.sendError(err);
+                return;
+              }
+
+              let tc = Gres.tc.filter((x) => x.channelID == channel.id)[0];
+
+              if (tc != null && tc != [] && tc != undefined) {
+                if (tc.joined == false) {
+                  channel.delete();
+
+                  Guild.findOneAndUpdate(
+                    { guildID: channel.guild.id },
+                    { $pull: { tc: tc } },
+                    (err, res) => {
+                      if (err) {
+                        console.error(err);
+                        error.sendError(err);
+                        return;
+                      }
+                    }
+                  );
+                }
+              }
+            }
+          );
+        }, 60000);
+      }
+
+      function createCategory(name) {
+        return new Promise((resolve, reject) => {
+          message.guild.channels
+            .create(name, {
+              type: "GUILD_CATEGORY",
+              permissionOverwrites: [
+                {
+                  id: message.guild.me,
+                  allow: ["VIEW_CHANNEL"],
+                  type: "member",
+                },
+                {
+                  id: message.guild.roles.everyone,
+                  deny: ["VIEW_CHANNEL"],
+                  type: "role",
+                },
+              ],
+            })
+            .then((category) => {
+              Guild.findOneAndUpdate(
+                {
+                  guildID: message.guild.id,
+                },
+                {
+                  tcCategoryID: category.id,
+                },
+                function (err) {
+                  if (err) {
+                    console.error(err);
+                    error.sendError(err);
+                    return;
+                  }
+                }
+              );
+
+              var pos = category.guild.channels.cache
+                .filter((x) => x.parentID == null)
+                .reduce((a, b) => {
+                  if (a.position > b.position) {
+                    return a;
+                  } else if (b.position > a.position) {
+                    return b;
+                  } else {
+                    return a;
+                  }
+                }).position;
+
+              category.setPosition(pos + 1);
+
+              resolve(category);
+            })
+            .catch((err) => {
+              if (err) {
+                reject(err);
+              }
+            });
+        });
+      }
+
+      function createChannel(name, category) {
+        return new Promise((resolve, reject) => {
+          message.guild.channels
+            .create(name, {
+              type: "GUILD_VOICE",
+              permissionOverwrites: [
+                {
+                  id: message.guild.roles.everyone,
+                  deny: ["VIEW_CHANNEL"],
+                  type: "role",
+                },
+                {
+                  id: message.member,
+                  allow: ["VIEW_CHANNEL"],
+                  type: "member",
+                },
+                {
+                  id: message.guild.me,
+                  allow: ["VIEW_CHANNEL"],
+                  type: "member",
+                },
+              ],
+              parent: category,
+            })
+            .then((channel) => {
+              if (message.member.voice.channel) {
+                message.member.voice.setChannel(channel);
+                tcConctructor.joined = true;
+              } else {
+                tcConctructor.joined = false;
+              }
+
+              tcConctructor.userID = message.author.id;
+              tcConctructor.channelID = channel.id;
+              tcConctructor.invitedUserIDs = [];
+
+              Guild.findOneAndUpdate(
+                { guildID: message.guild.id },
+                { $push: { tc: tcConctructor } },
+                (err, res) => {
+                  if (err) {
+                    console.error(err);
+                    error.sendError(err);
+                    return;
+                  }
+                }
+              );
+
+              message.channel.send(LMessages.tc.channelCreated);
+
+              timer(channel);
+
+              resolve(channel);
+            })
+            .catch((err) => {
+              if (err) {
+                reject(err);
+              }
+            });
+        });
+      }
+
+      if (Gres.tcCategoryID) {
+        let cat = message.guild.channels.cache.get(Gres.tcCategoryID);
+        if (cat) {
+          createChannel(
+            template(
+              LMessages.tc.voiceName,
+              { username: message.author.username },
+              { before: "%", after: "%" }
+            ),
+            cat
+          );
+        } else {
+          createCategory(
+            template(
+              LMessages.tc.categoryName,
+              { username: message.author.username },
+              { before: "%", after: "%" }
+            )
+          ).then((category) => {
+            createChannel(
+              template(
+                LMessages.tc.voiceName,
+                { username: message.author.username },
+                { before: "%", after: "%" }
+              ),
+              category
+            );
+          });
+        }
+      } else {
+        createCategory(
+          template(
+            LMessages.tc.categoryName,
+            { username: message.author.username },
+            { before: "%", after: "%" }
+          )
+        ).then((category) => {
+          createChannel(
+            template(
+              LMessages.tc.voiceName,
+              { username: message.author.username },
+              { before: "%", after: "%" }
+            ),
+            category
+          );
+        });
+      }
+    } else if (args[0] == "add") {
+      if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
+        message.channel.send(LMessages.botNoPermission);
+
+        return;
+      }
+
+      let tc = Gres.tc.filter((x) => x.userID == message.author.id)[0];
+
+      if (tc != null && tc != [] && tc != undefined) {
+        if (message.mentions.members.size >= 1) {
+          Guild.findOneAndUpdate(
+            { guildID: message.guild.id },
+            { $pull: { tc: tc } },
+            (err, res) => {
+              if (err) {
+                console.error(err);
+                error.sendError(err);
+                return;
+              }
+            }
+          );
+
+          message.mentions.members.forEach((value, key) => {
+            tc.invitedUserIDs.push(value.id);
+          });
+
+          let chan = message.guild.channels.cache.get(tc.channelID);
+
+          if (chan) {
+            let overwrites = [];
+
+            if (tc.invitedUserIDs.length > 0 && tc.invitedUserIDs != []) {
+              tc.invitedUserIDs.forEach((e) => {
+                let constr = {
+                  id: e,
+                  allow: ["VIEW_CHANNEL", "CONNECT", "SPEAK", "STREAM"],
+                };
+
+                overwrites.push(constr);
+              });
+            }
+            chan.permissionOverwrites.forEach((value, key) => {
+              overwrites.push(value);
+            });
+
+            chan.overwritePermissions(overwrites);
+
+            Guild.findOneAndUpdate(
+              { guildID: message.guild.id },
+              { $push: { tc: tc } },
+              (err, res) => {
+                if (err) {
+                  console.error(err);
+                  error.sendError(err);
+                  return;
+                }
+              }
+            );
+
+            message.channel.send(LMessages.tc.added);
+          }
+        }
+      } else {
+        message.channel.send(LMessages.tc.noChannelForUser);
+      }
+    } else if (args[0] == "remove") {
+      if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
+        message.channel.send(LMessagesq.botNoPermission);
+
+        return;
+      }
+
+      let tc = Gres.tc.filter((x) => x.userID == message.author.id)[0];
+
+      if (tc != null && tc != [] && tc != undefined) {
+        if (message.mentions.members.size >= 1) {
+          Guild.findOneAndUpdate(
+            { guildID: message.guild.id },
+            { $pull: { tc: tc } },
+            (err, res) => {
+              if (err) {
+                console.error(err);
+                error.sendError(err);
+                return;
+              }
+            }
+          );
+
+          let removed = [];
+
+          message.mentions.members.forEach((value, key) => {
+            if (tc.invitedUserIDs.includes(value.id)) {
+              tc.invitedUserIDs.splice(tc.invitedUserIDs.indexOf(value.id), 1);
+            }
+            removed.push(value.id);
+          });
+
+          let chan = message.guild.channels.cache.get(tc.channelID);
+
+          if (chan) {
+            let overwrites = [];
+
+            chan.permissionOverwrites.forEach((value, key) => {
+              if (!removed.includes(value.id)) {
+                overwrites.push(value);
+              }
+            });
+
+            chan.overwritePermissions(overwrites);
+
+            Guild.findOneAndUpdate(
+              { guildID: message.guild.id },
+              { $push: { tc: tc } },
+              (err, res) => {
+                if (err) {
+                  console.error(err);
+                  error.sendError(err);
+                  return;
+                }
+              }
+            );
+
+            message.channel.send(LMessages.tc.removed);
+          }
+        }
+      } else {
+        message.channel.send(LMessages.tc.noChannelForUser);
+      }
+    }
+  },
+};

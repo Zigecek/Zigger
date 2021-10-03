@@ -3,7 +3,7 @@
   "DefaultPrefix": "*",
   "name": "Zigger",
   "avatarUrl": "https://cdn.discordapp.com/app-icons/763859712340262972/a4a67eb98e81e75a94d59a2a17df9710.png?size=256",
-  "webUrl": "https://kozohorsky.xyz/zigger",
+  "webUrl": "https://kozohorsky.xyz/#zigger",
   "colors": {
     "orange": "#e58e43",
     "green": "#3BB031",
@@ -22,5 +22,5 @@
     "tempchannel",
     "other"
   ],
-  "langs": ["cz", "en"]
+  "langs": ["cz"]
 }
