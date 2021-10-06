@@ -232,13 +232,33 @@ const play = async (guild, song) => {
     return stream;
   }
 
-  serverQueue.audioPlayer.play(
+  var player = serverQueue.audioPlayer;
+
+  player.play(
     voice.createAudioResource(createSafeYTDL(song.url, 0), {
       inlineVolume: true,
     })
   );
+  onError(player);
 
-  serverQueue.connection.subscribe(serverQueue.audioPlayer);
+  function onError(player) {
+    player.once("error", (err) => {
+      console.error("ERRR");
+      setTimeout(() => {
+        player.play(
+          voice.createAudioResource(createSafeYTDL(song.url, 0), {
+            inlineVolume: true,
+          })
+        );
+        onError(player);
+      }, 3000);
+    });
+    setTimeout(() => {
+      player.removeAllListeners("error");
+    }, 5000);
+  }
+
+  serverQueue.connection.subscribe(player);
 
   return;
 };

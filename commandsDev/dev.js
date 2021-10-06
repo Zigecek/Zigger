@@ -353,10 +353,12 @@ module.exports = {
             var gls = [];
             Guild.find({}).then(function (gGuilds) {
               gGuilds.forEach((e) => {
-                gls.push(`${e.guildName} - ${e.guildID} \n`);
+                gls.push(`**${e.guildName}** - ${e.guildID} \n`);
               });
+              console.log(gls);
+              followReply(int, { content: gls.join(" ") });
             });
-            followReply(int, { content: gls.join(" ") });
+
             return;
           } else if (int.options.getSubcommand() == "deploy") {
             if (bot.application) {
