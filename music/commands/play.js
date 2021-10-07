@@ -123,6 +123,8 @@ module.exports = {
           .catch((err) => {
             if (err.statusCode == 404 || err.statusCode == 403) {
               resolve(404);
+            } else if (err.statusCode == 410) {
+              resolve(410);
             } else {
               reject(err);
             }
@@ -221,6 +223,17 @@ module.exports = {
               LMessages.music.error,
               {
                 errr: "Youtube: Loading information for a YouTube track failed.",
+              },
+              { before: "%", after: "%" }
+            )
+          );
+          return;
+        } else if (song == 410) {
+          message.channel.send(
+            template(
+              LMessages.music.error,
+              {
+                errr: "Youtube: Cannot play age restricted video. (410)",
               },
               { before: "%", after: "%" }
             )
@@ -422,7 +435,7 @@ module.exports = {
             }
             */
 
-      music.play(message.guild, serverQueue.songs[0], Gres.plus);
+      music.play(message.guild, serverQueue.songs[0], false);
 
       try {
         await voice.entersState(

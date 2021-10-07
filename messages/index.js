@@ -789,7 +789,7 @@ module.exports = {
   musicAlreadyInTheChannel: "**:thumbsup: I'm already in your channel.**",
   musicNothingFound: "**<:tickNo:870239550163779604> Nothing has been found.**",
   music: {
-    error: "**<:tickNo:870239550163779604> Nastala chyba: `%errr%`**",
+    error: "**<:tickNo:870239550163779604> Error occured: `%errr%`**",
     channelBlacklisted:
       "**:no_entry_sign: This text channel cannot be used for music commands.**",
     botIsPlaying:

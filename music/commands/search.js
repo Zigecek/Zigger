@@ -270,7 +270,7 @@ module.exports = {
                     music.stateChange(serverQueue, message.guild);
                   }
 
-                  music.play(message.guild, serverQueue.songs[0], Gres.plus);
+                  music.play(message.guild, serverQueue.songs[0], false);
 
                   try {
                     await voice.entersState(
