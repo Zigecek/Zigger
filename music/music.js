@@ -220,14 +220,6 @@ const play = async (guild, song, errored) => {
     });
   }
 
-  function createYTDL(url) {
-    return ytdl(url, {
-      quality: "highestaudio",
-      filter: "audio",
-      audioBitrate: 96,
-      highWaterMark: 1 << 25,
-    });
-  }
   async function createSafeYTDL(url, guild) {
     async function getInfo() {
       var info;
@@ -239,48 +231,42 @@ const play = async (guild, song, errored) => {
           err.statusCode == 404 ||
           err.statusCode == 410
         ) {
-          if (err.statusCode == 410) {
-            Guild.findOne(
-              {
-                guildID: guild.id,
-              },
-              async (err, Gres) => {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
-                var channel = await bot.channels.fetch(
-                  Gres.musicBotTxtChannelID
-                );
-                if (
-                  channel.permissionsFor(guild.me).has("SEND_MESSAGES")
-                ) {
-                  channel.send(
-                    template(
-                      LMessages.music.error,
-                      {
-                        errr: "Youtube: Cannot play age restricted video. (410) - Skipping",
-                      },
-                      { before: "%", after: "%" }
-                    )
-                  );
-                }
-                var serverQueue = queue.get(guild.id);
-                if (serverQueue) {
-                  if (serverQueue.songs.length > 0) {
-                    serverQueue.songs.shift();
-                    play(guild, serverQueue.songs[0], false);
-                  }
-                }
+          console.log("errrrr");
+          console.error(err);
+          info = getInfo();
+        } else if (err.statusCode == 410) {
+          Guild.findOne(
+            {
+              guildID: guild.id,
+            },
+            async (err, Gres) => {
+              if (err) {
+                console.error(err);
+                error.sendError(err);
                 return;
               }
-            );
-          } else {
-            console.log("errrrr");
-            console.error(err);
-            info = getInfo();
-          }
+              var channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
+              if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+                channel.send(
+                  template(
+                    LMessages.music.error,
+                    {
+                      errr: "Youtube: Cannot play age restricted video. (410) - Skipping",
+                    },
+                    { before: "%", after: "%" }
+                  )
+                );
+              }
+              var serverQueue = queue.get(guild.id);
+              if (serverQueue) {
+                if (serverQueue.songs.length > 0) {
+                  serverQueue.songs.shift();
+                  play(guild, serverQueue.songs[0], false);
+                }
+              }
+              return;
+            }
+          );
         } else {
           console.error(err);
           Guild.findOne(
@@ -294,9 +280,7 @@ const play = async (guild, song, errored) => {
                 return;
               }
               var channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
-              if (
-                channel.permissionsFor(guild.me).has("SEND_MESSAGES")
-              ) {
+              if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
                 channel.send(LMessages.musicError);
               }
               return;
@@ -328,31 +312,8 @@ const play = async (guild, song, errored) => {
       })
     );
   }
-  /*
-  var player = serverQueue.audioPlayer;
-  var stream = createYTDL(song.url);
-  var resource = voice.createAudioResource(stream, {
-    inlineVolume: true,
-  });
-  resource.playStream.removeAllListeners("error");
 
-  player.play(resource);
-
-  resource.playStream.once("error", (err) => {
-    console.log("errrrr");
-    player.stop(true);
-    player.removeAllListeners("error");
-    resource.playStream.removeAllListeners("error");
-    serverQueue.audioPlayer = null;
-    play(guild, song, true);
-  });
-  setTimeout(() => {
-    player.removeAllListeners("error");
-    resource.playStream.removeAllListeners("error");
-  }, 500);
-*/
   serverQueue.connection.subscribe(serverQueue.audioPlayer);
-
   return;
 };
 

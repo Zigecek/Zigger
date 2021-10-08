@@ -151,7 +151,7 @@ module.exports = {
               sDur: video.isLive
                 ? "LIVE!"
                 : Math.floor(parseTimestamp(video.duration) / 1000),
-              thumbnail: video.bestThumbnail,
+              thumbnail: video.bestThumbnail.url,
               seek: null,
             };
             resolve(song);

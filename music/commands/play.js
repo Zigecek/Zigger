@@ -115,7 +115,15 @@ module.exports = {
               sDur: songInfo.videoDetails.isLive
                 ? "LIVE!"
                 : songInfo.videoDetails.lengthSeconds,
-              thumbnail: songInfo.videoDetails.thumbnails.pop().url,
+              thumbnail: songInfo.videoDetails.thumbnails.reduce(
+                (prev, curr) => {
+                  if (prev.width > curr.width) {
+                    return prev;
+                  } else {
+                    return curr;
+                  }
+                }
+              ).url,
               seek: null,
             };
             resolve(song);
@@ -158,7 +166,7 @@ module.exports = {
               sDur: video.isLive
                 ? "LIVE!"
                 : Math.floor(parseTimestamp(video.duration) / 1000),
-              thumbnail: video.thumbnails.pop().url,
+              thumbnail: video.bestThumbnail.url,
               seek: null,
             };
             resolve(song);
