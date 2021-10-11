@@ -887,12 +887,25 @@ module.exports = {
   countSetupFinished:
     "**<:tickYes:870238031603462154> The setup has finished and will update counters *every 10 minutes*.** \n*Type in* `%prefix%counters create` *to create new counter.*", // %prefix% for prefix
   countCategoryName: "📈 Server Stats 📊",
-  countAllName: "👥 All members: %count%", // %count% for count of all members
-  countOnlyMembersName: "👤 Members: %count%", // %count% for count of only members
-  countOnlyBotsName: "👮 Bots: %count%", // %count% for count of only members
-  countOnlineMembers: "✔️ Online Members: %count%", // %count% for count of online members
-  countOfflineMembers: "✖️ Offline Members: %count%", // %count% for count of offline members
-  countIdleMembers: "💤 Idle Members: %count%", // %count% for count of idle members
+  countAllName: "👥 All members: %count%",
+  countOnlyMembersName: "👤 Members: %count%",
+  countOnlyBotsName: "👮 Bots: %count%",
+  countOnlineMembers: "✅ Online Members: %count%",
+  countOfflineMembers: "✖️ Offline Members: %count%",
+  countIdleMembers: "💤 Idle Members: %count%",
+  countDndMembers: "⛔ DnD Members: %count%",
+  countNotOfflineMembers: "✔️ Not Offline Members: %count%",
+  countRoles: "🎨 Roles: %count%",
+  countChannels: "🏷️ Channels: %count%",
+  countText: "📃 Text channels: %count%",
+  countVoice: "🎤 Voice channels: %count%",
+  countCategories: "🔖 Categories: %count%",
+  countStages: "🎙️ Stages: %count%",
+  countAnnouncement: "📰 Announcement channels: %count%",
+  countEmojis: "🤪 Emojis: %count%",
+  countBoosters: "🚀 Server Boosters: %count%",
+  countTier: "🔮 Server Tier: %count%",
+
   countSetupAlreadyDone:
     "**<:tickNo:870239550163779604> The setup is already finished, use** `%prefix%counters reset` **to reset the setup.**",
   countSetupNotDone:

@@ -146,25 +146,25 @@ module.exports = {
                   : type == "notOffline"
                   ? LMessages.countNotOfflineMembers
                   : type == "roles"
-                  ? LMessages.countRolesMembers
+                  ? LMessages.countRoles
                   : type == "channels"
-                  ? LMessages.countChannelsMembers
+                  ? LMessages.countChannels
                   : type == "text"
-                  ? LMessages.countTextMembers
+                  ? LMessages.countText
                   : type == "voice"
-                  ? LMessages.countVoiceMembers
+                  ? LMessages.countVoice
                   : type == "categories"
-                  ? LMessages.countCategoriesMembers
+                  ? LMessages.countCategories
                   : type == "announcement"
-                  ? LMessages.countAnnouncementMembers
+                  ? LMessages.countAnnouncement
                   : type == "stages"
-                  ? LMessages.countStagesMembers
+                  ? LMessages.countStages
                   : type == "emojis"
-                  ? LMessages.countEmojisMembers
+                  ? LMessages.countEmojis
                   : type == "boosters"
-                  ? LMessages.countBoostersMembers
+                  ? LMessages.countBoosters
                   : type == "tier"
-                  ? LMessages.countTierMembers
+                  ? LMessages.countTier
                   : ".",
                 { count: count },
                 { before: "%", after: "%" }
