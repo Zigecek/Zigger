@@ -33,6 +33,7 @@ module.exports = {
       "notOffline",
       "idle",
       "dnd",
+      "notOffline",
       "roles",
       "channels",
       "text",
