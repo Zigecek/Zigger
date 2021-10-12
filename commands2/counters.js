@@ -127,49 +127,48 @@ module.exports = {
               break;
           }
 
+          var chanName =
+            type == "all"
+              ? LMessages.countAllName
+              : type == "members"
+              ? LMessages.countOnlyMembersName
+              : type == "bots"
+              ? LMessages.countOnlyBotsName
+              : type == "online"
+              ? LMessages.countOnlineMembers
+              : type == "offline"
+              ? LMessages.countOfflineMembers
+              : type == "idle"
+              ? LMessages.countIdleMembers
+              : type == "dnd"
+              ? LMessages.countDndMembers
+              : type == "notOffline"
+              ? LMessages.countNotOfflineMembers
+              : type == "roles"
+              ? LMessages.countRoles
+              : type == "channels"
+              ? LMessages.countChannels
+              : type == "text"
+              ? LMessages.countText
+              : type == "voice"
+              ? LMessages.countVoice
+              : type == "categories"
+              ? LMessages.countCategories
+              : type == "announcement"
+              ? LMessages.countAnnouncement
+              : type == "stages"
+              ? LMessages.countStages
+              : type == "emojis"
+              ? LMessages.countEmojis
+              : type == "boosters"
+              ? LMessages.countBoosters
+              : type == "tier"
+              ? LMessages.countTier
+              : ".";
+          console.log(chanName);
           int.guild.channels
             .create(
-              template(
-                type == "all"
-                  ? LMessages.countAllName
-                  : type == "members"
-                  ? LMessages.countOnlyMembersName
-                  : type == "bots"
-                  ? LMessages.countOnlyBotsName
-                  : type == "online"
-                  ? LMessages.countOnlineMembers
-                  : type == "offline"
-                  ? LMessages.countOfflineMembers
-                  : type == "idle"
-                  ? LMessages.countIdleMembers
-                  : type == "dnd"
-                  ? LMessages.countDndMembers
-                  : type == "notOffline"
-                  ? LMessages.countNotOfflineMembers
-                  : type == "roles"
-                  ? LMessages.countRoles
-                  : type == "channels"
-                  ? LMessages.countChannels
-                  : type == "text"
-                  ? LMessages.countText
-                  : type == "voice"
-                  ? LMessages.countVoice
-                  : type == "categories"
-                  ? LMessages.countCategories
-                  : type == "announcement"
-                  ? LMessages.countAnnouncement
-                  : type == "stages"
-                  ? LMessages.countStages
-                  : type == "emojis"
-                  ? LMessages.countEmojis
-                  : type == "boosters"
-                  ? LMessages.countBoosters
-                  : type == "tier"
-                  ? LMessages.countTier
-                  : ".",
-                { count: count },
-                { before: "%", after: "%" }
-              ),
+              template(chanName, { count: count }, { before: "%", after: "%" }),
               {
                 type: "GUILD_VOICE",
                 parent: category,
