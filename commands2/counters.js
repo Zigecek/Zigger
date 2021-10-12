@@ -90,6 +90,13 @@ module.exports = {
                 (x) => !x.user.bot && x.presence?.status == "idle"
               ).size;
               break;
+            case "notOffline":
+              count = m.filter(
+                (x) =>
+                  !x.user.bot &&
+                  ["online", "idle", "dnd"].includes(x.presence?.status)
+              ).size;
+              break;
             case "dnd":
               count = m.filter(
                 (x) => !x.user.bot && x.presence?.status == "dnd"
