@@ -14,12 +14,14 @@ const { bot } = require("../bot");
 const error = require("./error");
 const Guild = require("../models/guild");
 
-bot.on("ready", () => {
+const ready = () => {
   console.log(" ");
   console.log("Tempchannels - Ok.");
-});
+};
 
-bot.on("voiceStateUpdate", (oldMember, newMember) => {
+const voiceStateUpdate = (params) => {
+  var oldMember = params[0];
+  var newMember = params[1];
   Guild.findOne(
     {
       guildID: newMember.guild.id,
@@ -110,9 +112,10 @@ bot.on("voiceStateUpdate", (oldMember, newMember) => {
       }
     }
   );
-});
+};
 
-bot.on("channelDelete", (channel) => {
+const channelDelete = (params) => {
+  var channel = params[0];
   Guild.findOne(
     {
       guildID: channel.guild.id,
@@ -141,4 +144,12 @@ bot.on("channelDelete", (channel) => {
       }
     }
   );
-});
+};
+
+module.exports = {
+  events: {
+    channelDelete: channelDelete,
+    voiceStateUpdate: voiceStateUpdate,
+    ready: ready,
+  },
+};

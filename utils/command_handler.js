@@ -74,13 +74,10 @@ for (const file of commandFiles5) {
   bot.commands2.set(command5.name, command5);
 }
 
-module.exports = {
-  commands: bot.commands,
-};
-
 /////////// ///////////
 
-bot.on("messageCreate", (message) => {
+const messageCreate = (params) => {
+  var message = params[0];
   if (message.channel.type != "DM" && message.author != bot.user) {
     if (message.author != bot.user && message.author.bot == false) {
       var gExist = false;
@@ -274,9 +271,10 @@ bot.on("messageCreate", (message) => {
       });
     }
   }
-});
+};
 
-bot.on("interactionCreate", async (int) => {
+const interactionCreate = async (params) => {
+  var int = params[0];
   if (!int.isCommand()) return;
   if (!int.inGuild()) return;
   if (int.channel.type == "DM") return;
@@ -404,4 +402,12 @@ bot.on("interactionCreate", async (int) => {
       );
     }
   });
-});
+};
+
+module.exports = {
+  commands: bot.commands,
+  events: {
+    messageCreate: messageCreate,
+    interactionCreate: interactionCreate,
+  },
+};

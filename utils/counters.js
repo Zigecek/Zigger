@@ -16,11 +16,11 @@ const Guild = require("../models/guild");
 const functions = require("./functions");
 const LMessages = require(`../messages/`);
 
-bot.on("ready", () => {
+const ready = () => {
   callLoop();
   console.log(" ");
   console.log("Počítadla - Počítám.");
-});
+};
 
 function callLoop() {
   setInterval(() => {
@@ -210,7 +210,8 @@ function callLoop() {
   }, 10 * 60 * 1000);
 }
 
-bot.on("channelDelete", async (channel) => {
+const channelDelete = async (params) => {
+  var channel = params[0];
   Guild.findOne(
     {
       guildID: channel.guild.id,
@@ -262,4 +263,11 @@ bot.on("channelDelete", async (channel) => {
       );
     }
   );
-});
+};
+
+module.exports = {
+  events: {
+    channelDelete: channelDelete,
+    ready: ready,
+  },
+};

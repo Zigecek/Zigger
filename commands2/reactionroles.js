@@ -88,7 +88,7 @@ module.exports = {
               rrConstructor.emojis = reactionEmojis;
               rrConstructor.roleIDs = reactionRoleIDs;
 
-              functions.addReactions(message, rrConstructor.emojis);
+              functions.addReactions(message, reactionEmojis);
 
               followReply(int, {
                 content: template(

@@ -15,12 +15,14 @@ const functions = require("../utils/functions");
 const error = require("./error");
 const Guild = require("../models/guild");
 
-bot.on("ready", () => {
+const ready = () => {
   console.log(" ");
   console.log("RR - Reaguji.");
-});
+};
 
-bot.on("messageReactionAdd", async (react, user) => {
+const messageReactionAdd = async (params) => {
+  var react = params[0];
+  var user = params[1];
   let reaction;
   if (react.partial) {
     reaction = await react.fetch();
@@ -40,19 +42,19 @@ bot.on("messageReactionAdd", async (react, user) => {
         error.sendError(err);
         return;
       }
-      let emoji2 = "";
-      if (reaction.emoji.id == null) {
-        emoji2 = reaction.emoji.name;
-      } else {
-        emoji2 = "<:" + reaction.emoji.name + ":" + reaction.emoji.id + ">";
-      }
+      let emoji2 =
+        reaction.emoji.id == null
+          ? reaction.emoji.name
+          : "<:" + reaction.emoji.name + ":" + reaction.emoji.id + ">";
 
       Gres.rrMessages.forEach(async (e) => {
         if (e.messageID == reaction.message.id) {
           if (e.emojis.includes(emoji2)) {
             var index = e.emojis.indexOf(emoji2);
             let member = await reaction.message.guild.members.fetch(user);
-            let role = reaction.message.guild.roles.cache.get(e.roleIDs[index]);
+            let role = await reaction.message.guild.roles.fetch(
+              e.roleIDs[index]
+            );
             if (role) {
               if (member) {
                 if (reaction.message.guild.me.permissions.has("MANAGE_ROLES")) {
@@ -67,9 +69,11 @@ bot.on("messageReactionAdd", async (react, user) => {
       });
     }
   );
-});
+};
 
-bot.on("messageReactionRemove", async (react, user) => {
+const messageReactionRemove = async (params) => {
+  var react = params[0];
+  var user = params[1];
   let reaction;
   if (react.partial) {
     reaction = await react.fetch();
@@ -86,12 +90,10 @@ bot.on("messageReactionRemove", async (react, user) => {
         error.sendError(err);
         return;
       }
-      let emoji2 = "";
-      if (reaction.emoji.id == null) {
-        emoji2 = reaction.emoji.name;
-      } else {
-        emoji2 = "<:" + reaction.emoji.name + ":" + reaction.emoji.id + ">";
-      }
+      let emoji2 =
+        reaction.emoji.id == null
+          ? reaction.emoji.name
+          : "<:" + reaction.emoji.name + ":" + reaction.emoji.id + ">";
 
       Gres.rrMessages.forEach(async (e) => {
         if (e.messageID == reaction.message.id) {
@@ -101,7 +103,7 @@ bot.on("messageReactionRemove", async (react, user) => {
             } else {
               var index = e.emojis.indexOf(emoji2);
               let member = await reaction.message.guild.members.fetch(user);
-              let role = reaction.message.guild.roles.cache.get(
+              let role = await reaction.message.guild.roles.fetch(
                 e.roleIDs[index]
               );
               if (role) {
@@ -123,9 +125,10 @@ bot.on("messageReactionRemove", async (react, user) => {
       });
     }
   );
-});
+};
 
-bot.on("messageDelete", async (message) => {
+const messageDelete = async (params) => {
+  var message = params[0];
   Guild.findOne(
     {
       guildID: message.guild.id,
@@ -154,4 +157,13 @@ bot.on("messageDelete", async (message) => {
       });
     }
   );
-});
+};
+
+module.exports = {
+  events: {
+    ready: ready,
+    messageDelete: messageDelete,
+    messageReactionRemove: messageReactionRemove,
+    messageReactionAdd: messageReactionAdd,
+  },
+};

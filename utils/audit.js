@@ -17,7 +17,7 @@ const config = require("../config.json");
 const error = require("./error");
 const Guild = require("../models/guild");
 
-bot.on("ready", () => {
+const ready = () => {
   bot.guilds.cache.each((guild) => {
     Guild.exists({ guildID: guild.id }, function (err, res) {
       if (err) {
@@ -66,4 +66,10 @@ bot.on("ready", () => {
       });
     }
   });
-});
+};
+
+module.exports = {
+  events: {
+    ready: ready,
+  },
+};

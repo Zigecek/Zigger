@@ -26,11 +26,11 @@ function wait(time) {
   return new Promise((resolve) => setTimeout(resolve, time).unref());
 }
 
-bot.on("ready", () => {
+const ready = () => {
   console.log(" ");
   console.log("MusicBot - Hraju!");
   callLoop();
-});
+};
 
 const play = async (guild, song, errored) => {
   const serverQueue = queue.get(guild.id);
@@ -226,11 +226,7 @@ const play = async (guild, song, errored) => {
       try {
         info = await ytdl.getInfo(url);
       } catch (err) {
-        if (
-          err.statusCode == 403 ||
-          err.statusCode == 404 ||
-          err.statusCode == 410
-        ) {
+        if (err.statusCode == 403 || err.statusCode == 404) {
           console.log("errrrr");
           console.error(err);
           info = getInfo();
@@ -431,7 +427,9 @@ async function callLoop() {
   }, 5000);
 }
 
-bot.on("voiceStateUpdate", (oldVoice, newVoice) => {
+const voiceStateUpdate = (params) => {
+  var oldVoice = params[0];
+  var newVoice = params[1];
   if (newVoice.member == newVoice.guild.me) {
     if (newVoice.channel == null) {
       const serverQueue = queue.get(newVoice.guild.id);
@@ -448,9 +446,10 @@ bot.on("voiceStateUpdate", (oldVoice, newVoice) => {
       }
     }
   }
-});
+};
 
-bot.on("channelDelete", (channel) => {
+const channelDelete = (params) => {
+  var channel = params[0];
   Guild.findOne(
     {
       guildID: channel.guild.id,
@@ -480,7 +479,7 @@ bot.on("channelDelete", (channel) => {
       }
     }
   );
-});
+};
 
 function stopET(id, serverQueue) {
   if (serverQueue) {
@@ -603,7 +602,14 @@ async function stateChange(serverQueue, guild) {
     }
   });
 }
-module.exports.queue = queue;
-module.exports.play = play;
-module.exports.stateChange = stateChange;
-module.exports.stopET = stopET;
+module.exports = {
+  queue: queue,
+  play: play,
+  stateChange: stateChange,
+  stopET: stopET,
+  events: {
+    voiceStateUpdate: voiceStateUpdate,
+    channelDelete: channelDelete,
+    ready: ready,
+  },
+};

@@ -19,11 +19,11 @@ const { bot } = require("../bot");
 const config = require("../config.json");
 const sec2human = require("sec2human");
 
-bot.on("ready", () => {
+const ready = () => {
   console.log(" ");
   console.log("Twitch - Oznamuju.");
   callLoop();
-});
+};
 
 async function callLoop() {
   setInterval(async () => {
@@ -225,4 +225,10 @@ const getStream = (clientID, channelID) => {
       }
     );
   });
+};
+
+module.exports = {
+  events: {
+    ready: ready,
+  },
 };

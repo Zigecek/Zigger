@@ -50,18 +50,9 @@ module.exports = {
   bot: bot,
 };
 
-/////////// SETUP ///////////
-
-const utilFiles = fs
-  .readdirSync("./utils")
-  .filter((file) => file.endsWith(".js"));
-for (const file of utilFiles) {
-  require(`./utils/${file}`);
-}
-
 /////////// EVENTS ///////////
 
-bot.on("ready", async () => {
+const ready = async () => {
   console.log(" ");
   console.log("Zigger - Pracuji.");
 
@@ -89,9 +80,10 @@ bot.on("ready", async () => {
   myGuilds.each((x) => {
     x.commands.set([devCom]);
   });
-});
+};
 
-bot.on("guildCreate", async (guild) => {
+const guildCreate = async (params) => {
+  var guild = params[0];
   let channel = guild.channels.cache
     .filter(
       (x) =>
@@ -129,9 +121,10 @@ bot.on("guildCreate", async (guild) => {
     const devCom = require("./deploy/commandsDev").dev;
     guild.commands.set([devCom]);
   }
-});
+};
 
-bot.on("guildDelete", (guild) => {
+const guildDelete = (params) => {
+  var guild = params[0];
   console.log("-Guilda: " + guild.name + ".");
 
   Streams.exists({ guildIDs: guild.id }, function (err, res) {
@@ -165,9 +158,10 @@ bot.on("guildDelete", (guild) => {
     }
     console.log("MongoDB - Guilda smazána.");
   });
-});
+};
 
-bot.on("guildMemberAdd", async (member) => {
+const guildMemberAdd = async (params) => {
+  var member = params[0];
   Guild.findOne(
     {
       guildID: member.guild.id,
@@ -219,9 +213,10 @@ bot.on("guildMemberAdd", async (member) => {
       }
     }
   );
-});
+};
 
-bot.on("guildMemberRemove", (member) => {
+const guildMemberRemove = (params) => {
+  var member = params[0];
   if (member.user == bot.user) return;
   Guild.findOne(
     {
@@ -253,7 +248,19 @@ bot.on("guildMemberRemove", (member) => {
       }
     }
   );
-});
+};
+
+module.exports.events = {
+  ready: ready,
+  guildCreate: guildCreate,
+  guildDelete: guildDelete,
+  guildMemberAdd: guildMemberAdd,
+  guildMemberRemove: guildMemberRemove,
+};
+
+/////////// EVENT HANDLER ///////////
+
+require("./event_handler");
 
 /////////// LOGIN ///////////
 

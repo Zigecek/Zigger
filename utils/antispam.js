@@ -14,7 +14,8 @@ const { bot } = require("../bot");
 const error = require("./error");
 const Guild = require("../models/guild");
 
-bot.on("messageCreate", async (message) => {
+const messageCreate = async (params) => {
+  var message = params[0];
   if (!message) return;
   if (message.partial) await message.fetch();
   if (message.guild == null) await message.fetch();
@@ -318,7 +319,7 @@ bot.on("messageCreate", async (message) => {
       }
     );
   }
-});
+};
 
 async function delMesss(array) {
   array.forEach(async (e) => {
@@ -333,7 +334,8 @@ async function delMesss(array) {
   });
 }
 
-bot.on("channelCreate", (channel) => {
+const channelCreate = (params) => {
+  var channel = params[0];
   if (channel.type == "DM") {
     return;
   }
@@ -371,9 +373,10 @@ bot.on("channelCreate", (channel) => {
       }
     }
   );
-});
+};
 
-bot.on("channelUpdate", async (channel) => {
+const channelUpdate = async (params) => {
+  var channel = params[0];
   if (channel.type == "DM") {
     return;
   }
@@ -423,9 +426,10 @@ bot.on("channelUpdate", async (channel) => {
       }
     }
   }
-});
+};
 
-bot.on("guildMemberRemove", (member) => {
+const guildMemberRemove = (params) => {
+  var member = params[0];
   if (member.user == bot.user) return;
   Guild.findOne(
     {
@@ -460,9 +464,10 @@ bot.on("guildMemberRemove", (member) => {
       }
     }
   );
-});
+};
 
-bot.on("roleDelete", (role) => {
+const roleDelete = (params) => {
+  var role = params[0];
   Guild.findOne(
     {
       guildID: role.guild.id,
@@ -500,9 +505,10 @@ bot.on("roleDelete", (role) => {
       }
     }
   );
-});
+};
 
-bot.on("roleUpdate", (role) => {
+const roleUpdate = (params) => {
+  var role = params[0];
   Guild.findOne(
     {
       guildID: role.guild.id,
@@ -526,4 +532,15 @@ bot.on("roleUpdate", (role) => {
       }
     }
   );
-});
+};
+
+module.exports = {
+  events: {
+    roleUpdate: roleUpdate,
+    messageCreate: messageCreate,
+    channelCreate: channelCreate,
+    channelUpdate: channelUpdate,
+    roleDelete: roleDelete,
+    guildMemberRemove: guildMemberRemove,
+  },
+};
