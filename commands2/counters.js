@@ -172,7 +172,6 @@ module.exports = {
               : type == "tier"
               ? LMessages.countTier
               : ".";
-          console.log(chanName);
           int.guild.channels
             .create(
               template(chanName, { count: count }, { before: "%", after: "%" }),
