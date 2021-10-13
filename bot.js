@@ -30,7 +30,6 @@ const Streams = require("./models/streamguilds");
 const config = require("./config.json");
 const { AutoPoster } = require("topgg-autoposter");
 const mongooseFile = require("./utils/mongoose");
-const functions = require("./utils/functions");
 const LMessages = require(`./messages/`);
 
 const bot = new Discord.Client({
@@ -56,10 +55,25 @@ const ready = async () => {
   console.log(" ");
   console.log("Zigger - Pracuji.");
 
+  var mode = 1;
+
   setInterval(() => {
-    Guild.find({}).then(function (gGuilds) {
-      bot.user.setActivity(`for ${gGuilds.length} servers <3`);
-    });
+    switch (mode) {
+      case 1:
+        bot.user.setActivity(
+          `for ${bot.guilds.cache
+            .map((g) => g.memberCount)
+            .reduce((a, c) => a + c)} servers <3`
+        );
+        mode = 2;
+        break;
+      case 2:
+        Guild.find({}).then(function (gGuilds) {
+          bot.user.setActivity(`for ${gGuilds.length} servers <3`);
+        });
+        mode = 1;
+        break;
+    }
   }, 10000);
 
   if (!(process.platform != "linux" && config.ofi != true)) {
