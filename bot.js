@@ -63,7 +63,7 @@ const ready = async () => {
         bot.user.setActivity(
           `for ${bot.guilds.cache
             .map((g) => g.memberCount)
-            .reduce((a, c) => a + c)} servers <3`
+            .reduce((a, c) => a + c)} users <3`
         );
         mode = 2;
         break;
