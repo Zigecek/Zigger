@@ -137,6 +137,7 @@ const play = async (guild, song, errored) => {
         oldState.status !== voice.AudioPlayerStatus.Idle
       ) {
         //  on finish
+        console.log("stateChange");
         Guild.findOneAndUpdate(
           {
             guildID: guild.id,
@@ -220,15 +221,18 @@ const play = async (guild, song, errored) => {
     });
   }
 
+  serverQueue.audioPlayer.removeAllListeners("error");
+  serverQueue.audioPlayer.on("error", (err) => {
+    serverQueue.audioPlayer.removeAllListeners("error");
+    serverQueue.audioPlayer.removeAllListeners("stateChange");
+    play(guild, song, true);
+  });
+
   async function createSafeYTDL(url, guild) {
     async function getInfo() {
-      var info;
-      try {
-        info = await ytdl.getInfo(url);
-      } catch (err) {
+      var info = await ytdl.getInfo(url).catch((err) => {
         if (err.statusCode == 403 || err.statusCode == 404) {
-          console.log("errrrr");
-          console.error(err);
+          console.log("errrrr 403");
           info = getInfo();
         } else if (err.statusCode == 410) {
           Guild.findOne(
@@ -283,7 +287,7 @@ const play = async (guild, song, errored) => {
             }
           );
         }
-      }
+      });
       if (info) {
         return info;
       } else {
