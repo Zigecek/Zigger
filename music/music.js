@@ -225,6 +225,7 @@ const play = async (guild, song, errored) => {
   serverQueue.audioPlayer.on("error", (err) => {
     serverQueue.audioPlayer.removeAllListeners("error");
     serverQueue.audioPlayer.removeAllListeners("stateChange");
+    serverQueue.audioPlayer = null;
     play(guild, song, true);
   });
 
@@ -232,7 +233,6 @@ const play = async (guild, song, errored) => {
     async function getInfo() {
       var info = await ytdl.getInfo(url).catch((err) => {
         if (err.statusCode == 403 || err.statusCode == 404) {
-          console.log("errrrr 403");
           info = getInfo();
         } else if (err.statusCode == 410) {
           Guild.findOne(
