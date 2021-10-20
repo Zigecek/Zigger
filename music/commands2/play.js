@@ -414,15 +414,6 @@ module.exports = {
         });
         music.stateChange(serverQueue, int.guild);
       }
-      /*
-            if (lastCon) {
-                if (lastCon != serverQueue.connection) {
-                    music.stateChange(serverQueue, int.guild);
-                }
-            } else {
-                music.stateChange(serverQueue, int.guild);
-            }
-            */
 
       music.play(int.guild, serverQueue.songs[0], false);
 
@@ -440,7 +431,6 @@ module.exports = {
           error.sendError(err);
         }
 
-        //music.queue.delete(int.guild.id);
         if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
           followReply(int, { content: LMessages.musicError });
         }

@@ -90,44 +90,97 @@ module.exports = {
         tracks.map((track) => `\n${++i}. ${decode(track.title)}`) +
         "\n```";
       if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        const row = new Discord.MessageActionRow().setComponents([
+          new Discord.MessageButton()
+            .setCustomId("1")
+            .setLabel("1")
+            .setStyle("PRIMARY"),
+          new Discord.MessageButton()
+            .setCustomId("2")
+            .setLabel("2")
+            .setStyle("PRIMARY"),
+          new Discord.MessageButton()
+            .setCustomId("3")
+            .setLabel("3")
+            .setStyle("PRIMARY"),
+          new Discord.MessageButton()
+            .setCustomId("4")
+            .setLabel("4")
+            .setStyle("PRIMARY"),
+          new Discord.MessageButton()
+            .setCustomId("5")
+            .setLabel("5")
+            .setStyle("PRIMARY"),
+        ]);
+        const row2 = new Discord.MessageActionRow().setComponents([
+          new Discord.MessageButton()
+            .setCustomId("6")
+            .setLabel("6")
+            .setStyle("PRIMARY"),
+          new Discord.MessageButton()
+            .setCustomId("7")
+            .setLabel("7")
+            .setStyle("PRIMARY"),
+          new Discord.MessageButton()
+            .setCustomId("8")
+            .setLabel("8")
+            .setStyle("PRIMARY"),
+          new Discord.MessageButton()
+            .setCustomId("9")
+            .setLabel("9")
+            .setStyle("PRIMARY"),
+          new Discord.MessageButton()
+            .setCustomId("10")
+            .setLabel("10")
+            .setStyle("PRIMARY"),
+        ]);
         followReply(int, {
           content: template(
             LMessages.musicSearch,
             { tracks: tracksInfo },
             { before: "%", after: "%" }
           ),
+          components: [row, row2],
         }).then(async (smessage) => {
-          followReply(int, { content: LMessages.musicTypeNumber });
-          const filter = (m) => m.author.id == int.user.id;
-          const collector = smessage.channel
-            .createMessageCollector({ filter, time: 30000 })
-            .on("collect", (m) => {
-              if (m.content == "1") {
+          const filter = (inter) => inter.member.id == int.member.id;
+          const collector = smessage
+            .createMessageComponentCollector({ filter, time: 30_000 })
+            .on("collect", (interact) => {
+              if (!interact.isButton()) return;
+              var id = Number(interact.component.customId);
+              interact.component.setStyle("DANGER");
+              interact.message.components.forEach((row) => {
+                row.components.forEach((butt) => {
+                  butt.setDisabled();
+                });
+              });
+
+              if (id == 1) {
                 rSearch(0, int, tracks, collector);
-              } else if (m.content == "2") {
+              } else if (id == 2) {
                 rSearch(1, int, tracks, collector);
-              } else if (m.content == "3") {
+              } else if (id == 3) {
                 rSearch(2, int, tracks, collector);
-              } else if (m.content == "4") {
+              } else if (id == 4) {
                 rSearch(3, int, tracks, collector);
-              } else if (m.content == "5") {
+              } else if (id == 5) {
                 rSearch(4, int, tracks, collector);
-              } else if (m.content == "6") {
+              } else if (id == 6) {
                 rSearch(5, int, tracks, collector);
-              } else if (m.content == "7") {
+              } else if (id == 7) {
                 rSearch(6, int, tracks, collector);
-              } else if (m.content == "8") {
+              } else if (id == 8) {
                 rSearch(7, int, tracks, collector);
-              } else if (m.content == "9") {
+              } else if (id == 9) {
                 rSearch(8, int, tracks, collector);
-              } else if (m.content == "10") {
+              } else if (id == 10) {
                 rSearch(9, int, tracks, collector);
               } else {
                 collector.stop();
                 return;
               }
             })
-            .on("end", async (collected) => {
+            .on("end", async () => {
               if (smessage) {
                 if (smessage.deletable) {
                   if (int.guild.me.permissions.has("MANAGE_MESSAGES")) {

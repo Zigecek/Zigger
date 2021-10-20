@@ -137,7 +137,6 @@ const play = async (guild, song, errored) => {
         oldState.status !== voice.AudioPlayerStatus.Idle
       ) {
         //  on finish
-        console.log("stateChange");
         Guild.findOneAndUpdate(
           {
             guildID: guild.id,
@@ -232,9 +231,8 @@ const play = async (guild, song, errored) => {
   async function createSafeYTDL(url, guild) {
     async function getInfo() {
       var info = await ytdl.getInfo(url).catch((err) => {
-        if (err.statusCode == 403 || err.statusCode == 404) {
-          info = getInfo();
-        } else if (err.statusCode == 410) {
+        if (err.statusCode == 410) {
+          console.log("errrrr 410");
           Guild.findOne(
             {
               guildID: guild.id,
@@ -301,6 +299,7 @@ const play = async (guild, song, errored) => {
       filter: "audio",
       audioBitrate: 96,
       highWaterMark: 1 << 25,
+      dlChunkSize: 256 * 1024,
     });
     return stream;
   }
@@ -317,19 +316,20 @@ const play = async (guild, song, errored) => {
   return;
 };
 
-async function callLoop() {
-  setInterval(async () => {
-    Guild.find({}).then(async (gGuilds) => {
+function callLoop() {
+  setInterval(() => {
+    Guild.find({}).then((gGuilds) => {
       gGuilds.forEach(async (Gres) => {
         const guild = await bot.guilds.fetch(Gres.guildID);
         var serverQueue = queue.get(Gres.guildID);
-        var vChannel = guild ? guild.me.voice.channel : undefined;
-        var one = 0;
-        var two = 0;
-        var three = 0;
+        var vChannel = guild ? guild.me.voice.channel : null;
 
         if (vChannel) {
-          if (Gres.musicBotPlaying == false) {
+          var one = 0;
+          var two = 0;
+          var three = 0;
+
+          if (!Gres.musicBotPlaying) {
             if (!Gres.musicBotPaused) {
               ////////////////// NOT PAUSED CHANNEL - musicBotCounter
 
@@ -392,40 +392,27 @@ async function callLoop() {
               two = Gres.musicBotCounter2 + 1;
             }
           } else {
-            Guild.findOneAndUpdate(
-              {
-                guildID: Gres.guildID,
-              },
-              {
-                musicBotCounter2: 0,
-              },
-              function (err) {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
+            two = 0;
+          }
+
+          Guild.findOneAndUpdate(
+            {
+              guildID: Gres.guildID,
+            },
+            {
+              musicBotCounter: one,
+              musicBotCounter2: two,
+              musicBotCounter3: three,
+            },
+            function (err) {
+              if (err) {
+                console.error(err);
+                error.sendError(err);
+                return;
               }
-            );
-          }
-        }
-        Guild.findOneAndUpdate(
-          {
-            guildID: Gres.guildID,
-          },
-          {
-            musicBotCounter: one,
-            musicBotCounter2: two,
-            musicBotCounter3: three,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
             }
-          }
-        );
+          );
+        }
       });
     });
   }, 5000);

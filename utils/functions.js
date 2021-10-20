@@ -133,6 +133,7 @@ async function followReply(interaction, content) {
       : await interaction.reply(content);
     return message;
   } catch (error) {
+    console.error(error);
     return message;
   }
 }

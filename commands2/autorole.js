@@ -119,7 +119,7 @@ module.exports = {
           var role = int.options.getRole(`role${i}`);
           if (!role) break;
           if (role.position == 0) break;
-          roleAr.push(role.id);
+          roleAr.splice(roleAr.indexOf(role.id), 1);
           ar.push(role.id);
         }
         roleAr = functions.filterDuplicates(roleAr);
