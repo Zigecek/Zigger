@@ -30,7 +30,6 @@ module.exports = {
     var regexEmoji = /<a:.+?:\d+>|<:.+?:\d+>/;
     var regexEmoji2 = emojiRegex();
     let reactionEmojis = [];
-    let reactionRoleIDs = [];
 
     let rrConstructor = {
       messageID: "",
@@ -62,20 +61,23 @@ module.exports = {
             ) {
               break;
             }
-            console.log("afas");
+
             if (
               int.guild.me.roles.highest.position <
               int.options.get(`role${index}`).role.position
             ) {
               break;
             }
-            console.log(":)");
 
+            rrConstructor.emojis.push(int.options.get(`emoji${index}`).value);
             reactionEmojis.push(int.options.get(`emoji${index}`).value);
-            reactionRoleIDs.push(int.options.get(`role${index}`).role.id);
+            rrConstructor.roleIDs.push(int.options.get(`role${index}`).role.id);
           }
 
-          if (reactionRoleIDs.length == 0 || reactionEmojis.length == 0) {
+          if (
+            rrConstructor.roleIDs.length == 0 ||
+            rrConstructor.emojis.length == 0
+          ) {
             followReply(int, { content: LMessages.rr.atLeastOnePair });
             return;
           }
@@ -85,8 +87,6 @@ module.exports = {
             .channel.send({ content: content })
             .then((message) => {
               rrConstructor.messageID = message.id;
-              rrConstructor.emojis = reactionEmojis;
-              rrConstructor.roleIDs = reactionRoleIDs;
 
               functions.addReactions(message, reactionEmojis);
 
