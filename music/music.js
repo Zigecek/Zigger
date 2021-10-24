@@ -229,8 +229,26 @@ const play = async (guild, song, errored) => {
   });
 
   async function createSafeYTDL(url, guild) {
-    async function getInfo() {
-      var info = await ytdl.getInfo(url).catch((err) => {
+    let stream = null;
+    await ytdl
+      .getInfo(url)
+      .then((info) => {
+        if (!info) return;
+        stream = ytdl.downloadFromInfo(info, {
+          filter: info.videoDetails.isLiveContent ? null : "audioonly",
+          quality: info.videoDetails.isLiveContent ? null : "highestaudio",
+          dlChunkSize: 0,
+          liveBuffer: 1000,
+          isHLS: info.videoDetails.isLiveContent,
+
+          //quality: "highestaudio",
+          //filter: "audio",
+          audioBitrate: 96,
+          highWaterMark: 1 << 25,
+          //dlChunkSize: 256 * 1024,
+        });
+      })
+      .catch((err) => {
         if (err.statusCode == 410) {
           console.log("errrrr 410");
           Guild.findOne(
@@ -286,25 +304,11 @@ const play = async (guild, song, errored) => {
           );
         }
       });
-      if (info) {
-        return info;
-      } else {
-        return 410;
-      }
-    }
-    var info = await getInfo();
-    if (info == 410) return 410;
-    var stream = ytdl.downloadFromInfo(info, {
-      quality: "highestaudio",
-      filter: "audio",
-      audioBitrate: 96,
-      highWaterMark: 1 << 25,
-      dlChunkSize: 256 * 1024,
-    });
+
     return stream;
   }
   var stream = await createSafeYTDL(song.url, guild);
-  if (stream != 410) {
+  if (stream) {
     serverQueue.audioPlayer.play(
       voice.createAudioResource(stream, {
         inlineVolume: true,
