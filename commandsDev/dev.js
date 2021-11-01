@@ -31,7 +31,7 @@ module.exports = {
       {
         number: 1,
       },
-      (err, Cres) => {
+      async (err, Cres) => {
         if (err) {
           console.error(err);
           error.sendError(err);
@@ -394,10 +394,10 @@ module.exports = {
           } else if (int.options.getSubcommand() == "eval") {
             var string = int.options.get("code").value;
 
-            eval(string).then((result) => {
-              followReply(int, {
-                content: "**RESULT: ** \n```JS\n" + result + "\n```",
-              });
+            let result = await eval(string);
+
+            followReply(int, {
+              content: "**RESULT: ** \n```JS\n" + result + "\n```",
             });
             return;
           }
