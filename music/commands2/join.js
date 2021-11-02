@@ -51,7 +51,7 @@ module.exports = {
         if (int.guild.me.voice.channel.id == voiceChannel.id) {
           if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
             followReply(int, {
-              content: LMessages.music.otherCmds.alreadyInTheChannel,
+              content: LMessages.musicAlreadyInTheChannel,
             });
           }
         }
