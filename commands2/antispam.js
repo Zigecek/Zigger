@@ -36,22 +36,22 @@ module.exports = {
           .addFields(
             {
               name: LMessages.antispam.cmds.enabledLabel,
-              value: Gres.spamEnabled,
+              value: Gres.spamEnabled ? 'Enabled' : 'Disabled',
               inline: true,
             },
             {
               name: LMessages.antispam.cmds.dela,
-              value: Gres.spamDelay,
+              value: Gres.spamDelay.toString(),
               inline: true,
             },
             {
               name: LMessages.antispam.cmds.tracking,
-              value: Gres.spam.length + LMessages.antispam.cmds.users,
+              value: Gres.spam.length.toString() + LMessages.antispam.cmds.users,
               inline: true,
             },
             {
               name: LMessages.antispam.cmds.ignor,
-              value: Gres.spamIgnoreAdmins,
+              value: Gres.spamIgnoreAdmins ? 'Ignoring' : 'Not ignoring',
               inline: true,
             }
           );
