@@ -19,6 +19,7 @@ const config = require("../config.json");
 const voice = require("@discordjs/voice");
 const LMessages = require(`../messages/`);
 const template = require("string-placeholder");
+const short = require("short-uuid");
 
 let queue = new Map();
 
@@ -29,7 +30,7 @@ function wait(time) {
 const ready = () => {
   console.log(" ");
   console.log("MusicBot - Hraju!");
-  callLoop();
+  //callLoop();
 };
 
 const play = async (guild, song, errored) => {
@@ -133,17 +134,17 @@ const play = async (guild, song, errored) => {
 
     serverQueue.audioPlayer.on("stateChange", (oldState, newState) => {
       if (
-        newState.status === voice.AudioPlayerStatus.Idle &&
-        oldState.status !== voice.AudioPlayerStatus.Idle
+        // Paused
+        newState.status == voice.AudioPlayerStatus.Paused &&
+        oldState.status != voice.AudioPlayerStatus.Paused
       ) {
-        //  on finish
+        const uid = short.generate();
         Guild.findOneAndUpdate(
           {
             guildID: guild.id,
           },
           {
-            musicBotSkipVotedMembersID: [],
-            musicBotSkipVotesNeeded: 0,
+            musicBotLastUUID: uid,
           },
           function (err) {
             if (err) {
@@ -153,6 +154,106 @@ const play = async (guild, song, errored) => {
             }
           }
         );
+        setTimeout(() => {
+          Guild.findOne(
+            {
+              guildID: guild.id,
+            },
+            (err, Gres) => {
+              if (err) {
+                console.error(err);
+                error.sendError(err);
+                return;
+              }
+              if (uid == Gres.musicBotLastUUID) {
+                const serverQueue = queue.get(guild.id);
+                if (serverQueue) {
+                  if (serverQueue.connection) {
+                    if (
+                      serverQueue.connection.state.status !==
+                      voice.VoiceConnectionStatus.Destroyed
+                    ) {
+                      serverQueue.connection.destroy();
+                    }
+                  }
+                  stopET(guild.id, serverQueue);
+                }
+              }
+            }
+          );
+        }, 900 * 1000); // 900
+      } else if (
+        // Resumed
+        newState.status != voice.AudioPlayerStatus.Paused &&
+        oldState.status == voice.AudioPlayerStatus.Paused
+      ) {
+        Guild.findOneAndUpdate(
+          {
+            guildID: guild.id,
+          },
+          {
+            musicBotLastUUID: "nothing",
+          },
+          function (err) {
+            if (err) {
+              console.error(err);
+              error.sendError(err);
+              return;
+            }
+          }
+        );
+      } else if (
+        newState.status === voice.AudioPlayerStatus.Idle &&
+        oldState.status !== voice.AudioPlayerStatus.Idle
+      ) {
+        //  on finish
+        const uid = short.generate();
+        Guild.findOneAndUpdate(
+          {
+            guildID: guild.id,
+          },
+          {
+            musicBotSkipVotedMembersID: [],
+            musicBotSkipVotesNeeded: 0,
+            musicBotLastUUID: uid,
+          },
+          function (err) {
+            if (err) {
+              console.error(err);
+              error.sendError(err);
+              return;
+            }
+          }
+        );
+
+        setTimeout(() => {
+          Guild.findOne(
+            {
+              guildID: guild.id,
+            },
+            (err, Gres) => {
+              if (err) {
+                console.error(err);
+                error.sendError(err);
+                return;
+              }
+              if (uid == Gres.musicBotLastUUID) {
+                const serverQueue = queue.get(guild.id);
+                if (serverQueue) {
+                  if (serverQueue.connection) {
+                    if (
+                      serverQueue.connection.state.status !==
+                      voice.VoiceConnectionStatus.Destroyed
+                    ) {
+                      serverQueue.connection.destroy();
+                    }
+                  }
+                  stopET(guild.id, serverQueue);
+                }
+              }
+            }
+          );
+        }, 300 * 1000); // 300
 
         Guild.findOne(
           {
@@ -319,7 +420,7 @@ const play = async (guild, song, errored) => {
   serverQueue.connection.subscribe(serverQueue.audioPlayer);
   return;
 };
-
+/*
 function callLoop() {
   setInterval(() => {
     Guild.find({}).then((gGuilds) => {
@@ -421,12 +522,12 @@ function callLoop() {
     });
   }, 5000);
 }
-
+*/
 const voiceStateUpdate = (params) => {
   var oldVoice = params[0];
   var newVoice = params[1];
-  if (newVoice.member == newVoice.guild.me) {
-    if (newVoice.channel == null) {
+  if (newVoice.channel == null) {
+    if (newVoice.member == newVoice.guild.me) {
       const serverQueue = queue.get(newVoice.guild.id);
       if (serverQueue) {
         if (serverQueue.connection) {
@@ -438,6 +539,54 @@ const voiceStateUpdate = (params) => {
           }
         }
         stopET(newVoice.guild.id, serverQueue);
+      }
+    } else {
+      if (oldVoice.channel.members.filter((x) => !x.user.bot).size == 0) {
+        const uid = short.generate();
+        Guild.findOneAndUpdate(
+          {
+            guildID: oldVoice.guild.id,
+          },
+          {
+            musicBotLastUUID: uid,
+          },
+          function (err) {
+            if (err) {
+              console.error(err);
+              error.sendError(err);
+              return;
+            }
+          }
+        );
+        setTimeout(() => {
+          console.log("iujhsdfg");
+          Guild.findOne(
+            {
+              guildID: oldVoice.guild.id,
+            },
+            (err, Gres) => {
+              if (err) {
+                console.error(err);
+                error.sendError(err);
+                return;
+              }
+              if (uid == Gres.musicBotLastUUID) {
+                const serverQueue = queue.get(newVoice.guild.id);
+                if (serverQueue) {
+                  if (serverQueue.connection) {
+                    if (
+                      serverQueue.connection.state.status !==
+                      voice.VoiceConnectionStatus.Destroyed
+                    ) {
+                      serverQueue.connection.destroy();
+                    }
+                  }
+                  stopET(newVoice.guild.id, serverQueue);
+                }
+              }
+            }
+          );
+        }, 300 * 1000);
       }
     }
   }
