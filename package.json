@@ -1,7 +1,7 @@
 {
   "version": "1.41.6",
   "scripts": {
-    "i": "npm i @discordjs/opus@latest discord.js@latest dotenv@latest emoji-regex@latest ffmpeg-static@latest fs@latest is-url@latest moment@latest mongoose@5.13.7 ms-to-timecode@latest sourcebin@latest string-placeholder@latest ytdl-core@latest ytpl@latest ytsr@latest ent@latest request@latest sec2human@latest m3u8stream@latest child_process@latest ngrok@latest axios@latest @discordjs/voice@7.2.2 tweetnacl@latest topgg-autoposter@latest systeminformation@latest short-uuid@latest",
+    "i": "npm i @discordjs/opus@latest discord.js@latest dotenv@latest emoji-regex@latest ffmpeg-static@latest fs@latest is-url@latest moment@latest mongoose@5.13.7 ms-to-timecode@latest sourcebin@latest string-placeholder@latest ytdl-core@latest ytpl@latest ytsr@latest ent@latest request@latest sec2human@latest m3u8stream@latest child_process@latest ngrok@latest axios@latest @discordjs/voice@0.7.2 tweetnacl@latest topgg-autoposter@latest systeminformation@latest short-uuid@latest",
     "uni": "npm uninstall @discordjs/opus discord.js dotenv emoji-regex ffmpeg-static fs is-url moment mongoose ms-to-timecode sourcebin string-placeholder ytdl-core ytpl ytsr ent request sec2human m3u8stream child_process ngrok topgg-autoposter systeminformation @discordjs/voice axios tweetnacl short-uuid",
     "start": "pm2 start ./bot.js --time",
     "start2": "node ./bot.js"
