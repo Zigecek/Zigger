@@ -308,7 +308,12 @@ module.exports = {
             return;
           } else if (int.options.getSubcommand() == "ssh") {
             followReply(int, {
-              content: "URL: " + Cres.ngrokRpiSSH,
+              content:
+                "RPi SSH: " +
+                Cres.ngrokRpiSSH +
+                " \n" +
+                "Zero SSH: " +
+                Cres.ngrokZeroSSH,
             });
             return;
           }
