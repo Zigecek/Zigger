@@ -320,16 +320,14 @@ module.exports = {
         } else if (int.options.getSubcommandGroup() == "global") {
           if (int.options.getSubcommand() == "playing") {
             var playing = 0;
-            Guild.find({}).then(function (gGuilds) {
-              gGuilds.forEach((e) => {
-                if (e.musicBotPlaying == true) {
-                  playing = playing + 1;
-                }
-              });
+            Guild.find({
+              musicBotPlaying: true,
+            }).then(function (gGuilds) {
+              playing = gGuilds.length;
 
               if (playing > 0) {
                 followReply(int, {
-                  content: `**:warning: Bot is currently playing on \`${playing}\` servers. \nBut you can use \`dev shout [int]\` to send a int to all of the guilds.**`,
+                  content: `**:warning: Bot is currently playing on \`${playing}\` servers.**`,
                 });
               } else {
                 followReply(int, {
