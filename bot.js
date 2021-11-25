@@ -31,7 +31,14 @@ const config = require("./config.json");
 const { AutoPoster } = require("topgg-autoposter");
 const mongooseFile = require("./utils/mongoose");
 const LMessages = require(`./messages/`);
+const { REST } = require("@discordjs/rest");
+const { Routes } = require("discord-api-types/v9");
 
+const rest = new REST({ version: "9" }).setToken(
+  process.platform != "linux" && config.ofi != true
+    ? process.env.TOKEN2
+    : process.env.TOKEN
+);
 const bot = new Discord.Client({
   partials: ["MESSAGE", "CHANNEL", "REACTION"],
   intents: [
@@ -80,6 +87,16 @@ const ready = async () => {
     AutoPoster(process.env.TOPGG_TOKEN, bot);
   }
   const Com = require("./deploy/commands");
+
+  Guild.find({}).then(function (gs) {
+    gs.forEach(async (Gres) => {
+      await rest.put(
+        Routes.applicationGuildCommands(bot.user.id, Gres.guildID),
+        { body: Com }
+      );
+    });
+  });
+  /*
   try {
     await bot.application.commands.set(Com);
   } catch (err) {
@@ -87,12 +104,15 @@ const ready = async () => {
       console.error(err);
     }
   }
+  */
   let myGuilds = bot.guilds.cache.filter(
     (x) => x.ownerId == "470568283993538561" && x.name == "Zigger Testing"
   );
-  const devCom = require("./deploy/commandsDev").dev;
-  myGuilds.each((x) => {
-    x.commands.set([devCom]);
+  const devCom = require("./deploy/commandsDev");
+  myGuilds.each(async (x) => {
+    await rest.put(Routes.applicationGuildCommands(bot.user.id, x.id), {
+      body: Com.concat(devCom),
+    });
   });
 };
 
@@ -279,8 +299,8 @@ require("./event_handler");
 /////////// LOGIN ///////////
 
 mongooseFile.init();
-if (process.platform != "linux" && config.ofi != true) {
-  bot.login(process.env.TOKEN2);
-} else {
-  bot.login(process.env.TOKEN);
-}
+bot.login(
+  process.platform != "linux" && config.ofi != true
+    ? process.env.TOKEN2
+    : process.env.TOKEN
+);

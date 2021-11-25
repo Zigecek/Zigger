@@ -24,11 +24,12 @@ module.exports = {
       family: 4,
     };
 
-    if (process.platform != "linux" && config.ofi != true) {
-      mongoose.connect(process.env.MONGOOSE_KEY2, dbOptions);
-    } else {
-      mongoose.connect(process.env.MONGOOSE_KEY, dbOptions);
-    }
+    mongoose.connect(
+      process.platform != "linux" && config.ofi != true
+        ? process.env.MONGOOSE_KEY2
+        : process.env.MONGOOSE_KEY,
+      dbOptions
+    );
 
     mongoose.set("useFindAndModify", false);
     mongoose.Promise = global.Promise;

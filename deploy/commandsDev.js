@@ -1,5 +1,18 @@
-module.exports = {
-  dev: {
+const ApplicationCommandOptionTypes = {
+  SUB_COMMAND: 1,
+  SUB_COMMAND_GROUP: 2,
+  STRING: 3,
+  INTEGER: 4,
+  BOOLEAN: 5,
+  USER: 6,
+  CHANNEL: 7,
+  ROLE: 8,
+  MENTIONABLE: 9,
+  NUMBER: 10,
+};
+
+module.exports = [
+  {
     name: "dev",
     description: "Dev.",
     options: [
@@ -16,7 +29,7 @@ module.exports = {
               {
                 name: "id",
                 description: "Dev.",
-                type: "STRING",
+                type: ApplicationCommandOptionTypes.STRING,
                 required: true,
               },
             ],
@@ -29,7 +42,7 @@ module.exports = {
               {
                 name: "id",
                 description: "Dev.",
-                type: "STRING",
+                type: ApplicationCommandOptionTypes.STRING,
                 required: true,
               },
             ],
@@ -42,7 +55,7 @@ module.exports = {
               {
                 name: "id",
                 description: "Dev.",
-                type: "STRING",
+                type: ApplicationCommandOptionTypes.STRING,
                 required: true,
               },
             ],
@@ -55,7 +68,7 @@ module.exports = {
               {
                 name: "id",
                 description: "Dev.",
-                type: "STRING",
+                type: ApplicationCommandOptionTypes.STRING,
                 required: true,
               },
             ],
@@ -68,7 +81,7 @@ module.exports = {
               {
                 name: "id",
                 description: "Dev.",
-                type: "STRING",
+                type: ApplicationCommandOptionTypes.STRING,
                 required: true,
               },
             ],
@@ -93,7 +106,7 @@ module.exports = {
               {
                 name: "command",
                 description: "Dev.",
-                type: "STRING",
+                type: ApplicationCommandOptionTypes.STRING,
                 required: true,
               },
             ],
@@ -147,7 +160,7 @@ module.exports = {
             options: [
               {
                 name: "message",
-                type: "STRING",
+                type: ApplicationCommandOptionTypes.STRING,
                 required: true,
                 description: "Dev.",
               },
@@ -161,7 +174,7 @@ module.exports = {
               {
                 name: "code",
                 description: "Code to evalute.",
-                type: "STRING",
+                type: ApplicationCommandOptionTypes.STRING,
                 required: true,
               },
             ],
@@ -170,4 +183,4 @@ module.exports = {
       },
     ],
   },
-};
+];

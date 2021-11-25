@@ -150,7 +150,7 @@ module.exports = {
 
       fun: {
         label: "Fun",
-        commands: "```\n• penis \n• howgay\n• meme\n```",
+        commands: "```\n• penis \n• howgay\n• meme\n• urban\n```",
       },
 
       settings: {
@@ -940,7 +940,8 @@ module.exports = {
       "**<:tickNo:870239550163779604> I cannot use this role, because it is higher then mine.** \n**:thumbsup: Use another one.**",
     botHasNoPermission:
       "**<:tickNo:870239550163779604> I don't have permission to **`MANAGE_ROLES`**!**",
-    succesfulCreated: "<:tickYes:870238031603462154> **Reaction role message has been succesfully created. \n** %url%" 
+    succesfulCreated:
+      "<:tickYes:870238031603462154> **Reaction role message has been succesfully created. \n** %url%",
   },
 
   tc: {
@@ -1035,5 +1036,10 @@ module.exports = {
       mode: "**:gear: Announcement mode is set to `%mode%`**",
       use: "**:warning: Usage: `settings announce on/off/short`**",
     },
+  },
+
+  urban: {
+    enterQuery: ":x: **You need to enter some search query.**",
+    nothingFound: ":mag: **Nothing has been found.**",
   },
 };
