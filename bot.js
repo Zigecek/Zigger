@@ -92,7 +92,7 @@ const ready = async () => {
     gs.forEach(async (Gres) => {
       await rest.put(
         Routes.applicationGuildCommands(bot.user.id, Gres.guildID),
-        { body: Com }
+        { body: [] }
       );
     });
   });
@@ -106,6 +106,7 @@ const ready = async () => {
     }
   }
   */
+  await rest.put(Routes.applicationGuildCommands(bot.user.id), { body: Com });
   let myGuilds = bot.guilds.cache.filter(
     (x) => x.ownerId == "470568283993538561" && x.name == "Zigger Testing"
   );
@@ -113,10 +114,7 @@ const ready = async () => {
   myGuilds.each(async (x) => {
     console.log(x.id);
     await rest.put(Routes.applicationGuildCommands(bot.user.id, x.id), {
-      body: [],
-    });
-    await rest.put(Routes.applicationGuildCommands(bot.user.id, x.id), {
-      body: Com.concat(devCom),
+      body: devCom,
     });
   });
 };
