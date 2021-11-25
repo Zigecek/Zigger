@@ -96,6 +96,7 @@ const ready = async () => {
       );
     });
   });
+  await bot.application.commands.set([]);
   /*
   try {
     await bot.application.commands.set(Com);
@@ -110,6 +111,10 @@ const ready = async () => {
   );
   const devCom = require("./deploy/commandsDev");
   myGuilds.each(async (x) => {
+    console.log(x.id);
+    await rest.put(Routes.applicationGuildCommands(bot.user.id, x.id), {
+      body: [],
+    });
     await rest.put(Routes.applicationGuildCommands(bot.user.id, x.id), {
       body: Com.concat(devCom),
     });
