@@ -87,16 +87,6 @@ const ready = async () => {
     AutoPoster(process.env.TOPGG_TOKEN, bot);
   }
   const Com = require("./deploy/commands");
-
-  Guild.find({}).then(function (gs) {
-    gs.forEach(async (Gres) => {
-      await rest.put(
-        Routes.applicationGuildCommands(bot.user.id, Gres.guildID),
-        { body: [] }
-      );
-    });
-  });
-  await bot.application.commands.set([]);
   /*
   try {
     await bot.application.commands.set(Com);
@@ -106,7 +96,7 @@ const ready = async () => {
     }
   }
   */
-  await rest.put(Routes.applicationGuildCommands(bot.user.id), { body: Com });
+  await rest.put(Routes.applicationCommands(bot.user.id), { body: Com });
   let myGuilds = bot.guilds.cache.filter(
     (x) => x.ownerId == "470568283993538561" && x.name == "Zigger Testing"
   );
