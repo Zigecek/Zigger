@@ -20,7 +20,7 @@ const voice = require("@discordjs/voice");
 const LMessages = require(`../messages/`);
 const template = require("string-placeholder");
 const short = require("short-uuid");
-var logger = require('tracer').console();
+var logger = require("tracer").console();
 
 let queue = new Map();
 
@@ -297,6 +297,26 @@ const play = async (guild, song, errored) => {
             );
           }
         );
+        if (
+          guild.me.voice.channel.members.filter((x) => !x.user.bot).size > 0
+        ) {
+          const uid = short.generate();
+          Guild.findOneAndUpdate(
+            {
+              guildID: guild.id,
+            },
+            {
+              musicBotLastUUID: uid,
+            },
+            function (err) {
+              if (err) {
+                console.error(err);
+                error.sendError(err);
+                return;
+              }
+            }
+          );
+        }
         Guild.findOneAndUpdate(
           {
             guildID: guild.id,
