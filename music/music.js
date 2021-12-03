@@ -20,6 +20,7 @@ const voice = require("@discordjs/voice");
 const LMessages = require(`../messages/`);
 const template = require("string-placeholder");
 const short = require("short-uuid");
+var logger = require('tracer').console();
 
 let queue = new Map();
 
@@ -174,6 +175,7 @@ const play = async (guild, song, errored) => {
                       voice.VoiceConnectionStatus.Destroyed
                     ) {
                       serverQueue.connection.destroy();
+                      logger.log(Gres);
                     }
                   }
                   stopET(guild.id, serverQueue);
@@ -246,6 +248,7 @@ const play = async (guild, song, errored) => {
                       voice.VoiceConnectionStatus.Destroyed
                     ) {
                       serverQueue.connection.destroy();
+                      logger.log(Gres);
                     }
                   }
                   stopET(guild.id, serverQueue);
@@ -289,13 +292,11 @@ const play = async (guild, song, errored) => {
               error.sendError(err);
               return;
             }
-            //dispatcher.setBitrate((plus) ? ((serverQueue.connection.voice.channel.bitrate >= 256) ? 256 : (serverQueue.connection.voice.channel.bitrate < 256) ? serverQueue.connection.voice.channel.bitrate : 96) : ((serverQueue.connection.voice.channel.bitrate < 96) ? serverQueue.connection.voice.channel.bitrate : 96));
             serverQueue.audioPlayer.state?.resource.volume.setVolume(
               Number(Gres.musicBotVolume) / 100
             );
           }
         );
-
         Guild.findOneAndUpdate(
           {
             guildID: guild.id,
@@ -536,6 +537,7 @@ const voiceStateUpdate = (params) => {
             voice.VoiceConnectionStatus.Destroyed
           ) {
             serverQueue.connection.destroy();
+            logger.log(Gres);
           }
         }
         stopET(newVoice.guild.id, serverQueue);
@@ -559,7 +561,6 @@ const voiceStateUpdate = (params) => {
           }
         );
         setTimeout(() => {
-          console.log("iujhsdfg");
           Guild.findOne(
             {
               guildID: oldVoice.guild.id,
@@ -579,6 +580,7 @@ const voiceStateUpdate = (params) => {
                       voice.VoiceConnectionStatus.Destroyed
                     ) {
                       serverQueue.connection.destroy();
+                      logger.log(Gres);
                     }
                   }
                   stopET(newVoice.guild.id, serverQueue);
@@ -689,6 +691,7 @@ async function stateChange(serverQueue, guild) {
             voice.VoiceConnectionStatus.Destroyed
           ) {
             serverQueue.connection.destroy();
+            logger.log(Gres);
           }
         }
       } else if (serverQueue.connection.rejoinAttempts < 5) {
@@ -700,6 +703,7 @@ async function stateChange(serverQueue, guild) {
           voice.VoiceConnectionStatus.Destroyed
         ) {
           serverQueue.connection.destroy();
+          logger.log(Gres);
         }
       }
       // destroyed //
@@ -723,6 +727,7 @@ async function stateChange(serverQueue, guild) {
           voice.VoiceConnectionStatus.Destroyed
         ) {
           serverQueue.connection.destroy();
+          logger.log(Gres);
         }
       }
     } else if (newState.status == voice.VoiceConnectionStatus.Ready) {
