@@ -33,13 +33,21 @@ app.post("/toAdmin", function (req, res, next) {
         new Discord.MessageEmbed()
           .setTitle(args[0])
           .setDescription(
-            (event == "PrintStarted"
-              ? "Started: "
-              : event == "PrintFailed"
-              ? "Failed: "
-              : "Done: ") +
-              args[1] +
-              (event == "PrintFailed" ? " \nReason: " + args[2] : "")
+            `${() => {
+              if (event == "PrintStarted") {
+                return "Started: ";
+              } else if (event == "PrintFailed") {
+                return "Failed: ";
+              } else if (event == "PrintDone") {
+                return "Done: ";
+              }
+            }}${args[1]}${() => {
+              if (event == "PrintFailed") {
+                return " \nReason: " + args[2];
+              } else {
+                return "";
+              }
+            }}`
           )
           .setTimestamp()
       );
