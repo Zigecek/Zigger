@@ -2,6 +2,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const Config = require("../models/Config");
 const Discord = require("discord.js");
+const { bot } = require("../bot");
 
 const port = 3321;
 const app = express();
