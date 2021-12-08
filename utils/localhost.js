@@ -17,14 +17,18 @@ app.get("/", function (req, res, next) {
 
 app.post("/toAdmin", function (req, res, next) {
   var args = req.body.args;
-  const event = req.body.event;
-  const finalArg0 =
+  var event = req.body.event;
+  var finalArg0 =
     event == "PrintStarted"
       ? "Started: "
       : event == "PrintFailed"
       ? "Failed: "
       : "Done: ";
-  const finalArg2 = event == "PrintFailed" ? " \nReason: " + args[2] : "";
+  var finalArg2 = event == "PrintFailed" ? " \nReason: " + args[2] : "";
+  console.log(args);
+  console.log(event);
+  console.log(finalArg0);
+  console.log(finalArg2);
   Config.findOne(
     {
       number: 1,
