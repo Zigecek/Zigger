@@ -17,18 +17,7 @@ app.get("/", function (req, res, next) {
 
 app.post("/toAdmin", function (req, res, next) {
   var args = req.body.args;
-  var event = req.body.event;
-  var finalArg0 =
-    event == "PrintStarted"
-      ? "Started: "
-      : event == "PrintFailed"
-      ? "Failed: "
-      : "Done: ";
-  var finalArg2 = event == "PrintFailed" ? " \nReason: " + args[2] : "";
-  console.log(args);
-  console.log(event);
-  console.log(finalArg0);
-  console.log(finalArg2);
+  const event = req.body.event;
   Config.findOne(
     {
       number: 1,
@@ -40,12 +29,19 @@ app.post("/toAdmin", function (req, res, next) {
       }
       const user = await bot.users.fetch(Gres.botAdminDiscordID[0]);
 
-      user.send(
-        new Discord.MessageEmbed()
-          .setTitle(args[0])
-          .setDescription(finalArg0 + args[1] + finalArg2)
-          .setTimestamp()
-      );
+      const em = new Discord.MessageEmbed()
+        .setTitle(args[0])
+        .setDescription(
+          (event == "PrintStarted"
+            ? "Started: "
+            : event == "PrintFailed"
+            ? "Failed: "
+            : "Done: ") +
+            args[1] +
+            (event == "PrintFailed" ? " \nReason: " + args[2] : "")
+        )
+        .setTimestamp();
+      user.send(em);
       res.sendStatus(200);
     }
   );
