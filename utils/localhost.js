@@ -29,19 +29,22 @@ app.post("/toAdmin", function (req, res, next) {
       }
       const user = await bot.users.fetch(Gres.botAdminDiscordID[0]);
 
-      const em = new Discord.MessageEmbed()
-        .setTitle(args[0])
-        .setDescription(
-          (event == "PrintStarted"
-            ? "Started: "
-            : event == "PrintFailed"
-            ? "Failed: "
-            : "Done: ") +
-            args[1] +
-            (event == "PrintFailed" ? " \nReason: " + args[2] : "")
-        )
-        .setTimestamp();
-      user.send(em);
+      user.send({
+        embeds: [
+          new Discord.MessageEmbed()
+            .setTitle(args[0])
+            .setDescription(
+              (event == "PrintStarted"
+                ? "Started: "
+                : event == "PrintFailed"
+                ? "Failed: "
+                : "Done: ") +
+                args[1] +
+                (event == "PrintFailed" ? " \nReason: " + args[2] : "")
+            )
+            .setTimestamp(),
+        ],
+      });
       res.sendStatus(200);
     }
   );
