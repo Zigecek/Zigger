@@ -18,6 +18,13 @@ app.get("/", function (req, res, next) {
 app.post("/toAdmin", function (req, res, next) {
   var args = req.body.args;
   const event = req.body.event;
+  const finalArg0 =
+    event == "PrintStarted"
+      ? "Started: "
+      : event == "PrintFailed"
+      ? "Failed: "
+      : "Done: ";
+  const finalArg2 = event == "PrintFailed" ? " \nReason: " + args[2] : "";
   Config.findOne(
     {
       number: 1,
@@ -32,23 +39,7 @@ app.post("/toAdmin", function (req, res, next) {
       user.send(
         new Discord.MessageEmbed()
           .setTitle(args[0])
-          .setDescription(
-            `${() => {
-              if (event == "PrintStarted") {
-                return "Started: ";
-              } else if (event == "PrintFailed") {
-                return "Failed: ";
-              } else if (event == "PrintDone") {
-                return "Done: ";
-              }
-            }}${args[1]}${() => {
-              if (event == "PrintFailed") {
-                return " \nReason: " + args[2];
-              } else {
-                return "";
-              }
-            }}`
-          )
+          .setDescription(finalArg0 + args[1] + finalArg2)
           .setTimestamp()
       );
       res.sendStatus(200);
