@@ -22,14 +22,12 @@ app.post("/toAdmin", function (req, res, next) {
     {
       number: 1,
     },
-    (err, Gres) => {
+    async (err, Gres) => {
       if (err) {
         console.error(err);
         return;
       }
-      const user = bot.users.cache.find(
-        (user) => user.id == Gres.botAdminDiscordID[0]
-      );
+      const user = await bot.users.fetch(Gres.botAdminDiscordID[0]);
 
       user.send(
         new Discord.MessageEmbed()
@@ -45,9 +43,9 @@ app.post("/toAdmin", function (req, res, next) {
           )
           .setTimestamp()
       );
+      res.sendStatus(200);
     }
   );
-  res.sendStatus(200);
 });
 
 app.listen(port);
