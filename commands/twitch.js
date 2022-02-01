@@ -28,19 +28,9 @@ module.exports = {
     if (message.member.permissions.has("ADMINISTRATOR")) {
       if (args[0] == "user") {
         if (args[1] == null) {
-          let Gres = await Guild.findOne(
-            {
-              guildID: message.guild.id,
-            },
-            (err, Gres) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-              return Gres;
-            }
-          );
+          var Gres = await Guild.findOne({
+            guildID: message.guild.id,
+          });
           if (Gres.streamUserName == null || Gres.streamUserID == null) {
             if (message.guild.me.permissions.has("SEND_MESSAGES")) {
               message.channel.send(LMessages.twitch.userNotSet);
@@ -129,20 +119,13 @@ module.exports = {
               );
             }
 
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               {
                 guildID: message.guild.id,
               },
               {
                 streamUserName: args[2],
                 streamUserID: Tres.users[0]._id,
-              },
-              function (err) {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
               }
             );
           } else {
@@ -153,34 +136,25 @@ module.exports = {
         }
       } else if (args[0] == "notifychannel" || args[0] == "nc") {
         if (args[1] == null) {
-          Guild.findOne(
-            {
-              guildID: message.guild.id,
-            },
-            (err, Gres) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
+          var Gres = await Guild.findOne({
+            guildID: message.guild.id,
+          });
 
-              if (Gres.streamNotifyChannelID == null) {
-                if (message.guild.me.permissions.has("SEND_MESSAGES")) {
-                  message.channel.send(LMessages.twitch.channelNotSet);
-                }
-              } else {
-                if (message.guild.me.permissions.has("SEND_MESSAGES")) {
-                  message.channel.send(
-                    template(
-                      LMessages.twitch.channelInfo,
-                      { channel: "<#" + Gres.streamNotifyChannelID + ">" },
-                      { before: "%", after: "%" }
-                    )
-                  );
-                }
-              }
+          if (Gres.streamNotifyChannelID == null) {
+            if (message.guild.me.permissions.has("SEND_MESSAGES")) {
+              message.channel.send(LMessages.twitch.channelNotSet);
             }
-          );
+          } else {
+            if (message.guild.me.permissions.has("SEND_MESSAGES")) {
+              message.channel.send(
+                template(
+                  LMessages.twitch.channelInfo,
+                  { channel: "<#" + Gres.streamNotifyChannelID + ">" },
+                  { before: "%", after: "%" }
+                )
+              );
+            }
+          }
         } else if (args[1] == "set") {
           if (args[2] != null) {
             if (!message.mentions.channels.first()) {
@@ -189,19 +163,12 @@ module.exports = {
               }
               return;
             }
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               {
                 guildID: message.guild.id,
               },
               {
                 streamNotifyChannelID: message.mentions.channels.first().id,
-              },
-              function (err) {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
               }
             );
             if (message.guild.me.permissions.has("SEND_MESSAGES")) {
@@ -223,64 +190,38 @@ module.exports = {
           }
         }
       } else if (args[0] == "on") {
-        Streams.exists({ guildIDs: message.guild.id }, function (err, res) {
-          if (err) {
-            console.error(err);
-            error.sendError(err);
-            return;
-          } else {
-            if (res != true) {
-              Streams.updateOne(
-                { note: "555" },
-                { $push: { guildIDs: message.guild.id } },
-                function (err) {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
-                  if (message.guild.me.permissions.has("SEND_MESSAGES")) {
-                    message.channel.send(LMessages.twitch.turnOn);
-                  }
-                }
-              );
-            } else {
-              if (message.guild.me.permissions.has("SEND_MESSAGES")) {
-                message.channel.send(LMessages.twitch.isAlreadyOn);
-              }
-            }
+        var res = await Streams.exists({ guildIDs: message.guild.id });
+
+        if (res != true) {
+          await Streams.updateOne(
+            { note: "555" },
+            { $push: { guildIDs: message.guild.id } }
+          );
+          if (message.guild.me.permissions.has("SEND_MESSAGES")) {
+            message.channel.send(LMessages.twitch.turnOn);
           }
-        });
+        } else {
+          if (message.guild.me.permissions.has("SEND_MESSAGES")) {
+            message.channel.send(LMessages.twitch.isAlreadyOn);
+          }
+        }
       } else if (args[0] == "off") {
-        Streams.exists({ guildIDs: message.guild.id }, function (err, res) {
-          if (err) {
-            console.error(err);
-            error.sendError(err);
-            return;
-          } else {
-            if (res == true) {
-              Streams.findOneAndUpdate(
-                { note: "555" },
-                { $pull: { guildIDs: message.guild.id } },
-                { new: true },
-                function (err, res) {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
-                  if (message.guild.me.permissions.has("SEND_MESSAGES")) {
-                    message.channel.send(LMessages.twitch.turnOff);
-                  }
-                }
-              );
-            } else {
-              if (message.guild.me.permissions.has("SEND_MESSAGES")) {
-                message.channel.send(LMessages.twitch.isAlreadyOff);
-              }
-            }
+        var res = await Streams.exists({ guildIDs: message.guild.id });
+
+        if (res == true) {
+          await Streams.updateOne(
+            { note: "555" },
+            { $pull: { guildIDs: message.guild.id } },
+            { new: true }
+          );
+          if (message.guild.me.permissions.has("SEND_MESSAGES")) {
+            message.channel.send(LMessages.twitch.turnOff);
           }
-        });
+        } else {
+          if (message.guild.me.permissions.has("SEND_MESSAGES")) {
+            message.channel.send(LMessages.twitch.isAlreadyOff);
+          }
+        }
       }
     } else {
       message.channel.send(LMessages.noPermission);

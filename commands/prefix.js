@@ -34,28 +34,20 @@ module.exports = {
         if (args[1] == null) {
           message.channel.send(LMessages.prefix.use);
         } else {
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             {
               guildID: message.guild.id,
             },
             {
               prefix: args[1],
-            },
-            function (err) {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-
-              message.channel.send(
-                template(
-                  LMessages.prefix.set,
-                  { guild: Gres.guildName, prefix: args[1] },
-                  { before: "%", after: "%" }
-                )
-              );
             }
+          );
+          message.channel.send(
+            template(
+              LMessages.prefix.set,
+              { guild: Gres.guildName, prefix: args[1] },
+              { before: "%", after: "%" }
+            )
           );
         }
       }

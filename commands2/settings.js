@@ -29,20 +29,13 @@ module.exports = {
             Number(int.options.get("volume").value) >= 1 &&
             Number(int.options.get("volume").value) <= 100
           ) {
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               {
                 guildID: int.guild.id,
               },
               {
                 musicBotDefaultVolume: Number(int.options.get("volume").value),
                 musicBotVolume: Number(int.options.get("volume").value),
-              },
-              function (err) {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
               }
             );
             followReply(int, {
@@ -90,25 +83,18 @@ module.exports = {
             });
           }
           var ar = [];
-          channels.forEach((ch) => {
+          channels.forEach(async (ch) => {
             if (Gres.blacklist.includes(ch.id)) {
               ar.push(ch.id);
               channels.delete(ch);
               return;
             }
-            Guild.updateOne(
+            await Guild.updateOne(
               {
                 guildID: int.guild.id,
               },
               {
                 $push: { blacklist: ch.id },
-              },
-              (err) => {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
               }
             );
           });
@@ -143,25 +129,18 @@ module.exports = {
             });
           }
           var ar = [];
-          channels.forEach((ch) => {
+          channels.forEach(async (ch) => {
             if (!Gres.blacklist.includes(ch.id)) {
               ar.push(ch.id);
               channels.delete(ch);
               return;
             }
-            Guild.updateOne(
+            await Guild.updateOne(
               {
                 guildID: int.guild.id,
               },
               {
                 $pull: { blacklist: ch.id },
-              },
-              (err) => {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
               }
             );
           });
@@ -186,19 +165,12 @@ module.exports = {
         }
       } else if (int.options.getSubcommandGroup() == "annouce") {
         if (int.options.getSubcommand() == "set") {
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             {
               guildID: int.guild.id,
             },
             {
               annouce: int.options.get("mode").value,
-            },
-            function (err) {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
             }
           );
           followReply(int, {

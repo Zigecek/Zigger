@@ -29,24 +29,20 @@ module.exports = {
     ) {
       if (args[0] == "wel") {
         if (args[1] == null) {
-          Guild.findOne(
-            {
-              guildID: message.guild.id,
-            },
-            (err, Gres) => {
-              if (Gres.welChannelID == null) {
-                message.channel.send(LMessages.channels.wel.notSet);
-              } else {
-                message.channel.send(
-                  template(
-                    LMessages.channels.wel.whatIs,
-                    { log: "<#" + Gres.welChannelID + ">" },
-                    { before: "%", after: "%" }
-                  )
-                );
-              }
-            }
-          );
+          var Gres = await Guild.findOne({
+            guildID: message.guild.id,
+          });
+          if (Gres.welChannelID == null) {
+            message.channel.send(LMessages.channels.wel.notSet);
+          } else {
+            message.channel.send(
+              template(
+                LMessages.channels.wel.whatIs,
+                { log: "<#" + Gres.welChannelID + ">" },
+                { before: "%", after: "%" }
+              )
+            );
+          }
         } else if (args[1] == "set") {
           if (args[2] != null) {
             if (!message.mentions.channels.first()) {
@@ -54,28 +50,20 @@ module.exports = {
 
               return;
             }
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               {
                 guildID: message.guild.id,
               },
               {
                 welChannelID: message.mentions.channels.first().id,
-              },
-              (err, result) => {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
-
-                message.channel.send(
-                  template(
-                    LMessages.channels.wel.set,
-                    { log: "<#" + message.mentions.channels.first().id + ">" },
-                    { before: "%", after: "%" }
-                  )
-                );
               }
+            );
+            message.channel.send(
+              template(
+                LMessages.channels.wel.set,
+                { log: "<#" + message.mentions.channels.first().id + ">" },
+                { before: "%", after: "%" }
+              )
             );
           } else {
             message.channel.send(
@@ -89,24 +77,21 @@ module.exports = {
         }
       } else if (args[0] == "bye") {
         if (args[1] == null) {
-          Guild.findOne(
-            {
-              guildID: message.guild.id,
-            },
-            (err, Gres) => {
-              if (Gres.byeChannelID == null) {
-                message.channel.send(LMessages.channels.bye.notSet);
-              } else {
-                message.channel.send(
-                  template(
-                    LMessages.channels.bye.whatIs,
-                    { bye: "<#" + Gres.byeChannelID + ">" },
-                    { before: "%", after: "%" }
-                  )
-                );
-              }
-            }
-          );
+          var Gres = await Guild.findOne({
+            guildID: message.guild.id,
+          });
+
+          if (Gres.byeChannelID == null) {
+            message.channel.send(LMessages.channels.bye.notSet);
+          } else {
+            message.channel.send(
+              template(
+                LMessages.channels.bye.whatIs,
+                { bye: "<#" + Gres.byeChannelID + ">" },
+                { before: "%", after: "%" }
+              )
+            );
+          }
         } else if (args[1] == "set") {
           if (args[2] != null) {
             if (!message.mentions.channels.first()) {
@@ -114,28 +99,20 @@ module.exports = {
 
               return;
             }
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               {
                 guildID: message.guild.id,
               },
               {
                 byeChannelID: message.mentions.channels.first().id,
-              },
-              (err, result) => {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
-
-                message.channel.send(
-                  template(
-                    LMessages.channels.bye.set,
-                    { bye: "<#" + message.mentions.channels.first().id + ">" },
-                    { before: "%", after: "%" }
-                  )
-                );
               }
+            );
+            message.channel.send(
+              template(
+                LMessages.channels.bye.set,
+                { bye: "<#" + message.mentions.channels.first().id + ">" },
+                { before: "%", after: "%" }
+              )
             );
           }
         } else {

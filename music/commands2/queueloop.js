@@ -37,19 +37,12 @@ module.exports = {
       return;
     }
 
-    Guild.findOneAndUpdate(
+    await Guild.updateOne(
       {
         guildID: int.guild.id,
       },
       {
         musicBotQueueLoop: !Gres.musicBotQueueLoop,
-      },
-      function (err) {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
       }
     );
 

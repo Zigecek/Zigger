@@ -101,20 +101,13 @@ module.exports = {
             }
           }
 
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             {
               guildID: message.guild.id,
             },
             {
               musicBotSkipVotedMembersID: [],
               musicBotSkipVotesNeeded: 0,
-            },
-            function (err) {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
             }
           );
         } else {
@@ -174,20 +167,13 @@ module.exports = {
         ) {
           message.channel.send(LMessages.music.skip.skipped);
         }
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: message.guild.id,
           },
           {
             musicBotSkipVotedMembersID: [],
             musicBotSkipVotesNeeded: 0,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
       }
@@ -200,214 +186,47 @@ module.exports = {
         }
         return;
       }
-      Guild.findOne(
-        {
-          guildID: message.guild.id,
-        },
-        (err, Gres) => {
+      var Gres = await Guild.findOne({
+        guildID: message.guild.id,
+      });
+      if (err) {
+        console.error(err);
+        error.sendError(err);
+        return;
+      }
+      if (
+        message.member.voice.channel.members.filter((m) => m.user.bot == false)
+          .size >= 3
+      ) {
+        if (Gres.musicBotSkipVotedMembersID.length != 0) {
+          if (Gres.musicBotSkipVotedMembersID.includes(message.author.id)) {
+            if (
+              message.channel
+                .permissionsFor(message.guild.me)
+                .has("SEND_MESSAGES")
+            ) {
+              message.channel.send(LMessages.music.skip.alreadyVoted);
+            }
+            return;
+          }
+          await Guild.updateOne(
+            { guildID: message.guild.id },
+            { $push: { musicBotSkipVotedMembersID: message.author.id } }
+          );
           if (err) {
             console.error(err);
             error.sendError(err);
             return;
           }
+
+          var Gres = await Guild.findOne({
+            guildID: message.guild.id,
+          });
+
           if (
-            message.member.voice.channel.members.filter(
-              (m) => m.user.bot == false
-            ).size >= 3
+            Gres.musicBotSkipVotedMembersID.length >=
+            Gres.musicBotSkipVotesNeeded
           ) {
-            if (Gres.musicBotSkipVotedMembersID.length != 0) {
-              if (Gres.musicBotSkipVotedMembersID.includes(message.author.id)) {
-                if (
-                  message.channel
-                    .permissionsFor(message.guild.me)
-                    .has("SEND_MESSAGES")
-                ) {
-                  message.channel.send(LMessages.music.skip.alreadyVoted);
-                }
-                return;
-              }
-              Guild.updateOne(
-                { guildID: message.guild.id },
-                { $push: { musicBotSkipVotedMembersID: message.author.id } },
-                (err, result) => {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
-
-                  Guild.findOne(
-                    {
-                      guildID: message.guild.id,
-                    },
-                    (err, Gres) => {
-                      if (err) {
-                        console.error(err);
-                        error.sendError(err);
-                        return;
-                      }
-
-                      if (
-                        Gres.musicBotSkipVotedMembersID.length >=
-                        Gres.musicBotSkipVotesNeeded
-                      ) {
-                        if (
-                          message.channel
-                            .permissionsFor(message.guild.me)
-                            .has("SEND_MESSAGES")
-                        ) {
-                          message.channel.send(LMessages.music.skip.skipped);
-                        }
-                        var number = Gres.musicBotSkipSongs;
-                        if (number > 0) {
-                          if (number != 1) {
-                            let song1 = serverQueue.songs.shift();
-                            serverQueue.songs.splice(0, number - 1);
-                            serverQueue.songs = [song1].concat(
-                              serverQueue.songs
-                            );
-                          }
-                        }
-
-                        if (serverQueue) {
-                          if (serverQueue.audioPlayer) {
-                            serverQueue.audioPlayer.stop();
-                          }
-                        }
-
-                        Guild.findOneAndUpdate(
-                          {
-                            guildID: message.guild.id,
-                          },
-                          {
-                            musicBotSkipVotedMembersID: [],
-                            musicBotSkipVotesNeeded: 0,
-                          },
-                          function (err) {
-                            if (err) {
-                              console.error(err);
-                              error.sendError(err);
-                              return;
-                            }
-                          }
-                        );
-                      } else {
-                        if (
-                          message.channel
-                            .permissionsFor(message.guild.me)
-                            .has("SEND_MESSAGES")
-                        ) {
-                          message.channel.send(
-                            template(
-                              LMessages.music.skip.newSkip,
-                              {
-                                voted: Gres.musicBotSkipVotedMembersID.length,
-                                needed: Gres.musicBotSkipVotesNeeded,
-                              },
-                              { before: "%", after: "%" }
-                            )
-                          );
-                        }
-                      }
-                    }
-                  );
-                }
-              );
-            } else {
-              var number = isNaN(Number(args[0])) ? false : Number(args[0]);
-              if (args[0]) {
-                if (!(number > 0)) {
-                  if (
-                    message.channel
-                      .permissionsFor(message.guild.me)
-                      .has("SEND_MESSAGES")
-                  ) {
-                    message.channel.send(LMessages.music.invalidNumber);
-                  }
-                  return;
-                }
-              }
-              Guild.findOneAndUpdate(
-                {
-                  guildID: message.guild.id,
-                },
-                {
-                  musicBotSkipSongs: number ? 0 : number,
-                  musicBotSkipVotesNeeded: Math.floor(
-                    (message.member.voice.channel.members.filter(
-                      (m) => m.user.bot == false
-                    ).size /
-                      100) *
-                      75
-                  ),
-                },
-                function (err) {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
-                }
-              );
-              Guild.updateOne(
-                { guildID: message.guild.id },
-                { $push: { musicBotSkipVotedMembersID: message.author.id } },
-                (err, result) => {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
-                }
-              );
-              if (
-                message.channel
-                  .permissionsFor(message.guild.me)
-                  .has("SEND_MESSAGES")
-              ) {
-                message.channel.send(
-                  template(
-                    LMessages.music.skip.voting,
-                    {
-                      prefix: prefix,
-                      needed: Math.floor(
-                        (message.member.voice.channel.members.filter(
-                          (m) => m.user.bot == false
-                        ).size /
-                          100) *
-                          75
-                      ),
-                    },
-                    { before: "%", after: "%" }
-                  )
-                );
-              }
-            }
-          } else {
-            if (args[0]) {
-              var number = isNaN(Number(args[0])) ? false : Number(args[0]);
-              if (number > 0) {
-                let song1 = serverQueue.songs.shift();
-                if (number != 1) {
-                  serverQueue.songs.splice(0, number - 1);
-                }
-                serverQueue.songs = [song1].concat(serverQueue.songs);
-              } else {
-                if (
-                  message.channel
-                    .permissionsFor(message.guild.me)
-                    .has("SEND_MESSAGES")
-                ) {
-                  message.channel.send(LMessages.music.invalidNumber);
-                }
-                return;
-              }
-            }
-            if (serverQueue) {
-              if (serverQueue.audioPlayer) {
-                serverQueue.audioPlayer.stop();
-              }
-            }
             if (
               message.channel
                 .permissionsFor(message.guild.me)
@@ -415,9 +234,135 @@ module.exports = {
             ) {
               message.channel.send(LMessages.music.skip.skipped);
             }
+            var number = Gres.musicBotSkipSongs;
+            if (number > 0) {
+              if (number != 1) {
+                let song1 = serverQueue.songs.shift();
+                serverQueue.songs.splice(0, number - 1);
+                serverQueue.songs = [song1].concat(serverQueue.songs);
+              }
+            }
+
+            if (serverQueue) {
+              if (serverQueue.audioPlayer) {
+                serverQueue.audioPlayer.stop();
+              }
+            }
+
+            await Guild.updateOne(
+              {
+                guildID: message.guild.id,
+              },
+              {
+                musicBotSkipVotedMembersID: [],
+                musicBotSkipVotesNeeded: 0,
+              }
+            );
+          } else {
+            if (
+              message.channel
+                .permissionsFor(message.guild.me)
+                .has("SEND_MESSAGES")
+            ) {
+              message.channel.send(
+                template(
+                  LMessages.music.skip.newSkip,
+                  {
+                    voted: Gres.musicBotSkipVotedMembersID.length,
+                    needed: Gres.musicBotSkipVotesNeeded,
+                  },
+                  { before: "%", after: "%" }
+                )
+              );
+            }
+          }
+        } else {
+          var number = isNaN(Number(args[0])) ? false : Number(args[0]);
+          if (args[0]) {
+            if (!(number > 0)) {
+              if (
+                message.channel
+                  .permissionsFor(message.guild.me)
+                  .has("SEND_MESSAGES")
+              ) {
+                message.channel.send(LMessages.music.invalidNumber);
+              }
+              return;
+            }
+          }
+          await Guild.updateOne(
+            {
+              guildID: message.guild.id,
+            },
+            {
+              musicBotSkipSongs: number ? 0 : number,
+              musicBotSkipVotesNeeded: Math.floor(
+                (message.member.voice.channel.members.filter(
+                  (m) => m.user.bot == false
+                ).size /
+                  100) *
+                  75
+              ),
+            }
+          );
+          await Guild.updateOne(
+            { guildID: message.guild.id },
+            { $push: { musicBotSkipVotedMembersID: message.author.id } }
+          );
+          if (
+            message.channel
+              .permissionsFor(message.guild.me)
+              .has("SEND_MESSAGES")
+          ) {
+            message.channel.send(
+              template(
+                LMessages.music.skip.voting,
+                {
+                  prefix: prefix,
+                  needed: Math.floor(
+                    (message.member.voice.channel.members.filter(
+                      (m) => m.user.bot == false
+                    ).size /
+                      100) *
+                      75
+                  ),
+                },
+                { before: "%", after: "%" }
+              )
+            );
           }
         }
-      );
+      } else {
+        if (args[0]) {
+          var number = isNaN(Number(args[0])) ? false : Number(args[0]);
+          if (number > 0) {
+            let song1 = serverQueue.songs.shift();
+            if (number != 1) {
+              serverQueue.songs.splice(0, number - 1);
+            }
+            serverQueue.songs = [song1].concat(serverQueue.songs);
+          } else {
+            if (
+              message.channel
+                .permissionsFor(message.guild.me)
+                .has("SEND_MESSAGES")
+            ) {
+              message.channel.send(LMessages.music.invalidNumber);
+            }
+            return;
+          }
+        }
+        if (serverQueue) {
+          if (serverQueue.audioPlayer) {
+            serverQueue.audioPlayer.stop();
+          }
+        }
+        if (
+          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        ) {
+          message.channel.send(LMessages.music.skip.skipped);
+        }
+      }
     }
   },
 };

@@ -51,79 +51,61 @@ module.exports = {
       return;
     } else {
       if (Number(args[0]) >= 1 && Number(args[0]) <= 100) {
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: message.guild.id,
           },
           {
             musicBotVolume: Number(args[0]),
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-
-            if (serverQueue != undefined) {
-              serverQueue.audioPlayer.state?.resource.volume.setVolume(
-                Number(args[0]) / 100
-              );
-            }
-
-            if (
-              message.channel
-                .permissionsFor(message.guild.me)
-                .has("SEND_MESSAGES")
-            ) {
-              message.channel.send(
-                template(
-                  LMessages.music.volume.set,
-                  { volume: args[0] },
-                  { before: "%", after: "%" }
-                )
-              );
-            }
-            return;
           }
         );
+
+        if (serverQueue != undefined) {
+          serverQueue.audioPlayer.state?.resource.volume.setVolume(
+            Number(args[0]) / 100
+          );
+        }
+
+        if (
+          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        ) {
+          message.channel.send(
+            template(
+              LMessages.music.volume.set,
+              { volume: args[0] },
+              { before: "%", after: "%" }
+            )
+          );
+        }
+        return;
       } else if (Number(args[0]) >= 1 && Gres.plus) {
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: message.guild.id,
           },
           {
             musicBotVolume: Number(args[0]),
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-
-            if (serverQueue != undefined) {
-              serverQueue.audioPlayer.state?.resource.volume.setVolume(
-                Number(args[0]) / 100
-              );
-            }
-
-            if (
-              message.channel
-                .permissionsFor(message.guild.me)
-                .has("SEND_MESSAGES")
-            ) {
-              message.channel.send(
-                template(
-                  LMessages.music.volume.set,
-                  { volume: args[0] },
-                  { before: "%", after: "%" }
-                )
-              );
-            }
-            return;
           }
         );
+
+        if (serverQueue != undefined) {
+          serverQueue.audioPlayer.state?.resource.volume.setVolume(
+            Number(args[0]) / 100
+          );
+        }
+
+        if (
+          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        ) {
+          message.channel.send(
+            template(
+              LMessages.music.volume.set,
+              { volume: args[0] },
+              { before: "%", after: "%" }
+            )
+          );
+        }
+        return;
       } else {
         if (
           message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")

@@ -180,8 +180,8 @@ module.exports = {
                 parent: category,
               }
             )
-            .then((chan) => {
-              Guild.updateOne(
+            .then(async (chan) => {
+              await Guild.updateOne(
                 { guildID: int.guild.id },
                 {
                   $push: {
@@ -190,13 +190,6 @@ module.exports = {
                       channelID: chan.id,
                     },
                   },
-                },
-                (err, result) => {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
               resolve(chan);
@@ -242,20 +235,13 @@ module.exports = {
                 ),
               });
 
-              Guild.findOneAndUpdate(
+              await Guild.updateOne(
                 {
                   guildID: int.guild.id,
                 },
                 {
                   countersSetupDone: true,
                   countersCategoryChannelID: category.id,
-                },
-                function (err) {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
             });
@@ -347,7 +333,7 @@ module.exports = {
             }
           }
         }
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: int.guild.id,
           },
@@ -355,13 +341,6 @@ module.exports = {
             counters: [],
             countersCategoryChannelID: null,
             countersSetupDone: false,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
 

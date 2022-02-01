@@ -32,32 +32,25 @@ module.exports = {
           ),
         });
       } else if (int.options.getSubcommand() == "set") {
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: int.guild.id,
           },
           {
             prefix: int.options.get("prefix").value,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-
-            followReply(int, {
-              content: template(
-                LMessages.prefix.set,
-                {
-                  guild: Gres.guildName,
-                  prefix: int.options.get("prefix").value,
-                },
-                { before: "%", after: "%" }
-              ),
-            });
           }
         );
+
+        followReply(int, {
+          content: template(
+            LMessages.prefix.set,
+            {
+              guild: Gres.guildName,
+              prefix: int.options.get("prefix").value,
+            },
+            { before: "%", after: "%" }
+          ),
+        });
       }
     } else {
       followReply(int, { content: LMessages.noPermission });

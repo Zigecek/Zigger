@@ -40,19 +40,12 @@ module.exports = {
           ar.push(role.id);
         }
         roleAr = functions.filterDuplicates(roleAr);
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: int.guild.id,
           },
           {
             autoRoleIDs: roleAr,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
         if (ar.length == 0) {
@@ -71,47 +64,33 @@ module.exports = {
           ),
         });
       } else if (int.options.getSubcommand() == "on") {
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: int.guild.id,
           },
           {
             autoroleEnabled: true,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-
-            followReply(int, { content: LMessages.autorole.enabled });
-
-            if (Gres.autoRoleIDs.length < 1) {
-              followReply(int, {
-                content: LMessages.autorole.enabledButNotSet,
-              });
-            }
           }
         );
+
+        followReply(int, { content: LMessages.autorole.enabled });
+
+        if (Gres.autoRoleIDs.length < 1) {
+          followReply(int, {
+            content: LMessages.autorole.enabledButNotSet,
+          });
+        }
       } else if (int.options.getSubcommand() == "off") {
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: int.guild.id,
           },
           {
             autoroleEnabled: false,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-
-            followReply(int, { content: LMessages.autorole.disabled });
           }
         );
+
+        followReply(int, { content: LMessages.autorole.disabled });
       } else if (int.options.getSubcommand() == "remove") {
         var ar = [];
         var roleAr = Gres.autoRoleIDs;
@@ -123,19 +102,12 @@ module.exports = {
           ar.push(role.id);
         }
         roleAr = functions.filterDuplicates(roleAr);
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: int.guild.id,
           },
           {
             autoRoleIDs: roleAr,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
         if (ar.length == 0) {
@@ -156,24 +128,17 @@ module.exports = {
       } else if (int.options.getSubcommand() == "info") {
         if (Gres.autoRoleIDs.length >= 1) {
           var roles = [];
-          Gres.autoRoleIDs.forEach((id) => {
+          Gres.autoRoleIDs.forEach(async (id) => {
             var role = int.guild.roles.cache.get(id);
             if (role) {
               roles.push(role);
             } else {
-              Guild.findOneAndUpdate(
+              await Guild.updateOne(
                 {
                   guildID: int.guild.id,
                 },
                 {
                   $pull: { autoRoleIDs: id },
-                },
-                (err, res) => {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
             }

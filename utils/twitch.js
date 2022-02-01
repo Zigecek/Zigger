@@ -25,31 +25,13 @@ const ready = () => {
   callLoop();
 };
 
-async function callLoop() {
+function callLoop() {
   setInterval(async () => {
-    let Sres = await Streams.findOne(
-      {
-        note: "555",
-      },
-      (err, Sres) => {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
-
-        return Sres;
-      }
-    );
+    var Sres = await Streams.findOne({
+      note: "555",
+    });
     if (Sres.guildIDs) {
-      let Gres = await Guild.find({}, (err, Gres) => {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
-        return Gres;
-      });
+      var Gres = await Guild.find({});
       if (Gres) {
         Gres.filter((x) => Sres.guildIDs.includes(x.guildID));
         Gres.forEach(async (e) => {
@@ -58,36 +40,22 @@ async function callLoop() {
 
             if (Tres) {
               if (Tres.stream == null) {
-                Guild.findOneAndUpdate(
+                await Guild.updateOne(
                   {
                     guildID: e.guildID,
                   },
                   {
                     stream: false,
-                  },
-                  function (err) {
-                    if (err) {
-                      console.error(err);
-                      error.sendError(err);
-                      return;
-                    }
                   }
                 );
               } else {
                 if (e.stream != true) {
-                  Guild.findOneAndUpdate(
+                  await Guild.updateOne(
                     {
                       guildID: e.guildID,
                     },
                     {
                       stream: true,
-                    },
-                    function (err) {
-                      if (err) {
-                        console.error(err);
-                        error.sendError(err);
-                        return;
-                      }
                     }
                   );
 
@@ -118,38 +86,24 @@ async function callLoop() {
                         var message = await chan.send({
                           embeds: [streamEmbed],
                         });
-                        Guild.findOneAndUpdate(
+                        await Guild.updateOne(
                           {
                             guildID: e.guildID,
                           },
                           {
                             streamMessageID: message.id,
                             streamMessageChannelID: e.streamNotifyChannelID,
-                          },
-                          (err, result) => {
-                            if (err) {
-                              console.error(err);
-                              error.sendError(err);
-                              return;
-                            }
                           }
                         );
                       }
                     }
                   } else {
-                    Guild.findOneAndUpdate(
+                    await Guild.updateOne(
                       {
                         guildID: e.guildID,
                       },
                       {
                         streamNotifyChannelID: null,
-                      },
-                      (err, result) => {
-                        if (err) {
-                          console.error(err);
-                          error.sendError(err);
-                          return;
-                        }
                       }
                     );
                   }

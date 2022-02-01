@@ -32,21 +32,14 @@ module.exports = {
         if (args[1] != null) {
           if (message.mentions.roles.size >= 1) {
             var ar = [];
-            message.mentions.roles.forEach((role) => {
+            message.mentions.roles.forEach(async (role) => {
               if (role.position == 0) return;
-              Guild.updateOne(
+              await Guild.updateOne(
                 {
                   guildID: message.guild.id,
                 },
                 {
                   $push: { autoRoleIDs: role.id },
-                },
-                (err, result) => {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
               ar.push(role.id);
@@ -67,66 +60,43 @@ module.exports = {
           return;
         }
       } else if (args[0] == "on") {
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: message.guild.id,
           },
           {
             autoroleEnabled: true,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-
-            message.channel.send(LMessages.autorole.enabled);
-
-            if (Gres.autoRoleIDs.length < 1) {
-              message.channel.send(LMessages.autorole.enabledButNotSet);
-            }
           }
         );
+        message.channel.send(LMessages.autorole.enabled);
+
+        if (Gres.autoRoleIDs.length < 1) {
+          message.channel.send(LMessages.autorole.enabledButNotSet);
+        }
       } else if (args[0] == "off") {
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: message.guild.id,
           },
           {
             autoroleEnabled: false,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-
-            message.channel.send(LMessages.autorole.disabled);
           }
         );
+        message.channel.send(LMessages.autorole.disabled);
       } else {
         if (Gres.autoRoleIDs.length >= 1) {
           var roles = [];
-          Gres.autoRoleIDs.forEach((id) => {
+          Gres.autoRoleIDs.forEach(async (id) => {
             var role = message.guild.roles.cache.get(id);
             if (role) {
               roles.push(role);
             } else {
-              Guild.findOneAndUpdate(
+              await Guild.updateOne(
                 {
                   guildID: message.guild.id,
                 },
                 {
                   $pull: { autoRoleIDs: id },
-                },
-                (err, res) => {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
             }

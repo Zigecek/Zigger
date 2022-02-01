@@ -19,7 +19,7 @@ module.exports = {
   aliases: [],
   cooldown: 3,
   category: "fun",
-  async execute(int, serverQueue, Gres) {
+  execute(int, serverQueue, Gres) {
     if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
     if (!int.guild.me.permissions.has("EMBED_LINKS"))
       return followReply(int, { content: LMessages.help.noPermission });
@@ -29,13 +29,11 @@ module.exports = {
 
 async function get(int) {
   const term = int.options.get("query").value;
-  console.log(term);
   const query = new URLSearchParams({ term });
 
   const res = await fetch(
     `https://api.urbandictionary.com/v0/define?${query}`
   ).then((response) => response.json());
-  console.log(res);
   var body = res.list;
   if (body.length == 0) {
     followReply(int, { content: LMessages.urban.nothingFound });
@@ -108,7 +106,7 @@ async function get(int) {
           }
         }
       })
-      .on("end", async () => {
+      .on("end", () => {
         if (msg) {
           msg.components.forEach((r) => {
             r.forEach((b) => {

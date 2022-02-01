@@ -73,20 +73,13 @@ module.exports = {
       }
       return;
     }
-    Guild.findOneAndUpdate(
+    await Guild.updateOne(
       {
         guildID: message.guild.id,
       },
       {
         musicBotTxtChannelID: message.channel.id,
         musicBotPaused: false,
-      },
-      function (err) {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
       }
     );
 
@@ -396,20 +389,13 @@ module.exports = {
 
     if (newQueue) {
       if (newJoin) {
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: message.guild.id,
           },
           {
             musicBotLoop: false,
             musicBotQueueLoop: false,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
         if (

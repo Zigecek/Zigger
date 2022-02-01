@@ -34,7 +34,7 @@ module.exports = {
       return;
     }
     const elMsecs = new Date().getTime() - Gres.musicBotPlayTime.getTime();
-    await Guild.findOneAndUpdate(
+    await Guild.updateOne(
       {
         guildID: int.guild.id,
       },
@@ -42,13 +42,6 @@ module.exports = {
         musicBotPaused: true,
         musicBotPlaying: false,
         musicBotPauseElapsed: elMsecs,
-      },
-      function (err) {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
       }
     );
     if (serverQueue) {

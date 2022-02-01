@@ -33,7 +33,7 @@ module.exports = {
       }
       return;
     }
-    await Guild.findOneAndUpdate(
+    await Guild.updateOne(
       {
         guildID: int.guild.id,
       },
@@ -44,13 +44,6 @@ module.exports = {
         musicBotPlayTime: new Date(
           new Date().getTime() - Gres.musicBotPauseElapsed
         ),
-      },
-      function (err) {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
       }
     );
     if (serverQueue) {

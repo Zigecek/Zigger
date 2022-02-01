@@ -36,19 +36,9 @@ const messageCreate = async (params) => {
     muteLength: 0.25,
   };
 
-  let Gres = await Guild.findOne(
-    {
-      guildID: message.guild.id,
-    },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
-      return Gres;
-    }
-  );
+  var Gres = await Guild.findOne({
+    guildID: message.guild.id,
+  });
 
   if (!Gres) return;
 
@@ -71,7 +61,7 @@ const messageCreate = async (params) => {
       sp.curMessCount = 1;
       sp.lastMess = new Date();
       sp.lastMesss = [[message.id, message.channel.id]];
-      Guild.findOneAndUpdate(
+      await Guild.updateOne(
         {
           guildID: message.guild.id,
           "spam.userID": message.author.id,
@@ -85,13 +75,6 @@ const messageCreate = async (params) => {
             "spam.$.muteLength": sp.muteLength,
             "spam.$.lastMesss": sp.lastMesss,
           },
-        },
-        function (err, res) {
-          if (err) {
-            console.error(err);
-            error.sendError(err);
-            return;
-          }
         }
       );
     } else {
@@ -106,7 +89,7 @@ const messageCreate = async (params) => {
           message.reply(LMessages.antispam.util.stopSpaming);
         }
 
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: message.guild.id,
             "spam.userID": message.author.id,
@@ -120,13 +103,6 @@ const messageCreate = async (params) => {
               "spam.$.muteLength": sp.muteLength,
               "spam.$.lastMesss": sp.lastMesss,
             },
-          },
-          function (err, res) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
       } else if (sp.curMessCount >= 5) {
@@ -140,40 +116,29 @@ const messageCreate = async (params) => {
               if (message.guild.me.permissions.has("MANAGE_ROLES")) {
                 message.member.roles.add(mRole);
               }
-              setTimeout(() => {
-                Guild.findOne(
-                  {
-                    guildID: message.guild.id,
-                  },
-                  (err, Gres) => {
-                    if (err) {
-                      console.error(err);
-                      error.sendError(err);
-                      return;
-                    }
+              setTimeout(async () => {
+                var Gres = await Guild.findOne({
+                  guildID: message.guild.id,
+                });
 
-                    let spam = Gres.spam.filter(
-                      (v) => v.userID == message.author.id
-                    );
+                let spam = Gres.spam.filter(
+                  (v) => v.userID == message.author.id
+                );
 
-                    if (spam.length > 0) {
-                      if (spam[0].mutes == sp.mutes) {
-                        if (message.member.roles.cache.has(mRole.id)) {
-                          if (
-                            message.guild.me.permissions.has("MANAGE_ROLES")
-                          ) {
-                            message.member.roles.remove(mRole);
-                          }
-                        }
+                if (spam.length > 0) {
+                  if (spam[0].mutes == sp.mutes) {
+                    if (message.member.roles.cache.has(mRole.id)) {
+                      if (message.guild.me.permissions.has("MANAGE_ROLES")) {
+                        message.member.roles.remove(mRole);
                       }
                     }
                   }
-                );
+                }
               }, sp.muteLength * 3600000);
             }
           }
 
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             {
               guildID: message.guild.id,
               "spam.userID": message.author.id,
@@ -187,13 +152,6 @@ const messageCreate = async (params) => {
                 "spam.$.muteLength": sp.muteLength,
                 "spam.$.lastMesss": sp.lastMesss,
               },
-            },
-            function (err, res) {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
             }
           );
         } else if (sp.mutes > 3 && sp.mutes < 7) {
@@ -205,40 +163,29 @@ const messageCreate = async (params) => {
               if (message.guild.me.permissions.has("MANAGE_ROLES")) {
                 message.member.roles.add(mRole);
               }
-              setTimeout(() => {
-                Guild.findOne(
-                  {
-                    guildID: message.guild.id,
-                  },
-                  (err, Gres) => {
-                    if (err) {
-                      console.error(err);
-                      error.sendError(err);
-                      return;
-                    }
+              setTimeout(async () => {
+                var Gres = await Guild.findOne({
+                  guildID: message.guild.id,
+                });
 
-                    let spam = Gres.spam.filter(
-                      (v) => v.userID == message.author.id
-                    );
+                let spam = Gres.spam.filter(
+                  (v) => v.userID == message.author.id
+                );
 
-                    if (spam.length > 0) {
-                      if (spam[0].mutes == sp.mutes) {
-                        if (message.member.roles.cache.has(mRole.id)) {
-                          if (
-                            message.guild.me.permissions.has("MANAGE_ROLES")
-                          ) {
-                            message.member.roles.remove(mRole);
-                          }
-                        }
+                if (spam.length > 0) {
+                  if (spam[0].mutes == sp.mutes) {
+                    if (message.member.roles.cache.has(mRole.id)) {
+                      if (message.guild.me.permissions.has("MANAGE_ROLES")) {
+                        message.member.roles.remove(mRole);
                       }
                     }
                   }
-                );
+                }
               }, sp.muteLength * 3600000);
             }
           }
 
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             {
               guildID: message.guild.id,
               "spam.userID": message.author.id,
@@ -252,26 +199,12 @@ const messageCreate = async (params) => {
                 "spam.$.muteLength": sp.muteLength,
                 "spam.$.lastMesss": sp.lastMesss,
               },
-            },
-            function (err, res) {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
             }
           );
         } else if (sp.mutes >= 7) {
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             { guildID: message.guild.id },
-            { $pull: { spam: spam[0] } },
-            function (err, res) {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-            }
+            { $pull: { spam: spam[0] } }
           );
           if (message.member.kickable) {
             if (message.guild.me.permissions.has("KICK_MEMBERS")) {
@@ -280,7 +213,7 @@ const messageCreate = async (params) => {
           }
         }
       } else {
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: message.guild.id,
             "spam.userID": message.author.id,
@@ -294,34 +227,20 @@ const messageCreate = async (params) => {
               "spam.$.muteLength": sp.muteLength,
               "spam.$.lastMesss": sp.lastMesss,
             },
-          },
-          function (err, res) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
       }
     }
   } else {
     userConst.userID = message.author.id;
-    Guild.findOneAndUpdate(
+    await Guild.updateOne(
       { guildID: message.guild.id },
-      { $push: { spam: userConst } },
-      (err, result) => {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
-      }
+      { $push: { spam: userConst } }
     );
   }
 };
 
-async function delMesss(array) {
+function delMesss(array) {
   array.forEach(async (e) => {
     var channel = await bot.channels.fetch(e[1]);
     try {
@@ -334,45 +253,36 @@ async function delMesss(array) {
   });
 }
 
-const channelCreate = (params) => {
+const channelCreate = async (params) => {
   var channel = params[0];
   if (channel.type == "DM") {
     return;
   }
 
-  Guild.findOne(
-    {
-      guildID: channel.guild.id,
-    },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
+  var Gres = await Guild.findOne({
+    guildID: channel.guild.id,
+  });
 
-      if (Gres) {
-        if (Gres.spamEnabled == false) {
-          return;
-        }
+  if (Gres) {
+    if (Gres.spamEnabled == false) {
+      return;
+    }
 
-        let mRole = channel.guild.roles.cache.get(Gres.spamMuteRoleID);
+    let mRole = channel.guild.roles.cache.get(Gres.spamMuteRoleID);
 
-        if (mRole) {
-          if (channel.guild.me.permissions.has("MANAGE_ROLES")) {
-            channel.createOverwrite(
-              mRole,
-              {
-                SEND_MESSAGES: false,
-                SEND_TTS_MESSAGES: false,
-              },
-              "Making Muted role to work here."
-            );
-          }
-        }
+    if (mRole) {
+      if (channel.guild.me.permissions.has("MANAGE_ROLES")) {
+        channel.createOverwrite(
+          mRole,
+          {
+            SEND_MESSAGES: false,
+            SEND_TTS_MESSAGES: false,
+          },
+          "Making Muted role to work here."
+        );
       }
     }
-  );
+  }
 };
 
 const channelUpdate = async (params) => {
@@ -381,19 +291,9 @@ const channelUpdate = async (params) => {
     return;
   }
 
-  var Gres = Guild.findOne(
-    {
-      guildID: channel.guild.id,
-    },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
-      return Gres;
-    }
-  );
+  var Gres = await Guild.findOne({
+    guildID: channel.guild.id,
+  });
 
   if (Gres) {
     if (Gres.spamEnabled == false) {
@@ -428,110 +328,69 @@ const channelUpdate = async (params) => {
   }
 };
 
-const guildMemberRemove = (params) => {
+const guildMemberRemove = async (params) => {
   var member = params[0];
   if (member.user == bot.user) return;
-  Guild.findOne(
-    {
-      guildID: member.guild.id,
-    },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
-      if (!Gres) return;
+  var Gres = await Guild.findOne({
+    guildID: member.guild.id,
+  });
+  if (!Gres) return;
 
-      let spam = Gres.spam.filter((v) => v.userID == member.id);
+  let spam = Gres.spam.filter((v) => v.userID == member.id);
 
-      if (spam.length > 0) {
-        Guild.findOneAndUpdate(
-          {
-            guildID: member.guild.id,
-          },
-          {
-            $pull: { spam: spam[0] },
-          },
-          (err, result) => {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-          }
-        );
+  if (spam.length > 0) {
+    await Guild.updateOne(
+      {
+        guildID: member.guild.id,
+      },
+      {
+        $pull: { spam: spam[0] },
       }
-    }
-  );
+    );
+  }
 };
 
-const roleDelete = (params) => {
+const roleDelete = async (params) => {
   var role = params[0];
-  Guild.findOne(
-    {
-      guildID: role.guild.id,
-    },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
+  var Gres = await Guild.findOne({
+    guildID: role.guild.id,
+  });
 
-      if (Gres) {
-        if (Gres.spamEnabled == false) {
-          return;
-        }
-
-        if ((role.id = Gres.spamMuteRoleID)) {
-          Guild.findOneAndUpdate(
-            {
-              guildID: role.guild.id,
-            },
-            {
-              spamEnabled: false,
-              spamMuteRoleID: null,
-            },
-            function (err) {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-            }
-          );
-        }
-      }
+  if (Gres) {
+    if (Gres.spamEnabled == false) {
+      return;
     }
-  );
+
+    if ((role.id = Gres.spamMuteRoleID)) {
+      await Guild.updateOne(
+        {
+          guildID: role.guild.id,
+        },
+        {
+          spamEnabled: false,
+          spamMuteRoleID: null,
+        }
+      );
+    }
+  }
 };
 
-const roleUpdate = (params) => {
+const roleUpdate = async (params) => {
   var role = params[0];
-  Guild.findOne(
-    {
-      guildID: role.guild.id,
-    },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
+  var Gres = await Guild.findOne({
+    guildID: role.guild.id,
+  });
 
-      if (Gres) {
-        if (Gres.spamEnabled == false) {
-          return;
-        }
-        if (role.id == Gres.spamMuteRoleID) {
-          if (role.guild.me.permissions.has("MANAGE_ROLES")) {
-            role.permissions.remove("SEND_MESSAGES", "SEND_TTS_MESSAGES");
-          }
-        }
+  if (Gres) {
+    if (Gres.spamEnabled == false) {
+      return;
+    }
+    if (role.id == Gres.spamMuteRoleID) {
+      if (role.guild.me.permissions.has("MANAGE_ROLES")) {
+        role.permissions.remove("SEND_MESSAGES", "SEND_TTS_MESSAGES");
       }
     }
-  );
+  }
 };
 
 module.exports = {

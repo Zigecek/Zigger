@@ -43,20 +43,13 @@ module.exports = {
         message.channel.send(LMessages.musicNothingPlaying);
       }
     }
-    Guild.findOneAndUpdate(
+    await Guild.updateOne(
       {
         guildID: message.guild.id,
       },
       {
         musicBotPaused: false,
         musicBotPlaying: false,
-      },
-      function (err) {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
       }
     );
 

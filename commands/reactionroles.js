@@ -22,7 +22,7 @@ module.exports = {
   cooldown: 3,
   aliases: ["rr"],
   category: "reactionroles",
-  async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
+  execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
       return;
 
@@ -77,7 +77,7 @@ module.exports = {
                     const filter = (mm) => mm.author == message.author;
                     const collector2 = messageForCollecting.channel
                       .createMessageCollector(filter, { time: 300000 })
-                      .on("collect", (m) => {
+                      .on("collect", async (m) => {
                         msgsToDel.push(m);
 
                         collector2.stop();
@@ -85,53 +85,32 @@ module.exports = {
                           completed = true;
                           return;
                         } else if (m.content.toLowerCase() == "done") {
-                          Guild.findOne(
-                            {
-                              guildID: m.guild.id,
-                            },
-                            (err, Gres) => {
-                              if (err) {
-                                console.error(err);
-                                error.sendError(err);
-                                return;
-                              }
+                          var Gres = await Guild.findOne({
+                            guildID: m.guild.id,
+                          });
+                          message.channel
+                            .send(content)
+                            .then(async (finalMess) => {
+                              rrConstructor.messageID = finalMess.id;
+                              rrConstructor.channelID = finalMess.channel.id;
+                              reactionEmojis.forEach((e) => {
+                                rrConstructor.emojis.push(e);
+                              });
+                              reactionRoleIDs.forEach((e) => {
+                                rrConstructor.roleIDs.push(e);
+                              });
 
-                              message.channel
-                                .send(content)
-                                .then((finalMess) => {
-                                  rrConstructor.messageID = finalMess.id;
-                                  rrConstructor.channelID =
-                                    finalMess.channel.id;
-                                  reactionEmojis.forEach((e) => {
-                                    rrConstructor.emojis.push(e);
-                                  });
-                                  reactionRoleIDs.forEach((e) => {
-                                    rrConstructor.roleIDs.push(e);
-                                  });
+                              functions.addReactions(finalMess, reactionEmojis);
 
-                                  functions.addReactions(
-                                    finalMess,
-                                    reactionEmojis
-                                  );
+                              await Guild.updateOne(
+                                { guildID: finalMess.guild.id },
+                                { $push: { rrMessages: rrConstructor } }
+                              );
 
-                                  Guild.updateOne(
-                                    { guildID: finalMess.guild.id },
-                                    { $push: { rrMessages: rrConstructor } },
-                                    (err, result) => {
-                                      if (err) {
-                                        console.error(err);
-                                        error.sendError(err);
-                                        return;
-                                      }
-                                    }
-                                  );
+                              completed = true;
 
-                                  completed = true;
-
-                                  functions.deleteMessages(msgsToDel);
-                                });
-                            }
-                          );
+                              functions.deleteMessages(msgsToDel);
+                            });
                         } else {
                           if (
                             m.content.match(regexEmoji) ||
@@ -172,7 +151,7 @@ module.exports = {
                     const filter = (mm) => mm.author == message.author;
                     const collector3 = messageForCollecting.channel
                       .createMessageCollector(filter, { time: 300000 })
-                      .on("collect", (m) => {
+                      .on("collect", async (m) => {
                         msgsToDel.push(m);
 
                         collector3.stop();
@@ -180,49 +159,29 @@ module.exports = {
                           completed = true;
                           return;
                         } else if (m.content.toLowerCase() == "done") {
-                          Guild.findOne(
-                            {
-                              guildID: m.guild.id,
-                            },
-                            (err, Gres) => {
-                              if (err) {
-                                console.error(err);
-                                error.sendError(err);
-                                return;
-                              }
+                          var Gres = await Guild.findOne({
+                            guildID: m.guild.id,
+                          });
 
-                              message.channel
-                                .send(content)
-                                .then((finalMess) => {
-                                  rrConstructor.messageID = finalMess.id;
-                                  rrConstructor.channelID =
-                                    finalMess.channel.id;
-                                  rrConstructor.emojis = reactionEmojis;
-                                  rrConstructor.roleIDs = reactionRoleIDs;
+                          message.channel
+                            .send(content)
+                            .then(async (finalMess) => {
+                              rrConstructor.messageID = finalMess.id;
+                              rrConstructor.channelID = finalMess.channel.id;
+                              rrConstructor.emojis = reactionEmojis;
+                              rrConstructor.roleIDs = reactionRoleIDs;
 
-                                  functions.addReactions(
-                                    finalMess,
-                                    reactionEmojis
-                                  );
+                              functions.addReactions(finalMess, reactionEmojis);
 
-                                  Guild.updateOne(
-                                    { guildID: finalMess.guild.id },
-                                    { $push: { rrMessages: rrConstructor } },
-                                    (err, result) => {
-                                      if (err) {
-                                        console.error(err);
-                                        error.sendError(err);
-                                        return;
-                                      }
-                                    }
-                                  );
+                              await Guild.updateOne(
+                                { guildID: finalMess.guild.id },
+                                { $push: { rrMessages: rrConstructor } }
+                              );
 
-                                  completed = true;
+                              completed = true;
 
-                                  functions.deleteMessages(msgsToDel);
-                                });
-                            }
-                          );
+                              functions.deleteMessages(msgsToDel);
+                            });
                         } else {
                           if (m.mentions.roles.size >= 1) {
                             let role = m.guild.roles.cache.get(

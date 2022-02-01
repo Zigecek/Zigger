@@ -36,7 +36,7 @@ module.exports = {
           .addFields(
             {
               name: LMessages.antispam.cmds.enabledLabel,
-              value: Gres.spamEnabled ? 'Enabled' : 'Disabled',
+              value: Gres.spamEnabled ? "Enabled" : "Disabled",
               inline: true,
             },
             {
@@ -46,12 +46,13 @@ module.exports = {
             },
             {
               name: LMessages.antispam.cmds.tracking,
-              value: Gres.spam.length.toString() + LMessages.antispam.cmds.users,
+              value:
+                Gres.spam.length.toString() + LMessages.antispam.cmds.users,
               inline: true,
             },
             {
               name: LMessages.antispam.cmds.ignor,
-              value: Gres.spamIgnoreAdmins ? 'Ignoring' : 'Not ignoring',
+              value: Gres.spamIgnoreAdmins ? "Ignoring" : "Not ignoring",
               inline: true,
             }
           );
@@ -117,20 +118,13 @@ module.exports = {
                     "Making Muted role to work here."
                   );
                 });
-              Guild.findOneAndUpdate(
+              await Guild.updateOne(
                 {
                   guildID: int.guild.id,
                 },
                 {
                   spamEnabled: true,
                   spamMuteRoleID: role.id,
-                },
-                function (err) {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
             } else {
@@ -138,19 +132,12 @@ module.exports = {
               return;
             }
           } else {
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               {
                 guildID: int.guild.id,
               },
               {
                 spamEnabled: true,
-              },
-              function (err) {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
               }
             );
           }
@@ -190,20 +177,13 @@ module.exports = {
                   "Making Muted role to work here."
                 );
               });
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               {
                 guildID: int.guild.id,
               },
               {
                 spamEnabled: true,
                 spamMuteRoleID: role.id,
-              },
-              function (err) {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
               }
             );
           } else {
@@ -236,20 +216,13 @@ module.exports = {
             return;
           }
         }
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: int.guild.id,
           },
           {
             spamEnabled: false,
             spamMuteRoleID: null,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
 
@@ -263,16 +236,9 @@ module.exports = {
           let spam = Gres.spam;
           var obj = spam.filter((e) => e.userID == member.user.id)[0];
           if (obj) {
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               { guildID: int.guild.id },
-              { $pull: { spam: obj } },
-              (err, res) => {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
-              }
+              { $pull: { spam: obj } }
             );
           }
         }
@@ -296,19 +262,12 @@ module.exports = {
               content: LMessages.antispam.cmds.invalidNumber,
             });
           } else {
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               {
                 guildID: int.guild.id,
               },
               {
                 spamDelay: Number(int.options.get("delay").value),
-              },
-              function (err) {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
               }
             );
 
@@ -331,20 +290,13 @@ module.exports = {
         }
       } else if (int.options.getSubcommand() == "ignoreadmins") {
         if (int.options.get("option").value) {
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             {
               guildID: int.guild.id,
             },
             {
               spamIgnoreAdmins:
                 int.options.get("option").value == 1 ? true : false,
-            },
-            function (err) {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
             }
           );
 

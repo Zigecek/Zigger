@@ -20,19 +20,12 @@ async function main() {
   await ngrok.authtoken(process.env.NGROK);
   const url = await ngrok.connect(3001);
 
-  await Config.findOneAndUpdate(
+  await Config.updateOne(
     {
       number: 1,
     },
     {
       ngrokUrl: url,
-    },
-    function (err) {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
     }
   );
 }

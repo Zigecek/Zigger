@@ -25,20 +25,13 @@ module.exports = {
       if (args[0] == "defaultvolume") {
         if (args[1]) {
           if (Number(args[1]) >= 1 && Number(args[1]) <= 100) {
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               {
                 guildID: message.guild.id,
               },
               {
                 musicBotDefaultVolume: Number(args[1]),
                 musicBotVolume: Number(args[1]),
-              },
-              function (err) {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
               }
             );
             message.channel.send(
@@ -63,37 +56,23 @@ module.exports = {
         }
       } else if (args[0] == "blacklist") {
         if (message.mentions.channels.size >= 1) {
-          message.mentions.channels.each((ch) => {
+          message.mentions.channels.each(async (ch) => {
             if (Gres.blacklist.includes(ch.id)) {
-              Guild.updateOne(
+              await Guild.updateOne(
                 {
                   guildID: message.guild.id,
                 },
                 {
                   $pull: { blacklist: ch.id },
-                },
-                (err) => {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
             } else {
-              Guild.updateOne(
+              await Guild.updateOne(
                 {
                   guildID: message.guild.id,
                 },
                 {
                   $push: { blacklist: ch.id },
-                },
-                (err) => {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
             }
@@ -107,7 +86,7 @@ module.exports = {
       } else if (args[0] == "annouce") {
         if (args[1]) {
           if (["on", "yes", "off", "no", "short", "small"].includes(args[1])) {
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               {
                 guildID: message.guild.id,
               },
@@ -120,13 +99,6 @@ module.exports = {
                     : args[1] == "short" || args[1] == "small"
                     ? 3
                     : 1,
-              },
-              function (err) {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
               }
             );
             message.channel.send(

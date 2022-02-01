@@ -31,19 +31,12 @@ module.exports = {
       }
       return;
     }
-    Guild.findOneAndUpdate(
+    await Guild.updateOne(
       {
         guildID: int.guild.id,
       },
       {
         musicBotTxtChannelID: int.channel.id,
-      },
-      function (err) {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
       }
     );
     try {
@@ -65,20 +58,13 @@ module.exports = {
               ),
             });
           }
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             {
               guildID: int.guild.id,
             },
             {
               musicBotLoop: false,
               musicBotQueueLoop: false,
-            },
-            function (err) {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
             }
           );
         }
@@ -92,20 +78,13 @@ module.exports = {
             ),
           });
         }
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: int.guild.id,
           },
           {
             musicBotLoop: false,
             musicBotQueueLoop: false,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
       }

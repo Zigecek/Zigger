@@ -29,24 +29,20 @@ module.exports = {
     ) {
       if (int.options.getSubcommandGroup() == "wel") {
         if (int.options.getSubcommand() == "info") {
-          Guild.findOne(
-            {
-              guildID: int.guild.id,
-            },
-            (err, Gres) => {
-              if (Gres.welChannelID == null) {
-                followReply(int, { content: LMessages.channels.wel.notSet });
-              } else {
-                followReply(int, {
-                  content: template(
-                    LMessages.channels.wel.whatIs,
-                    { log: "<#" + Gres.welChannelID + ">" },
-                    { before: "%", after: "%" }
-                  ),
-                });
-              }
-            }
-          );
+          var Gres = await Guild.findOne({
+            guildID: int.guild.id,
+          });
+          if (Gres.welChannelID == null) {
+            followReply(int, { content: LMessages.channels.wel.notSet });
+          } else {
+            followReply(int, {
+              content: template(
+                LMessages.channels.wel.whatIs,
+                { log: "<#" + Gres.welChannelID + ">" },
+                { before: "%", after: "%" }
+              ),
+            });
+          }
         } else if (int.options.getSubcommand() == "set") {
           if (!int.options.get("channel").channel) {
             followReply(int, {
@@ -55,50 +51,39 @@ module.exports = {
 
             return;
           }
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             {
               guildID: int.guild.id,
             },
             {
               welChannelID: int.options.get("channel").channel.id,
-            },
-            (err, result) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-
-              followReply(int, {
-                content: template(
-                  LMessages.channels.wel.set,
-                  { log: "<#" + int.options.get("channel").channel.id + ">" },
-                  { before: "%", after: "%" }
-                ),
-              });
             }
           );
+
+          followReply(int, {
+            content: template(
+              LMessages.channels.wel.set,
+              { log: "<#" + int.options.get("channel").channel.id + ">" },
+              { before: "%", after: "%" }
+            ),
+          });
         }
       } else if (int.options.getSubcommandGroup() == "bye") {
         if (int.options.getSubcommand() == "info") {
-          Guild.findOne(
-            {
-              guildID: int.guild.id,
-            },
-            (err, Gres) => {
-              if (Gres.byeChannelID == null) {
-                followReply(int, { content: LMessages.channels.bye.notSet });
-              } else {
-                followReply(int, {
-                  content: template(
-                    LMessages.channels.bye.whatIs,
-                    { bye: "<#" + Gres.byeChannelID + ">" },
-                    { before: "%", after: "%" }
-                  ),
-                });
-              }
-            }
-          );
+          var Gres = await Guild.findOne({
+            guildID: int.guild.id,
+          });
+          if (Gres.byeChannelID == null) {
+            followReply(int, { content: LMessages.channels.bye.notSet });
+          } else {
+            followReply(int, {
+              content: template(
+                LMessages.channels.bye.whatIs,
+                { bye: "<#" + Gres.byeChannelID + ">" },
+                { before: "%", after: "%" }
+              ),
+            });
+          }
         } else if (int.options.getSubcommand() == "set") {
           if (!int.options.get("channel").channel) {
             followReply(int, {
@@ -107,29 +92,22 @@ module.exports = {
 
             return;
           }
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             {
               guildID: int.guild.id,
             },
             {
               byeChannelID: int.options.get("channel").channel.id,
-            },
-            (err, result) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-
-              followReply(int, {
-                content: template(
-                  LMessages.channels.bye.set,
-                  { bye: "<#" + int.options.get("channel").channel.id + ">" },
-                  { before: "%", after: "%" }
-                ),
-              });
             }
           );
+
+          followReply(int, {
+            content: template(
+              LMessages.channels.bye.set,
+              { bye: "<#" + int.options.get("channel").channel.id + ">" },
+              { before: "%", after: "%" }
+            ),
+          });
         }
       } else {
       }

@@ -172,7 +172,7 @@ module.exports = {
                   ? LMessages.countBoostersMembers
                   : type == "tier"
                   ? LMessages.countTierMembers
-                  : '.',
+                  : ".",
                 { count: count },
                 { before: "%", after: "%" }
               ),
@@ -181,8 +181,8 @@ module.exports = {
                 parent: category,
               }
             )
-            .then((chan) => {
-              Guild.updateOne(
+            .then(async (chan) => {
+              await Guild.updateOne(
                 { guildID: message.guild.id },
                 {
                   $push: {
@@ -191,13 +191,6 @@ module.exports = {
                       channelID: chan.id,
                     },
                   },
-                },
-                (err, result) => {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
               resolve(chan);
@@ -245,20 +238,13 @@ module.exports = {
                 )
               );
 
-              Guild.findOneAndUpdate(
+              await Guild.updateOne(
                 {
                   guildID: message.guild.id,
                 },
                 {
                   countersSetupDone: true,
                   countersCategoryChannelID: category.id,
-                },
-                function (err) {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
             });
@@ -320,7 +306,7 @@ module.exports = {
                     message.channel.send(LMessages.count.invalidType);
                   }
                 })
-                .on("end", async (collected) => {
+                .on("end", (collected) => {
                   if (smessage) {
                     if (smessage.deletable) {
                       if (message.guild.me.permissions.has("MANAGE_MESSAGES")) {
@@ -377,7 +363,7 @@ module.exports = {
             }
           }
         }
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: message.guild.id,
           },
@@ -385,13 +371,6 @@ module.exports = {
             counters: [],
             countersCategoryChannelID: null,
             countersSetupDone: false,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
 

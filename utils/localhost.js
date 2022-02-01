@@ -15,39 +15,31 @@ app.get("/", function (req, res, next) {
   res.sendStatus(200);
 });
 
-app.post("/toAdmin", function (req, res, next) {
+app.post("/toAdmin", async function (req, res, next) {
   var args = req.body.args;
   const event = req.body.event;
-  Config.findOne(
-    {
-      number: 1,
-    },
-    async (err, Gres) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      const user = await bot.users.fetch(Gres.botAdminDiscordID[0]);
+  var Gres = await Config.findOne({
+    number: 1,
+  });
+  const user = await bot.users.fetch(Gres.botAdminDiscordID[0]);
 
-      user.send({
-        embeds: [
-          new Discord.MessageEmbed()
-            .setTitle(args[0])
-            .setDescription(
-              (event == "PrintStarted"
-                ? "Started: "
-                : event == "PrintFailed"
-                ? "Failed: "
-                : "Done: ") +
-                args[1] +
-                (event == "PrintFailed" ? " \nReason: " + args[2] : "")
-            )
-            .setTimestamp(),
-        ],
-      });
-      res.sendStatus(200);
-    }
-  );
+  user.send({
+    embeds: [
+      new Discord.MessageEmbed()
+        .setTitle(args[0])
+        .setDescription(
+          (event == "PrintStarted"
+            ? "Started: "
+            : event == "PrintFailed"
+            ? "Failed: "
+            : "Done: ") +
+            args[1] +
+            (event == "PrintFailed" ? " \nReason: " + args[2] : "")
+        )
+        .setTimestamp(),
+    ],
+  });
+  res.sendStatus(200);
 });
 
 app.listen(port);

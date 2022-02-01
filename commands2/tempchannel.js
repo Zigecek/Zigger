@@ -48,39 +48,23 @@ module.exports = {
       };
 
       function timer(channel) {
-        setTimeout(() => {
-          Guild.findOne(
-            {
-              guildID: channel.guild.id,
-            },
-            (err, Gres) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
+        setTimeout(async () => {
+          var Gres = await Guild.findOne({
+            guildID: channel.guild.id,
+          });
 
-              let tc = Gres.tc.filter((x) => x.channelID == channel.id)[0];
+          let tc = Gres.tc.filter((x) => x.channelID == channel.id)[0];
 
-              if (tc != null && tc != [] && tc != undefined) {
-                if (tc.joined == false) {
-                  channel.delete();
+          if (tc != null && tc != [] && tc != undefined) {
+            if (tc.joined == false) {
+              channel.delete();
 
-                  Guild.findOneAndUpdate(
-                    { guildID: channel.guild.id },
-                    { $pull: { tc: tc } },
-                    (err, res) => {
-                      if (err) {
-                        console.error(err);
-                        error.sendError(err);
-                        return;
-                      }
-                    }
-                  );
-                }
-              }
+              await Guild.updateOne(
+                { guildID: channel.guild.id },
+                { $pull: { tc: tc } }
+              );
             }
-          );
+          }
         }, 60000);
       }
 
@@ -102,20 +86,13 @@ module.exports = {
                 },
               ],
             })
-            .then((category) => {
-              Guild.findOneAndUpdate(
+            .then(async (category) => {
+              await Guild.updateOne(
                 {
                   guildID: int.guild.id,
                 },
                 {
                   tcCategoryID: category.id,
-                },
-                function (err) {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
 
@@ -167,7 +144,7 @@ module.exports = {
               ],
               parent: category,
             })
-            .then((channel) => {
+            .then(async (channel) => {
               if (int.member.voice.channel) {
                 int.member.voice.setChannel(channel);
                 tcConctructor.joined = true;
@@ -179,16 +156,9 @@ module.exports = {
               tcConctructor.channelID = channel.id;
               tcConctructor.invitedUserIDs = [];
 
-              Guild.findOneAndUpdate(
+              await Guild.updateOne(
                 { guildID: int.guild.id },
-                { $push: { tc: tcConctructor } },
-                (err, res) => {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
-                }
+                { $push: { tc: tcConctructor } }
               );
 
               followReply(int, { content: LMessages.tc.channelCreated });
@@ -268,16 +238,9 @@ module.exports = {
           memop.push(member.id);
         }
         if (memop.length >= 1) {
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             { guildID: int.guild.id },
-            { $pull: { tc: tc } },
-            (err, res) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-            }
+            { $pull: { tc: tc } }
           );
 
           memop.forEach((value) => {
@@ -305,16 +268,9 @@ module.exports = {
 
             chan.overwritePermissions(overwrites);
 
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               { guildID: int.guild.id },
-              { $push: { tc: tc } },
-              (err, res) => {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
-              }
+              { $push: { tc: tc } }
             );
 
             followReply(int, { content: LMessages.tc.added });
@@ -343,16 +299,9 @@ module.exports = {
           memop.push(member.id);
         }
         if (memop.length >= 1) {
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             { guildID: int.guild.id },
-            { $pull: { tc: tc } },
-            (err, res) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-            }
+            { $pull: { tc: tc } }
           );
 
           let removed = [];
@@ -380,16 +329,9 @@ module.exports = {
 
             chan.overwritePermissions(overwrites);
 
-            Guild.findOneAndUpdate(
+            await Guild.updateOne(
               { guildID: int.guild.id },
-              { $push: { tc: tc } },
-              (err, res) => {
-                if (err) {
-                  console.error(err);
-                  error.sendError(err);
-                  return;
-                }
-              }
+              { $push: { tc: tc } }
             );
 
             followReply(int, { content: LMessages.tc.removed });

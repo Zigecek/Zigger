@@ -64,7 +64,7 @@ const ready = async () => {
 
   var mode = 1;
 
-  setInterval(() => {
+  setInterval(async () => {
     switch (mode) {
       case 1:
         bot.user.setActivity(
@@ -75,9 +75,8 @@ const ready = async () => {
         mode = 2;
         break;
       case 2:
-        Guild.find({}).then(function (gGuilds) {
-          bot.user.setActivity(`for ${gGuilds.length} servers <3`);
-        });
+        var gGuilds = await Guild.find({});
+        bot.user.setActivity(`for ${gGuilds.length} servers <3`);
         mode = 1;
         break;
     }
@@ -87,29 +86,20 @@ const ready = async () => {
     AutoPoster(process.env.TOPGG_TOKEN, bot);
   }
   const Com = require("./deploy/commands");
-  /*
-  try {
-    await bot.application.commands.set(Com);
-  } catch (err) {
-    if (err.code != 30034) {
-      console.error(err);
-    }
-  }
-  */
+
   await rest.put(Routes.applicationCommands(bot.user.id), { body: Com });
   let myGuilds = bot.guilds.cache.filter(
     (x) => x.ownerId == "470568283993538561" && x.name == "Zigger Testing"
   );
   const devCom = require("./deploy/commandsDev");
   myGuilds.each(async (x) => {
-    console.log(x.id);
     await rest.put(Routes.applicationGuildCommands(bot.user.id, x.id), {
       body: devCom,
     });
   });
 };
 
-const guildCreate = async (params) => {
+const guildCreate = (params) => {
   var guild = params[0];
   let channel = guild.channels.cache
     .filter(
@@ -150,131 +140,96 @@ const guildCreate = async (params) => {
   }
 };
 
-const guildDelete = (params) => {
+const guildDelete = async (params) => {
   var guild = params[0];
   console.log("-Guilda: " + guild.name + ".");
 
-  Streams.exists({ guildIDs: guild.id }, function (err, res) {
-    if (err) {
-      console.error(err);
-      error.sendError(err);
-      return;
-    } else {
-      if (res == true) {
-        Streams.findOneAndUpdate(
-          { note: "555" },
-          { $pull: { guildIDs: guild.id } },
-          { new: true },
-          function (err, res) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-            console.log("MongoDB - Odpojeno oznamování.");
-          }
-        );
-      }
-    }
-  });
-  Guild.deleteOne({ guildID: guild.id }, function (err) {
-    if (err) {
-      console.error(err);
-      error.sendError(err);
-      return;
-    }
-    console.log("MongoDB - Guilda smazána.");
-  });
+  var res = await Streams.exists({ guildIDs: guild.id });
+
+  if (res == true) {
+    await Streams.updateOne(
+      { note: "555" },
+      { $pull: { guildIDs: guild.id } },
+      { new: true }
+    );
+    console.log("MongoDB - Odpojeno oznamování.");
+  }
+
+  await Guild.deleteOne({ guildID: guild.id });
+  console.log("MongoDB - Guilda smazána.");
 };
 
 const guildMemberAdd = async (params) => {
   var member = params[0];
-  Guild.findOne(
-    {
-      guildID: member.guild.id,
-    },
-    async (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
-      if (Gres.autoroleEnabled == true) {
-        if (Gres.autoRoleIDs.length >= 1) {
-          Gres.autoRoleIDs.forEach((rID) => {
-            var role = member.guild.roles.cache.get(rID);
-            if (role) {
-              if (!role.editable) {
-                Gres.autoRoleIDs.splice(Gres.autoRoleIDs.indexOf(rID), 1);
-              }
-            } else {
-              Gres.autoRoleIDs.splice(Gres.autoRoleIDs.indexOf(rID), 1);
-            }
-          });
-          if (member.guild.me.permissions.has("MANAGE_ROLES")) {
-            try {
-              await member.roles.add(Gres.autoRoleIDs);
-            } catch (error) {
-              if (!error.message.includes("Missing Permissions"))
-                return console.error(error);
-            }
+  var Gres = await Guild.findOne({
+    guildID: member.guild.id,
+  });
+  if (Gres.autoroleEnabled == true) {
+    if (Gres.autoRoleIDs.length >= 1) {
+      Gres.autoRoleIDs.forEach((rID) => {
+        var role = member.guild.roles.cache.get(rID);
+        if (role) {
+          if (!role.editable) {
+            Gres.autoRoleIDs.splice(Gres.autoRoleIDs.indexOf(rID), 1);
           }
+        } else {
+          Gres.autoRoleIDs.splice(Gres.autoRoleIDs.indexOf(rID), 1);
         }
-      }
-
-      if (Gres.welChannelID == null) {
-        return;
-      } else {
-        let welChannel = bot.channels.cache.get(Gres.welChannelID);
-        if (welChannel) {
-          if (member.guild.me.permissions.has("SEND_MESSAGES")) {
-            welChannel.send(
-              template(
-                LMessages.joinMessage,
-                { member: `<@${member.user.id}>` },
-                { before: "%", after: "%" }
-              )
-            );
-          }
+      });
+      if (member.guild.me.permissions.has("MANAGE_ROLES")) {
+        try {
+          await member.roles.add(Gres.autoRoleIDs);
+        } catch (error) {
+          if (!error.message.includes("Missing Permissions"))
+            return console.error(error);
         }
       }
     }
-  );
+  }
+
+  if (Gres.welChannelID == null) {
+    return;
+  } else {
+    let welChannel = bot.channels.cache.get(Gres.welChannelID);
+    if (welChannel) {
+      if (member.guild.me.permissions.has("SEND_MESSAGES")) {
+        welChannel.send(
+          template(
+            LMessages.joinMessage,
+            { member: `<@${member.user.id}>` },
+            { before: "%", after: "%" }
+          )
+        );
+      }
+    }
+  }
 };
 
-const guildMemberRemove = (params) => {
+const guildMemberRemove = async (params) => {
   var member = params[0];
   if (member.user == bot.user) return;
-  Guild.findOne(
-    {
-      guildID: member.guild.id,
-    },
-    function (err, Gres) {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
-      if (Gres) {
-        if (Gres.byeChannelID == null) {
-          return;
-        } else {
-          let byeChannel = bot.channels.cache.get(Gres.byeChannelID);
-          if (member.guild.me.permissions.has("SEND_MESSAGES")) {
-            if (byeChannel) {
-              byeChannel.send(
-                template(
-                  LMessages.leaveMessage,
-                  { member: member.user.username },
-                  { before: "%", after: "%" }
-                )
-              );
-            }
-          }
+  var Gres = await Guild.findOne({
+    guildID: member.guild.id,
+  });
+
+  if (Gres) {
+    if (Gres.byeChannelID == null) {
+      return;
+    } else {
+      let byeChannel = bot.channels.cache.get(Gres.byeChannelID);
+      if (member.guild.me.permissions.has("SEND_MESSAGES")) {
+        if (byeChannel) {
+          byeChannel.send(
+            template(
+              LMessages.leaveMessage,
+              { member: member.user.username },
+              { before: "%", after: "%" }
+            )
+          );
         }
       }
     }
-  );
+  }
 };
 
 module.exports.events = {

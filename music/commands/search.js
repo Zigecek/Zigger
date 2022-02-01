@@ -28,7 +28,7 @@ module.exports = {
   cooldown: 3,
   aliases: [],
   category: "music",
-  async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
+  execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
       return;
     const voiceChannel = message.member.voice.channel;
@@ -94,7 +94,7 @@ module.exports = {
           cookie: "",
         },
       },
-    }).then(async (result) => {
+    }).then((result) => {
       const tracks = result.items.filter((x) => x.type == "video").slice(0, 10);
       if (!tracks) {
         if (
@@ -120,7 +120,7 @@ module.exports = {
               { before: "%", after: "%" }
             )
           )
-          .then(async (smessage) => {
+          .then((smessage) => {
             message.channel.send(LMessages.musicTypeNumber);
             const filter = (m) => m.author.id == message.author.id;
             const collector = smessage.channel
@@ -151,7 +151,7 @@ module.exports = {
                   return;
                 }
               })
-              .on("end", async (collected) => {
+              .on("end", (collected) => {
                 if (smessage) {
                   if (smessage.deletable) {
                     if (message.guild.me.permissions.has("MANAGE_MESSAGES")) {
@@ -177,20 +177,13 @@ module.exports = {
                 thumbnail: tracks[index].thumbnails.pop().url,
                 seek: null,
               };
-              Guild.findOneAndUpdate(
+              await Guild.updateOne(
                 {
                   guildID: message.guild.id,
                 },
                 {
                   musicBotTxtChannelID: message.channel.id,
                   musicBotPaused: false,
-                },
-                function (err) {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
                 }
               );
 
@@ -214,20 +207,13 @@ module.exports = {
                           { before: "%", after: "%" }
                         )
                       );
-                      Guild.findOneAndUpdate(
+                      await Guild.updateOne(
                         {
                           guildID: message.guild.id,
                         },
                         {
                           musicBotLoop: false,
                           musicBotQueueLoop: false,
-                        },
-                        function (err) {
-                          if (err) {
-                            console.error(err);
-                            error.sendError(err);
-                            return;
-                          }
                         }
                       );
                     }
@@ -239,20 +225,13 @@ module.exports = {
                         { before: "%", after: "%" }
                       )
                     );
-                    Guild.findOneAndUpdate(
+                    await Guild.updateOne(
                       {
                         guildID: message.guild.id,
                       },
                       {
                         musicBotLoop: false,
                         musicBotQueueLoop: false,
-                      },
-                      function (err) {
-                        if (err) {
-                          console.error(err);
-                          error.sendError(err);
-                          return;
-                        }
                       }
                     );
                   }

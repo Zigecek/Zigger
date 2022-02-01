@@ -20,20 +20,9 @@ module.exports = {
   aliases: [],
   category: "dev",
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    var Cres = await Config.findOne(
-      {
-        number: 1,
-      },
-      (err, Cres) => {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        } else {
-          return Cres;
-        }
-      }
-    );
+    var Cres = await Config.findOne({
+      number: 1,
+    });
 
     if (Cres.botAdminDiscordID.includes(message.author.id)) {
       var string = args.join(" ");

@@ -37,81 +37,46 @@ const ready = () => {
 const play = async (guild, song, errored) => {
   const serverQueue = queue.get(guild.id);
   if (!song) {
-    Guild.findOneAndUpdate(
+    await Guild.updateOne(
       {
         guildID: guild.id,
       },
       {
         musicBotPlaying: false,
-      },
-      function (err) {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
       }
     );
     return;
   }
-  Guild.findOne(
-    {
-      guildID: guild.id,
-    },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
-      if (!errored) {
-        if (song.seek == null) {
-          if (Gres.annouce == 1) {
-            const Embed = new Discord.MessageEmbed()
-              .setColor(config.colors.red)
-              .setTitle(LMessages.musicNowPlaying)
-              .setThumbnail(song.thumbnail)
-              .addFields(
-                {
-                  name: LMessages.musicName,
-                  value: `[${song.title}](${song.url})`,
-                },
-                {
-                  name: LMessages.musicAuthor,
-                  value: song.author,
-                },
-                {
-                  name: LMessages.musicDuration,
-                  value: song.duration,
-                }
-              );
-            if (bot.channels.cache.get(Gres.musicBotTxtChannelID)) {
-              if (guild.me.permissions.has("EMBED_LINKS")) {
-                bot.channels
-                  .fetch(Gres.musicBotTxtChannelID)
-                  .then((channel) => {
-                    channel.send({ embeds: [Embed] });
-                  });
-              } else {
-                bot.channels
-                  .fetch(Gres.musicBotTxtChannelID)
-                  .then((channel) => {
-                    channel.send(
-                      "**" +
-                        LMessages.musicNowPlaying +
-                        "** " +
-                        "`" +
-                        song.title +
-                        "` **`(" +
-                        song.duration +
-                        ")`**"
-                    );
-                  });
-              }
+  var Gres = await Guild.findOne({
+    guildID: guild.id,
+  });
+  if (!errored) {
+    if (song.seek == null) {
+      if (Gres.annouce == 1) {
+        const Embed = new Discord.MessageEmbed()
+          .setColor(config.colors.red)
+          .setTitle(LMessages.musicNowPlaying)
+          .setThumbnail(song.thumbnail)
+          .addFields(
+            {
+              name: LMessages.musicName,
+              value: `[${song.title}](${song.url})`,
+            },
+            {
+              name: LMessages.musicAuthor,
+              value: song.author,
+            },
+            {
+              name: LMessages.musicDuration,
+              value: song.duration,
             }
-          } else if (Gres.annouce == 0) {
-            return;
-          } else if (Gres.annouce == 3) {
+          );
+        if (bot.channels.cache.get(Gres.musicBotTxtChannelID)) {
+          if (guild.me.permissions.has("EMBED_LINKS")) {
+            bot.channels.fetch(Gres.musicBotTxtChannelID).then((channel) => {
+              channel.send({ embeds: [Embed] });
+            });
+          } else {
             bot.channels.fetch(Gres.musicBotTxtChannelID).then((channel) => {
               channel.send(
                 "**" +
@@ -126,82 +91,74 @@ const play = async (guild, song, errored) => {
             });
           }
         }
+      } else if (Gres.annouce == 0) {
+        return;
+      } else if (Gres.annouce == 3) {
+        bot.channels.fetch(Gres.musicBotTxtChannelID).then((channel) => {
+          channel.send(
+            "**" +
+              LMessages.musicNowPlaying +
+              "** " +
+              "`" +
+              song.title +
+              "` **`(" +
+              song.duration +
+              ")`**"
+          );
+        });
       }
     }
-  );
+  }
 
   if (!serverQueue.audioPlayer) {
     serverQueue.audioPlayer = voice.createAudioPlayer();
 
-    serverQueue.audioPlayer.on("stateChange", (oldState, newState) => {
+    serverQueue.audioPlayer.on("stateChange", async (oldState, newState) => {
       if (
         // Paused
         newState.status == voice.AudioPlayerStatus.Paused &&
         oldState.status != voice.AudioPlayerStatus.Paused
       ) {
         const uid = short.generate();
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: guild.id,
           },
           {
             musicBotLastUUID: uid,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
-        setTimeout(() => {
-          Guild.findOne(
-            {
-              guildID: guild.id,
-            },
-            (err, Gres) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-              if (uid == Gres.musicBotLastUUID) {
-                const serverQueue = queue.get(guild.id);
-                if (serverQueue) {
-                  if (serverQueue.connection) {
-                    if (
-                      serverQueue.connection.state.status !==
-                      voice.VoiceConnectionStatus.Destroyed
-                    ) {
-                      serverQueue.connection.destroy();
-                      logger.log(Gres);
-                    }
-                  }
-                  stopET(guild.id, serverQueue);
+        setTimeout(async () => {
+          var Gres = await Guild.findOne({
+            guildID: guild.id,
+          });
+          if (uid == Gres.musicBotLastUUID) {
+            const serverQueue = queue.get(guild.id);
+            if (serverQueue) {
+              if (serverQueue.connection) {
+                if (
+                  serverQueue.connection.state.status !==
+                  voice.VoiceConnectionStatus.Destroyed
+                ) {
+                  serverQueue.connection.destroy();
+                  logger.log(Gres);
                 }
               }
+              stopET(guild.id, serverQueue);
             }
-          );
+          }
         }, 900 * 1000); // 900
       } else if (
         // Resumed
         newState.status != voice.AudioPlayerStatus.Paused &&
         oldState.status == voice.AudioPlayerStatus.Paused
       ) {
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: guild.id,
           },
           {
             musicBotLastUUID: "nothing",
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
       } else if (
@@ -210,7 +167,7 @@ const play = async (guild, song, errored) => {
       ) {
         //  on finish
         const uid = short.generate();
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: guild.id,
           },
@@ -218,106 +175,76 @@ const play = async (guild, song, errored) => {
             musicBotSkipVotedMembersID: [],
             musicBotSkipVotesNeeded: 0,
             musicBotLastUUID: uid,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
 
-        setTimeout(() => {
-          Guild.findOne(
-            {
-              guildID: guild.id,
-            },
-            (err, Gres) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-              if (uid == Gres.musicBotLastUUID) {
-                const serverQueue = queue.get(guild.id);
-                if (serverQueue) {
-                  if (serverQueue.connection) {
-                    if (
-                      serverQueue.connection.state.status !==
-                      voice.VoiceConnectionStatus.Destroyed
-                    ) {
-                      serverQueue.connection.destroy();
-                      logger.log(Gres);
-                    }
-                  }
-                  stopET(guild.id, serverQueue);
+        setTimeout(async () => {
+          var Gres = await Guild.findOne({
+            guildID: guild.id,
+          });
+          if (uid == Gres.musicBotLastUUID) {
+            const serverQueue = queue.get(guild.id);
+            if (serverQueue) {
+              if (serverQueue.connection) {
+                if (
+                  serverQueue.connection.state.status !==
+                  voice.VoiceConnectionStatus.Destroyed
+                ) {
+                  serverQueue.connection.destroy();
+                  logger.log(Gres);
                 }
               }
+              stopET(guild.id, serverQueue);
             }
-          );
+          }
         }, 300 * 1000); // 300
 
-        Guild.findOne(
-          {
-            guildID: guild.id,
-          },
-          (err, Gres) => {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-            if (!Gres.musicBotLoop) {
-              if (Gres.musicBotQueueLoop) {
-                serverQueue.songs.push(serverQueue.songs.shift());
-              } else {
-                serverQueue.songs.shift();
-              }
-            }
-            play(guild, serverQueue.songs[0], false);
-            return;
+        var Gres = await Guild.findOne({
+          guildID: guild.id,
+        });
+        if (err) {
+          console.error(err);
+          error.sendError(err);
+          return;
+        }
+        if (!Gres.musicBotLoop) {
+          if (Gres.musicBotQueueLoop) {
+            serverQueue.songs.push(serverQueue.songs.shift());
+          } else {
+            serverQueue.songs.shift();
           }
-        );
+        }
+        play(guild, serverQueue.songs[0], false);
+        return;
       } else if (newState.status === voice.AudioPlayerStatus.Playing) {
         // on start
 
-        Guild.findOne(
-          {
-            guildID: guild.id,
-          },
-          (err, Gres) => {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-            serverQueue.audioPlayer.state?.resource.volume.setVolume(
-              Number(Gres.musicBotVolume) / 100
-            );
-          }
+        var Gres = await Guild.findOne({
+          guildID: guild.id,
+        });
+        if (err) {
+          console.error(err);
+          error.sendError(err);
+          return;
+        }
+        serverQueue.audioPlayer.state?.resource.volume.setVolume(
+          Number(Gres.musicBotVolume) / 100
         );
+
         if (
           guild.me.voice.channel.members.filter((x) => !x.user.bot).size > 0
         ) {
           const uid = short.generate();
-          Guild.findOneAndUpdate(
+          await Guild.updateOne(
             {
               guildID: guild.id,
             },
             {
               musicBotLastUUID: uid,
-            },
-            function (err) {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
             }
           );
         }
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: guild.id,
           },
@@ -329,13 +256,6 @@ const play = async (guild, song, errored) => {
               song.seek == null
                 ? new Date()
                 : new Date(new Date().getTime() - song.seek * 1000),
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
       }
@@ -370,60 +290,47 @@ const play = async (guild, song, errored) => {
           //dlChunkSize: 256 * 1024,
         });
       })
-      .catch((err) => {
+      .catch(async (err) => {
         if (err.statusCode == 410) {
           console.log("errrrr 410");
-          Guild.findOne(
-            {
-              guildID: guild.id,
-            },
-            async (err, Gres) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-              var channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
-              if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
-                channel.send(
-                  template(
-                    LMessages.music.error,
-                    {
-                      errr: "Youtube: Cannot play age restricted video. (410) - Skipping",
-                    },
-                    { before: "%", after: "%" }
-                  )
-                );
-              }
-              var serverQueue = queue.get(guild.id);
-              if (serverQueue) {
-                if (serverQueue.songs.length > 0) {
-                  serverQueue.songs.shift();
-                  play(guild, serverQueue.songs[0], false);
-                }
-              }
-              return;
+          var Gres = await Guild.findOne({
+            guildID: guild.id,
+          });
+          if (err) {
+            console.error(err);
+            error.sendError(err);
+            return;
+          }
+          var channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
+          if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+            channel.send(
+              template(
+                LMessages.music.error,
+                {
+                  errr: "Youtube: Cannot play age restricted video. (410) - Skipping",
+                },
+                { before: "%", after: "%" }
+              )
+            );
+          }
+          var serverQueue = queue.get(guild.id);
+          if (serverQueue) {
+            if (serverQueue.songs.length > 0) {
+              serverQueue.songs.shift();
+              play(guild, serverQueue.songs[0], false);
             }
-          );
+          }
+          return;
         } else {
           console.error(err);
-          Guild.findOne(
-            {
-              guildID: guild.id,
-            },
-            async (err, Gres) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-              var channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
-              if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
-                channel.send(LMessages.musicError);
-              }
-              return;
-            }
-          );
+          var Gres = await Guild.findOne({
+            guildID: guild.id,
+          });
+          var channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
+          if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+            channel.send(LMessages.musicError);
+          }
+          return;
         }
       });
 
@@ -441,110 +348,8 @@ const play = async (guild, song, errored) => {
   serverQueue.connection.subscribe(serverQueue.audioPlayer);
   return;
 };
-/*
-function callLoop() {
-  setInterval(() => {
-    Guild.find({}).then((gGuilds) => {
-      gGuilds.forEach(async (Gres) => {
-        const guild = await bot.guilds.fetch(Gres.guildID);
-        var serverQueue = queue.get(Gres.guildID);
-        var vChannel = guild ? guild.me.voice.channel : null;
 
-        if (vChannel) {
-          var one = 0;
-          var two = 0;
-          var three = 0;
-
-          if (!Gres.musicBotPlaying) {
-            if (!Gres.musicBotPaused) {
-              ////////////////// NOT PAUSED CHANNEL - musicBotCounter
-
-              if (Gres.musicBotCounter >= 100) {
-                if (serverQueue) {
-                  if (serverQueue.connection) {
-                    if (
-                      serverQueue.connection.state.status !==
-                      voice.VoiceConnectionStatus.Destroyed
-                    ) {
-                      serverQueue.connection.destroy();
-                    }
-                  }
-                  stopET(Gres.guildID, serverQueue);
-                }
-              } else {
-                one = Gres.musicBotCounter + 1;
-                three = 0;
-              }
-            } else {
-              ////////////////// PAUSED CHANNEL - musicBotCounter3
-
-              if (Gres.musicBotCounter3 >= 1000) {
-                if (serverQueue) {
-                  if (serverQueue.connection) {
-                    if (
-                      serverQueue.connection.state.status !==
-                      voice.VoiceConnectionStatus.Destroyed
-                    ) {
-                      serverQueue.connection.destroy();
-                    }
-                  }
-                  stopET(Gres.guildID, serverQueue);
-                }
-              } else {
-                three = Gres.musicBotCounter3 + 1;
-                one = 0;
-              }
-            }
-          } else {
-            one = 0;
-          }
-
-          ////////////////// EMPTY CHANNEL - musicBotCounter2
-
-          if (vChannel.members.size <= 1) {
-            if (Gres.musicBotCounter2 >= 100) {
-              if (serverQueue) {
-                if (serverQueue.connection) {
-                  if (
-                    serverQueue.connection.state.status !==
-                    voice.VoiceConnectionStatus.Destroyed
-                  ) {
-                    serverQueue.connection.destroy();
-                  }
-                }
-                stopET(Gres.guildID, serverQueue);
-              }
-            } else {
-              two = Gres.musicBotCounter2 + 1;
-            }
-          } else {
-            two = 0;
-          }
-
-          Guild.findOneAndUpdate(
-            {
-              guildID: Gres.guildID,
-            },
-            {
-              musicBotCounter: one,
-              musicBotCounter2: two,
-              musicBotCounter3: three,
-            },
-            function (err) {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-            }
-          );
-        }
-      });
-    });
-  }, 5000);
-}
-*/
-const voiceStateUpdate = (params) => {
+const voiceStateUpdate = async (params) => {
   var oldVoice = params[0];
   var newVoice = params[1];
   if (newVoice.channel == null) {
@@ -565,89 +370,57 @@ const voiceStateUpdate = (params) => {
     } else {
       if (oldVoice.channel.members.filter((x) => !x.user.bot).size == 0) {
         const uid = short.generate();
-        Guild.findOneAndUpdate(
+        await Guild.updateOne(
           {
             guildID: oldVoice.guild.id,
           },
           {
             musicBotLastUUID: uid,
-          },
-          function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
           }
         );
-        setTimeout(() => {
-          Guild.findOne(
-            {
-              guildID: oldVoice.guild.id,
-            },
-            (err, Gres) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-              if (uid == Gres.musicBotLastUUID) {
-                const serverQueue = queue.get(newVoice.guild.id);
-                if (serverQueue) {
-                  if (serverQueue.connection) {
-                    if (
-                      serverQueue.connection.state.status !==
-                      voice.VoiceConnectionStatus.Destroyed
-                    ) {
-                      serverQueue.connection.destroy();
-                      logger.log(Gres);
-                    }
-                  }
-                  stopET(newVoice.guild.id, serverQueue);
+        setTimeout(async () => {
+          var Gres = await Guild.findOne({
+            guildID: oldVoice.guild.id,
+          });
+          if (uid == Gres.musicBotLastUUID) {
+            const serverQueue = queue.get(newVoice.guild.id);
+            if (serverQueue) {
+              if (serverQueue.connection) {
+                if (
+                  serverQueue.connection.state.status !==
+                  voice.VoiceConnectionStatus.Destroyed
+                ) {
+                  serverQueue.connection.destroy();
+                  logger.log(Gres);
                 }
               }
+              stopET(newVoice.guild.id, serverQueue);
             }
-          );
+          }
         }, 300 * 1000);
       }
     }
   }
 };
 
-const channelDelete = (params) => {
+const channelDelete = async (params) => {
   var channel = params[0];
-  Guild.findOne(
-    {
-      guildID: channel.guild.id,
-    },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
+  var Gres = await Guild.findOne({
+    guildID: channel.guild.id,
+  });
+  if (Gres.blacklist.includes(channel.id)) {
+    await Guild.updateOne(
+      {
+        guildID: channel.guild.id,
+      },
+      {
+        $pull: { blacklist: channel.id },
       }
-      if (Gres.blacklist.includes(channel.id)) {
-        Guild.findOneAndUpdate(
-          {
-            guildID: channel.guild.id,
-          },
-          {
-            $pull: { blacklist: channel.id },
-          },
-          (err) => {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-          }
-        );
-      }
-    }
-  );
+    );
+  }
 };
 
-function stopET(id, serverQueue) {
+async function stopET(id, serverQueue) {
   if (serverQueue) {
     if (serverQueue.audioPlayer) {
       serverQueue.audioPlayer.stop();
@@ -655,43 +428,27 @@ function stopET(id, serverQueue) {
     queue.delete(id);
   }
 
-  Guild.findOne(
+  var Gres = await Guild.findOne({
+    guildID: id,
+  });
+
+  await Guild.updateOne(
     {
       guildID: id,
     },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
-
-      Guild.findOneAndUpdate(
-        {
-          guildID: id,
-        },
-        {
-          musicBotCounter: 0,
-          musicBotCounter2: 0,
-          musicBotCounter3: 0,
-          musicBotPaused: false,
-          musicBotPlaying: false,
-          musicBotTxtChannelID: null,
-          musicBotVolume: Gres.musicBotDefaultVolume,
-        },
-        function (err) {
-          if (err) {
-            console.error(err);
-            error.sendError(err);
-            return;
-          }
-        }
-      );
+    {
+      musicBotCounter: 0,
+      musicBotCounter2: 0,
+      musicBotCounter3: 0,
+      musicBotPaused: false,
+      musicBotPlaying: false,
+      musicBotTxtChannelID: null,
+      musicBotVolume: Gres.musicBotDefaultVolume,
     }
   );
 }
 
-async function stateChange(serverQueue, guild) {
+function stateChange(serverQueue, guild) {
   serverQueue.connection.on("stateChange", async (_, newState) => {
     if (newState.status == voice.VoiceConnectionStatus.Disconnected) {
       if (
@@ -751,7 +508,7 @@ async function stateChange(serverQueue, guild) {
         }
       }
     } else if (newState.status == voice.VoiceConnectionStatus.Ready) {
-      Guild.findOneAndUpdate(
+      await Guild.updateOne(
         {
           guildID: guild.id,
         },
@@ -759,13 +516,6 @@ async function stateChange(serverQueue, guild) {
           musicBotCounter: 0,
           musicBotCounter2: 0,
           musicBotCounter3: 0,
-        },
-        function (err) {
-          if (err) {
-            console.error(err);
-            error.sendError(err);
-            return;
-          }
         }
       );
     }

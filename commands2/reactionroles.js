@@ -23,7 +23,7 @@ module.exports = {
   cooldown: 3,
   aliases: ["rr"],
   category: "reactionroles",
-  async execute(int, serverQueue, Gres) {
+  execute(int, serverQueue, Gres) {
     if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
 
     var content = "";
@@ -85,7 +85,7 @@ module.exports = {
           int.options
             .get("channel")
             .channel.send({ content: content })
-            .then((message) => {
+            .then(async (message) => {
               rrConstructor.messageID = message.id;
 
               functions.addReactions(message, reactionEmojis);
@@ -98,16 +98,9 @@ module.exports = {
                 ),
               });
 
-              Guild.updateOne(
+              await Guild.updateOne(
                 { guildID: int.guild.id },
-                { $push: { rrMessages: rrConstructor } },
-                (err) => {
-                  if (err) {
-                    console.error(err);
-                    error.sendError(err);
-                    return;
-                  }
-                }
+                { $push: { rrMessages: rrConstructor } }
               );
             });
         }

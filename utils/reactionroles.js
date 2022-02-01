@@ -32,43 +32,32 @@ const messageReactionAdd = async (params) => {
   if (user == bot.user) {
     return;
   }
-  Guild.findOne(
-    {
-      guildID: reaction.message.guild.id,
-    },
-    async (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
-      let emoji2 =
-        reaction.emoji.id == null
-          ? reaction.emoji.name
-          : "<:" + reaction.emoji.name + ":" + reaction.emoji.id + ">";
+  var Gres = await Guild.findOne({
+    guildID: reaction.message.guild.id,
+  });
+  let emoji2 =
+    reaction.emoji.id == null
+      ? reaction.emoji.name
+      : "<:" + reaction.emoji.name + ":" + reaction.emoji.id + ">";
 
-      Gres.rrMessages.forEach(async (e) => {
-        if (e.messageID == reaction.message.id) {
-          if (e.emojis.includes(emoji2)) {
-            var index = e.emojis.indexOf(emoji2);
-            let member = await reaction.message.guild.members.fetch(user);
-            let role = await reaction.message.guild.roles.fetch(
-              e.roleIDs[index]
-            );
-            if (role) {
-              if (member) {
-                if (reaction.message.guild.me.permissions.has("MANAGE_ROLES")) {
-                  member.roles.add(role);
-                }
-              }
+  Gres.rrMessages.forEach(async (e) => {
+    if (e.messageID == reaction.message.id) {
+      if (e.emojis.includes(emoji2)) {
+        var index = e.emojis.indexOf(emoji2);
+        let member = await reaction.message.guild.members.fetch(user);
+        let role = await reaction.message.guild.roles.fetch(e.roleIDs[index]);
+        if (role) {
+          if (member) {
+            if (reaction.message.guild.me.permissions.has("MANAGE_ROLES")) {
+              member.roles.add(role);
             }
           }
-        } else {
-          return;
         }
-      });
+      }
+    } else {
+      return;
     }
-  );
+  });
 };
 
 const messageReactionRemove = async (params) => {
@@ -80,83 +69,54 @@ const messageReactionRemove = async (params) => {
   } else {
     reaction = react;
   }
-  Guild.findOne(
-    {
-      guildID: reaction.message.guild.id,
-    },
-    async (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
-      let emoji2 =
-        reaction.emoji.id == null
-          ? reaction.emoji.name
-          : "<:" + reaction.emoji.name + ":" + reaction.emoji.id + ">";
+  var Gres = await Guild.findOne({
+    guildID: reaction.message.guild.id,
+  });
+  let emoji2 =
+    reaction.emoji.id == null
+      ? reaction.emoji.name
+      : "<:" + reaction.emoji.name + ":" + reaction.emoji.id + ">";
 
-      Gres.rrMessages.forEach(async (e) => {
-        if (e.messageID == reaction.message.id) {
-          if (e.emojis.includes(emoji2)) {
-            if (user == bot.user) {
-              functions.addReactions(reaction.message, e.emojis);
-            } else {
-              var index = e.emojis.indexOf(emoji2);
-              let member = await reaction.message.guild.members.fetch(user);
-              let role = await reaction.message.guild.roles.fetch(
-                e.roleIDs[index]
-              );
-              if (role) {
-                if (member) {
-                  if (member.roles.cache.has(role.id)) {
-                    if (
-                      reaction.message.guild.me.permissions.has("MANAGE_ROLES")
-                    ) {
-                      member.roles.remove(role);
-                    }
-                  }
+  Gres.rrMessages.forEach(async (e) => {
+    if (e.messageID == reaction.message.id) {
+      if (e.emojis.includes(emoji2)) {
+        if (user == bot.user) {
+          functions.addReactions(reaction.message, e.emojis);
+        } else {
+          var index = e.emojis.indexOf(emoji2);
+          let member = await reaction.message.guild.members.fetch(user);
+          let role = await reaction.message.guild.roles.fetch(e.roleIDs[index]);
+          if (role) {
+            if (member) {
+              if (member.roles.cache.has(role.id)) {
+                if (reaction.message.guild.me.permissions.has("MANAGE_ROLES")) {
+                  member.roles.remove(role);
                 }
               }
             }
           }
-        } else {
-          return;
         }
-      });
+      }
+    } else {
+      return;
     }
-  );
+  });
 };
 
 const messageDelete = async (params) => {
   var message = params[0];
-  Guild.findOne(
-    {
-      guildID: message.guild.id,
-    },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
+  var Gres = await Guild.findOne({
+    guildID: message.guild.id,
+  });
 
-      Gres.rrMessages.forEach((e) => {
-        if (e.messageID == message.id) {
-          Guild.findOneAndUpdate(
-            { guildID: message.guild.id },
-            { $pull: { rrMessages: e } },
-            (err, res) => {
-              if (err) {
-                console.error(err);
-                error.sendError(err);
-                return;
-              }
-            }
-          );
-        }
-      });
+  Gres.rrMessages.forEach(async (e) => {
+    if (e.messageID == message.id) {
+      await Guild.updateOne(
+        { guildID: message.guild.id },
+        { $pull: { rrMessages: e } }
+      );
     }
-  );
+  });
 };
 
 module.exports = {

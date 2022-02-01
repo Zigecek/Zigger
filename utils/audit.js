@@ -17,55 +17,37 @@ const config = require("../config.json");
 const error = require("./error");
 const Guild = require("../models/guild");
 
-const ready = () => {
-  bot.guilds.cache.each((guild) => {
-    Guild.exists({ guildID: guild.id }, function (err, res) {
-      if (err) {
+const ready = async () => {
+  bot.guilds.cache.each(async (guild) => {
+    var res = await Guild.exists({ guildID: guild.id });
+
+    if (res == false) {
+      const guildJoin = new Guild({
+        _id: mongoose.Types.ObjectId(),
+        guildID: guild.id,
+        guildName: guild.name,
+        prefix: config.DefaultPrefix,
+      });
+      guildJoin.save().catch((err) => {
         console.error(err);
         error.sendError(err);
         return;
-      } else {
-        if (res == false) {
-          const guildJoin = new Guild({
-            _id: mongoose.Types.ObjectId(),
-            guildID: guild.id,
-            guildName: guild.name,
-            prefix: config.DefaultPrefix,
-          });
-          guildJoin.save().catch((err) => {
-            console.error(err);
-            error.sendError(err);
-            return;
-          });
-          console.log(" ");
-          console.log("MongoDB - Guilda zapsána.");
-        }
+      });
+      console.log(" ");
+      console.log("MongoDB - Guilda zapsána.");
+    }
+  });
+  var Gres = await Guild.find({});
+
+  if (Gres) {
+    Gres.forEach(async (e) => {
+      if (!bot.guilds.cache.has(e.guildID)) {
+        await Guild.deleteOne({ guildID: e.guildID });
+        console.log(" ");
+        console.log("MongoDB - Guilda smazána.");
       }
     });
-  });
-  Guild.find({}, (err, Gres) => {
-    if (err) {
-      console.error(err);
-      error.sendError(err);
-      return;
-    }
-
-    if (Gres) {
-      Gres.forEach((e) => {
-        if (!bot.guilds.cache.has(e.guildID)) {
-          Guild.deleteOne({ guildID: e.guildID }, function (err) {
-            if (err) {
-              console.error(err);
-              error.sendError(err);
-              return;
-            }
-            console.log(" ");
-            console.log("MongoDB - Guilda smazána.");
-          });
-        }
-      });
-    }
-  });
+  }
 };
 
 module.exports = {

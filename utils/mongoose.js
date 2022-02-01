@@ -27,11 +27,9 @@ module.exports = {
     mongoose.connect(
       process.platform != "linux" && config.ofi != true
         ? process.env.MONGOOSE_KEY2
-        : process.env.MONGOOSE_KEY,
-      dbOptions
+        : process.env.MONGOOSE_KEY
     );
 
-    mongoose.set("useFindAndModify", false);
     mongoose.Promise = global.Promise;
 
     mongoose.connection.on("connected", () => {

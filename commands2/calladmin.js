@@ -22,29 +22,20 @@ module.exports = {
   aliases: ["ca"],
   category: "settings",
   async execute(int, serverQueue, Gres) {
-    Config.findOne(
-      {
-        number: 1,
-      },
-      (err, Gres) => {
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
+    var Gres = await Config.findOne({
+      number: 1,
+    });
 
-        let admin = int.guild.members.cache.get(Gres.botAdminDiscordID[0]);
+    let admin = int.guild.members.cache.get(Gres.botAdminDiscordID[0]);
 
-        if (admin) {
-          admin.send("**Error:** " + int.url + " \nGuildID:" + int.guild.id);
+    if (admin) {
+      admin.send("**Error:** " + int.url + " \nGuildID:" + int.guild.id);
 
-          followReply(int, { content: LMessages.adminNotified });
+      followReply(int, { content: LMessages.adminNotified });
 
-          return;
-        } else {
-          followReply(int, { content: LMessages.error });
-        }
-      }
-    );
+      return;
+    } else {
+      followReply(int, { content: LMessages.error });
+    }
   },
 };

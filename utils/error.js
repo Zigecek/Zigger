@@ -22,70 +22,54 @@ var functions = require("./functions");
  * @returns {null} Null
  */
 async function sendError(error) {
-  Config.findOne(
-    {
-      number: 1,
-    },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      const user = bot.users.cache.find(
-        (user) => user.id == Gres.botAdminDiscordID[0]
-      );
-
-      sourcebin
-        .create([
-          {
-            name: "Error",
-            content: error.stack,
-            languageId: "js",
-          },
-        ])
-        .then((res) => {
-          user.send("**CHYBA!** \nČas: " + functions.curDT() + " \nChyba: ");
-          user.send(res.url + " ");
-        })
-        .catch(console.error);
-    }
+  var Gres = await Config.findOne({
+    number: 1,
+  });
+  const user = bot.users.cache.find(
+    (user) => user.id == Gres.botAdminDiscordID[0]
   );
+
+  sourcebin
+    .create([
+      {
+        name: "Error",
+        content: error.stack,
+        languageId: "js",
+      },
+    ])
+    .then((res) => {
+      user.send("**CHYBA!** \nČas: " + functions.curDT() + " \nChyba: ");
+      user.send(res.url + " ");
+    })
+    .catch(console.error);
 }
 
 module.exports = {
   sendError,
 };
 
-mongoose.connection.on("err", (error) => {
+mongoose.connection.on("err", async (error) => {
   console.error(err);
 
-  Config.findOne(
-    {
-      number: 1,
-    },
-    (err, Gres) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
+  var Gres = await Config.findOne({
+    number: 1,
+  });
 
-      const user = bot.users.cache.find(
-        (user) => user.id == Gres.botAdminDiscordID[0]
-      );
-
-      sourcebin
-        .create([
-          {
-            name: "Error",
-            content: error.stack,
-            languageId: "js",
-          },
-        ])
-        .then((res) => {
-          user.send("**CHYBA!** \nČas: " + functions.curDT() + " \nChyba: ");
-          user.send(res.url + " ");
-        })
-        .catch(console.error);
-    }
+  const user = bot.users.cache.find(
+    (user) => user.id == Gres.botAdminDiscordID[0]
   );
+
+  sourcebin
+    .create([
+      {
+        name: "Error",
+        content: error.stack,
+        languageId: "js",
+      },
+    ])
+    .then((res) => {
+      user.send("**CHYBA!** \nČas: " + functions.curDT() + " \nChyba: ");
+      user.send(res.url + " ");
+    })
+    .catch(console.error);
 });
