@@ -222,11 +222,6 @@ const play = async (guild, song, errored) => {
         var Gres = await Guild.findOne({
           guildID: guild.id,
         });
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
         serverQueue.audioPlayer.state?.resource.volume.setVolume(
           Number(Gres.musicBotVolume) / 100
         );
