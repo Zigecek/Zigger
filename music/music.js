@@ -202,11 +202,6 @@ const play = async (guild, song, errored) => {
         var Gres = await Guild.findOne({
           guildID: guild.id,
         });
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
         if (!Gres.musicBotLoop) {
           if (Gres.musicBotQueueLoop) {
             serverQueue.songs.push(serverQueue.songs.shift());
@@ -357,7 +352,6 @@ const voiceStateUpdate = async (params) => {
             voice.VoiceConnectionStatus.Destroyed
           ) {
             serverQueue.connection.destroy();
-            logger.log(Gres);
           }
         }
         stopET(newVoice.guild.id, serverQueue);

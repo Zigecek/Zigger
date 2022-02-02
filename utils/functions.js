@@ -113,7 +113,7 @@ function shout(content, guild) {
  * Deletes every message in the array.
  * @param {Array} messages Messages to delete.
  */
-async function deleteMessages(messages) {
+function deleteMessages(messages) {
   messages.forEach(async (message) => {
     if (message) {
       if (message.deletable) {
@@ -134,7 +134,7 @@ async function followReply(interaction, content) {
     return message;
   } catch (error) {
     console.error(error);
-    return message;
+    return undefined;
   }
 }
 

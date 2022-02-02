@@ -18,7 +18,7 @@ module.exports = {
   aliases: [],
   cooldown: 3,
   category: "fun",
-  async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
+  execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
       return;
     if (!message.guild.me.permissions.has("EMBED_LINKS"))
@@ -38,6 +38,10 @@ async function get(message, args) {
     `https://api.urbandictionary.com/v0/define?${query}`
   ).then((response) => response.json());
   var body = res.list;
+  if (body.length == 0) {
+    message.channel.send(LMessages.urban.nothingFound);
+    return;
+  }
   var index = 0;
 
   function getRow(ind, bod) {
@@ -107,7 +111,7 @@ async function get(message, args) {
             }
           }
         })
-        .on("end", async () => {
+        .on("end", () => {
           if (msg) {
             msg.components.forEach((r) => {
               r.forEach((b) => {
