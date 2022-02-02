@@ -21,7 +21,7 @@ module.exports = {
   cooldown: 2,
   aliases: ["q"],
   category: "music",
-  async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
+  execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
       return;
     if (!message.guild.me.permissions.has("EMBED_LINKS"))
@@ -72,25 +72,30 @@ module.exports = {
       const Embed = new Discord.MessageEmbed()
         .setColor(config.colors.green)
         .setTitle(LMessages.music.queue.queue)
-        .setAuthor(config.name, config.avatarUrl, config.webUrl)
+        .setAuthor({
+          name: config.name,
+          iconURL: config.avatarUrl,
+          url: config.webUrl,
+        })
         .setDescription(`${pages[0]}`)
-        .setFooter(
-          template(
-            LMessages.music.queue.footer,
-            {
-              page: 1,
-              pages: pages.length,
-              loop: Gres.musicBotLoop ? "✔️" : "❌",
-              qloop: Gres.musicBotQueueLoop ? "✔️" : "❌",
-            },
-            {
-              before: "%",
-              after: "%",
-            }
-          ) +
+        .setFooter({
+          text:
+            template(
+              LMessages.music.queue.footer,
+              {
+                page: 1,
+                pages: pages.length,
+                loop: Gres.musicBotLoop ? "✔️" : "❌",
+                qloop: Gres.musicBotQueueLoop ? "✔️" : "❌",
+              },
+              {
+                before: "%",
+                after: "%",
+              }
+            ) +
             "\n" +
-            LMessages.music.queue.anotherPageUse
-        );
+            LMessages.music.queue.anotherPageUse,
+        });
       if (
         message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
       ) {
@@ -120,25 +125,30 @@ module.exports = {
       const Embed = new Discord.MessageEmbed()
         .setColor(config.colors.green)
         .setTitle(LMessages.music.queue.queue)
-        .setAuthor(config.name, config.avatarUrl, config.webUrl)
+        .setAuthor({
+          name: config.name,
+          iconURL: config.avatarUrl,
+          url: config.webUrl,
+        })
         .setDescription(`${pages[number - 1]}`)
-        .setFooter(
-          template(
-            LMessages.music.queue.footer,
-            {
-              page: number,
-              pages: pages.length,
-              loop: Gres.musicBotLoop ? "✔️" : "❌",
-              qloop: Gres.musicBotQueueLoop ? "✔️" : "❌",
-            },
-            {
-              before: "%",
-              after: "%",
-            }
-          ) +
+        .setFooter({
+          text:
+            template(
+              LMessages.music.queue.footer,
+              {
+                page: number,
+                pages: pages.length,
+                loop: Gres.musicBotLoop ? "✔️" : "❌",
+                qloop: Gres.musicBotQueueLoop ? "✔️" : "❌",
+              },
+              {
+                before: "%",
+                after: "%",
+              }
+            ) +
             "\n" +
-            LMessages.music.queue.anotherPageUse
-        );
+            LMessages.music.queue.anotherPageUse,
+        });
       if (
         message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
       ) {

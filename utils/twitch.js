@@ -70,13 +70,20 @@ function callLoop() {
                     .setColor(config.colors.purple)
                     .setTitle(Tres.stream.channel.status)
                     .setURL(Tres.stream.channel.url)
-                    .setAuthor(e.streamUserName, Tres.stream.channel.logo)
+                    .setAuthor({
+                      name: config.name,
+                      iconURL: config.avatarUrl,
+                      url: config.webUrl,
+                    })
                     .setThumbnail(Tres.stream.channel.logo)
                     .setDescription("@everyone Come to the stream!")
                     .addField("Game", Tres.stream.channel.game + ".", true)
                     .addField("Duration:", messageTime + " ", true)
                     .setImage(Tres.stream.preview.large)
-                    .setFooter(config.name, config.avatarUrl);
+                    .setFooter({
+                      text: config.name,
+                      iconURL: config.avatarUrl,
+                    });
 
                   let chan = bot.channels.cache.get(e.streamNotifyChannelID);
 
@@ -121,13 +128,20 @@ function callLoop() {
                     .setColor(config.colors.purple)
                     .setTitle(Tres.stream.channel.status)
                     .setURL(Tres.stream.channel.url)
-                    .setAuthor(e.streamUserName, Tres.stream.channel.logo)
+                    .setAuthor({
+                      name: config.name,
+                      iconURL: config.avatarUrl,
+                      url: config.webUrl,
+                    })
                     .setThumbnail(Tres.stream.channel.logo)
                     .setDescription("@everyone Come to the stream!")
                     .addField("Game", Tres.stream.channel.game + ".", true)
                     .addField("Duration:", messageTime + " ", true)
                     .setImage(Tres.stream.preview.large)
-                    .setFooter(config.name, config.avatarUrl);
+                    .setFooter({
+                      text: config.name,
+                      iconURL: config.avatarUrl,
+                    });
                   let channel = bot.channels.cache.get(
                     e.streamMessageChannelID
                   );

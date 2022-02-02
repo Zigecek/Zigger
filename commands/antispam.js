@@ -33,7 +33,11 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
           .setColor(config.colors.green)
           .setTitle(LMessages.antispam.cmds.antispam)
-          .setAuthor(config.name, config.avatarUrl, config.webUrl)
+          .setAuthor({
+            name: config.name,
+            iconURL: config.avatarUrl,
+            url: config.webUrl,
+          })
           .addFields(
             {
               name: LMessages.antispam.cmds.enabledLabel,

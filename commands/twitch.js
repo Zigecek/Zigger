@@ -48,7 +48,11 @@ module.exports = {
                       .setColor(config.colors.purple)
                       .setTitle(Gres.streamUserName)
                       .setURL("https://www.twitch.tv/" + Gres.streamUserName)
-                      .setAuthor(config.name, config.avatarUrl, config.webUrl)
+                      .setAuthor({
+                        name: config.name,
+                        iconURL: config.avatarUrl,
+                        url: config.webUrl,
+                      })
                       .setDescription(Tres.users[0].bio)
                       .setThumbnail(Tres.users[0].logo);
 
@@ -77,7 +81,11 @@ module.exports = {
                         .setColor(config.colors.purple)
                         .setTitle(Tres2.display_name)
                         .setURL("https://www.twitch.tv/" + Tres2.display_name)
-                        .setAuthor(config.name, config.avatarUrl, config.webUrl)
+                        .setAuthor({
+                          name: config.name,
+                          iconURL: config.avatarUrl,
+                          url: config.webUrl,
+                        })
                         .setDescription(Tres2.bio)
                         .setThumbnail(Tres2.logo);
 

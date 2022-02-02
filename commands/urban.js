@@ -67,11 +67,11 @@ async function get(message, args) {
       .setTitle(bod[ind].word)
       .setDescription(bod[ind].definition)
       .addField("Example", bod[ind].example, false)
-      .setFooter(
-        `by ${bod[ind].author} \n👍${bod[ind].thumbs_up} 👎${
+      .setFooter({
+        text: `by ${bod[ind].author} \n👍${bod[ind].thumbs_up} 👎${
           bod[ind].thumbs_down
-        } \nPage: ${index + 1}/${bod.length}`
-      );
+        } \nPage: ${index + 1}/${bod.length}`,
+      });
   }
 
   message.channel

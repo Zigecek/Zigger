@@ -20,7 +20,7 @@ module.exports = {
   cooldown: 1,
   aliases: [],
   category: "help",
-  async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
+  execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
       return;
     if (!message.guild.me.permissions.has("EMBED_LINKS"))
@@ -28,9 +28,13 @@ module.exports = {
     if (args[0] == null) {
       const helpEmbed = new Discord.MessageEmbed()
         .setColor(config.colors.green)
-        .setAuthor(config.name, config.avatarUrl, config.webUrl)
+        .setAuthor({
+          name: config.name,
+          iconURL: config.avatarUrl,
+          url: config.webUrl,
+        })
         .setDescription(LMessages.help.list)
-        .setFooter(LMessages.help.footer);
+        .setFooter({ text: LMessages.help.footer });
 
       for (const [key, value] of Object.entries(LMessages.help.categories)) {
         helpEmbed.addField(value.label, value.commands);
@@ -49,7 +53,11 @@ module.exports = {
               { before: "%", after: "%" }
             )
           )
-          .setAuthor(config.name, config.avatarUrl, config.webUrl);
+          .setAuthor({
+            name: config.name,
+            iconURL: config.avatarUrl,
+            url: config.webUrl,
+          });
 
         commandEmbed.addField(
           LMessages.help.helpCommands.labels.usage,
