@@ -191,7 +191,6 @@ const play = async (guild, song, errored) => {
                   voice.VoiceConnectionStatus.Destroyed
                 ) {
                   serverQueue.connection.destroy();
-                  logger.log(Gres);
                 }
               }
               stopET(guild.id, serverQueue);

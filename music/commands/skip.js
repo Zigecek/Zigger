@@ -189,11 +189,6 @@ module.exports = {
       var Gres = await Guild.findOne({
         guildID: message.guild.id,
       });
-      if (err) {
-        console.error(err);
-        error.sendError(err);
-        return;
-      }
       if (
         message.member.voice.channel.members.filter((m) => m.user.bot == false)
           .size >= 3
