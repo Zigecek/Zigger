@@ -208,11 +208,6 @@ module.exports = {
             { guildID: message.guild.id },
             { $push: { musicBotSkipVotedMembersID: message.author.id } }
           );
-          if (err) {
-            console.error(err);
-            error.sendError(err);
-            return;
-          }
 
           var Gres = await Guild.findOne({
             guildID: message.guild.id,
