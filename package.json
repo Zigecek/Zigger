@@ -1,5 +1,5 @@
 {
-  "version": "1.42.5",
+  "version": "1.42.6",
   "scripts": {
     "i": "npm i @discordjs/opus@latest axios@latest body-parser@latest discord.js@latest dotenv@latest emoji-regex@latest express@latest ffmpeg-static@latest fs@latest is-url@latest moment@latest mongoose@latest ms-to-timecode@latest sourcebin@latest string-placeholder@latest ytdl-core@latest ytpl@latest ytsr@latest ent@latest request@latest sec2human@latest m3u8stream@latest child_process@latest ngrok@latest axios@latest @discordjs/voice@latest tweetnacl@latest topgg-autoposter@latest systeminformation@latest short-uuid@latest discord-api-types@latest @discordjs/rest@latest cross-fetch@latest",
     "uni": "npm uninstall @discordjs/opus axios body-parser discord.js dotenv emoji-regex express ffmpeg-static fs is-url moment mongoose ms-to-timecode sourcebin string-placeholder ytdl-core ytpl ytsr ent request sec2human m3u8stream child_process ngrok topgg-autoposter systeminformation @discordjs/voice axios tweetnacl short-uuid discord-api-types @discordjs/rest cross-fetch",
