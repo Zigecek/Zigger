@@ -1,4 +1,4 @@
-const ApplicationCommandOptionTypes = {
+const Types = {
   SUB_COMMAND: 1,
   SUB_COMMAND_GROUP: 2,
   STRING: 3,
@@ -29,7 +29,7 @@ module.exports = [
               {
                 name: "id",
                 description: "Dev.",
-                type: ApplicationCommandOptionTypes.STRING,
+                type: Types.STRING,
                 required: true,
               },
             ],
@@ -42,7 +42,7 @@ module.exports = [
               {
                 name: "id",
                 description: "Dev.",
-                type: ApplicationCommandOptionTypes.STRING,
+                type: Types.STRING,
                 required: true,
               },
             ],
@@ -55,7 +55,7 @@ module.exports = [
               {
                 name: "id",
                 description: "Dev.",
-                type: ApplicationCommandOptionTypes.STRING,
+                type: Types.STRING,
                 required: true,
               },
             ],
@@ -68,7 +68,7 @@ module.exports = [
               {
                 name: "id",
                 description: "Dev.",
-                type: ApplicationCommandOptionTypes.STRING,
+                type: Types.STRING,
                 required: true,
               },
             ],
@@ -81,7 +81,7 @@ module.exports = [
               {
                 name: "id",
                 description: "Dev.",
-                type: ApplicationCommandOptionTypes.STRING,
+                type: Types.STRING,
                 required: true,
               },
             ],
@@ -106,7 +106,7 @@ module.exports = [
               {
                 name: "command",
                 description: "Dev.",
-                type: ApplicationCommandOptionTypes.STRING,
+                type: Types.STRING,
                 required: true,
               },
             ],
@@ -160,7 +160,7 @@ module.exports = [
             options: [
               {
                 name: "message",
-                type: ApplicationCommandOptionTypes.STRING,
+                type: Types.STRING,
                 required: true,
                 description: "Dev.",
               },
@@ -174,7 +174,7 @@ module.exports = [
               {
                 name: "code",
                 description: "Code to evalute.",
-                type: ApplicationCommandOptionTypes.STRING,
+                type: Types.STRING,
                 required: true,
               },
             ],

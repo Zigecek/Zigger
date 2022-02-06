@@ -21,6 +21,7 @@ const LMessages = require(`../messages/`);
 const template = require("string-placeholder");
 const short = require("short-uuid");
 var logger = require("tracer").console();
+const { followReply } = require("../utils/functions");
 
 let queue = new Map();
 
@@ -35,7 +36,7 @@ const ready = () => {
 };
 
 const play = async (guild, song, errored) => {
-  const serverQueue = queue.get(guild.id);
+  var serverQueue = queue.get(guild.id);
   if (!song) {
     await Guild.updateOne(
       {
@@ -52,60 +53,224 @@ const play = async (guild, song, errored) => {
   });
   if (!errored) {
     if (song.seek == null) {
-      if (Gres.annouce == 1) {
-        const Embed = new Discord.MessageEmbed()
-          .setColor(config.colors.red)
-          .setTitle(LMessages.musicNowPlaying)
-          .setThumbnail(song.thumbnail)
-          .addFields(
-            {
-              name: LMessages.musicName,
-              value: `[${song.title}](${song.url})`,
-            },
-            {
-              name: LMessages.musicAuthor,
-              value: song.author,
-            },
-            {
-              name: LMessages.musicDuration,
-              value: song.duration,
-            }
-          );
-        if (bot.channels.cache.get(Gres.musicBotTxtChannelID)) {
+      var content;
+      var channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
+      if (channel) {
+        if (Gres.annouce == 1) {
           if (guild.me.permissions.has("EMBED_LINKS")) {
-            bot.channels.fetch(Gres.musicBotTxtChannelID).then((channel) => {
-              channel.send({ embeds: [Embed] });
-            });
-          } else {
-            bot.channels.fetch(Gres.musicBotTxtChannelID).then((channel) => {
-              channel.send(
-                "**" +
-                  LMessages.musicNowPlaying +
-                  "** " +
-                  "`" +
-                  song.title +
-                  "` **`(" +
-                  song.duration +
-                  ")`**"
+            const Embed = new Discord.MessageEmbed()
+              .setColor(config.colors.red)
+              .setTitle(LMessages.musicNowPlaying)
+              .setThumbnail(song.thumbnail)
+              .addFields(
+                {
+                  name: LMessages.musicName,
+                  value: `[${song.title}](${song.url})`,
+                },
+                {
+                  name: LMessages.musicAuthor,
+                  value: song.author,
+                },
+                {
+                  name: LMessages.musicDuration,
+                  value: song.duration,
+                }
               );
-            });
+            content = { embeds: [Embed] };
+          } else {
+            content = {
+              content:
+                "**" +
+                LMessages.musicNowPlaying +
+                "** " +
+                "`" +
+                song.title +
+                "` **`(" +
+                song.duration +
+                ")`**",
+            };
           }
-        }
-      } else if (Gres.annouce == 0) {
-        return;
-      } else if (Gres.annouce == 3) {
-        bot.channels.fetch(Gres.musicBotTxtChannelID).then((channel) => {
-          channel.send(
-            "**" +
+        } else if (Gres.annouce == 0) {
+          return;
+        } else if (Gres.annouce == 3) {
+          content = {
+            content:
+              "**" +
               LMessages.musicNowPlaying +
               "** " +
               "`" +
               song.title +
               "` **`(" +
               song.duration +
-              ")`**"
-          );
-        });
+              ")`**",
+          };
+        }
+        var controlRow = new Discord.MessageActionRow().setComponents([
+          new Discord.MessageButton()
+            .setCustomId("pauseResume")
+            .setLabel("⏯")
+            .setStyle("DANGER")
+            .setDisabled(false),
+          new Discord.MessageButton()
+            .setCustomId("skip")
+            .setLabel("⏭")
+            .setStyle("PRIMARY")
+            .setDisabled(false),
+        ]);
+        if (song.sDur != "LIVE!") {
+          content.components = [controlRow];
+          var msg = await channel.send(content);
+          const songUUID = song.uuid;
+          const collector = msg.createMessageComponentCollector({
+            time: song.sDur * 1000,
+          });
+          collector
+            .on("collect", async (interact) => {
+              if (!interact.isButton()) return;
+              if (!interact.member.voice.channelId) return;
+              if (!interact.guild.me.voice.channelId) return;
+              if (
+                interact.member.voice.channelId !=
+                interact.guild.me.voice.channelId
+              )
+                return;
+              var id = interact.component.customId;
+
+              Gres = await Guild.findOne({
+                guildID: guild.id,
+              });
+              serverQueue = queue.get(guild.id);
+              if (id == "pauseResume") {
+                if (serverQueue.songs[0].uuid != songUUID) {
+                  collector.stop();
+
+                  if (
+                    interact.channel
+                      .permissionsFor(interact.guild.me)
+                      .has("SEND_MESSAGES")
+                  ) {
+                    followReply(interact, {
+                      content: LMessages.music.skip.differentUUID,
+                    });
+                  }
+                  return;
+                }
+
+                if (Gres.musicBotPaused) {
+                  // resume
+                  await Guild.updateOne(
+                    {
+                      guildID: guild.id,
+                    },
+                    {
+                      musicBotPaused: false,
+                      musicBotPlaying: true,
+                      musicBotPauseElapsed: 0,
+                      musicBotPlayTime: new Date(
+                        Date.now() - Gres.musicBotPauseElapsed
+                      ),
+                    }
+                  );
+                  if (serverQueue) {
+                    if (serverQueue.audioPlayer) {
+                      serverQueue.audioPlayer.unpause();
+                    }
+                  }
+                  var timerMS =
+                    serverQueue.songs[0].sDur * 1000 -
+                    (Date.now() - Gres.musicBotPlayTime.getTime());
+                  collector.resetTimer({
+                    time: timerMS,
+                  });
+
+                  if (
+                    interact.channel
+                      .permissionsFor(interact.guild.me)
+                      .has("SEND_MESSAGES")
+                  ) {
+                    followReply(interact, {
+                      content: LMessages.music.otherCmds.resume,
+                    });
+                  }
+                } else {
+                  // pause
+                  collector.resetTimer({
+                    time: 900 * 1000,
+                  });
+
+                  const elMsecs = Date.now() - Gres.musicBotPlayTime.getTime();
+                  await Guild.updateOne(
+                    {
+                      guildID: guild.id,
+                    },
+                    {
+                      musicBotPaused: true,
+                      musicBotPlaying: false,
+                      musicBotPauseElapsed: elMsecs,
+                    }
+                  );
+                  if (serverQueue) {
+                    if (serverQueue.audioPlayer) {
+                      serverQueue.audioPlayer.pause(true);
+                    }
+                  }
+
+                  if (
+                    interact.channel
+                      .permissionsFor(interact.guild.me)
+                      .has("SEND_MESSAGES")
+                  ) {
+                    followReply(interact, {
+                      content: LMessages.music.otherCmds.pause,
+                    });
+                  }
+                }
+              } else if (id == "skip") {
+                if (serverQueue.songs[0].uuid != songUUID) {
+                  collector.stop();
+
+                  if (
+                    interact.channel
+                      .permissionsFor(interact.guild.me)
+                      .has("SEND_MESSAGES")
+                  ) {
+                    followReply(interact, {
+                      content: LMessages.music.skip.differentUUID,
+                    });
+                  }
+                  return;
+                }
+                if (serverQueue) {
+                  if (serverQueue.audioPlayer) {
+                    serverQueue.audioPlayer.stop();
+                  }
+                }
+
+                if (
+                  interact.channel
+                    .permissionsFor(interact.guild.me)
+                    .has("SEND_MESSAGES")
+                ) {
+                  followReply(interact, {
+                    content: LMessages.music.skip.FSkipped,
+                  });
+                }
+
+                collector.stop();
+              }
+            })
+            .on("end", () => {
+              if (msg) {
+                msg.components.forEach((r) => {
+                  r.components.forEach((b) => {
+                    b.setDisabled(true);
+                  });
+                });
+              }
+            });
+        } else {
+          channel.send(content);
+        }
       }
     }
   }
@@ -172,8 +337,6 @@ const play = async (guild, song, errored) => {
             guildID: guild.id,
           },
           {
-            musicBotSkipVotedMembersID: [],
-            musicBotSkipVotesNeeded: 0,
             musicBotLastUUID: uid,
           }
         );
@@ -239,12 +402,10 @@ const play = async (guild, song, errored) => {
           },
           {
             musicBotPlaying: true,
-            musicBotSkipVotedMembersID: [],
-            musicBotSkipVotesNeeded: 0,
             musicBotPlayTime:
               song.seek == null
                 ? new Date()
-                : new Date(new Date().getTime() - song.seek * 1000),
+                : new Date(Date.now() - song.seek * 1000),
           }
         );
       }
@@ -271,12 +432,8 @@ const play = async (guild, song, errored) => {
           dlChunkSize: 0,
           liveBuffer: 1000,
           isHLS: info.videoDetails.isLiveContent,
-
-          //quality: "highestaudio",
-          //filter: "audio",
           audioBitrate: 96,
           highWaterMark: 1 << 25,
-          //dlChunkSize: 256 * 1024,
         });
       })
       .catch(async (err) => {

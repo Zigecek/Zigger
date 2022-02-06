@@ -42,7 +42,7 @@ module.exports = {
         musicBotPlaying: true,
         musicBotPauseElapsed: 0,
         musicBotPlayTime: new Date(
-          new Date().getTime() - Gres.musicBotPauseElapsed
+          Date.now() - Gres.musicBotPauseElapsed
         ),
       }
     );

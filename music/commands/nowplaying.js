@@ -30,7 +30,7 @@ module.exports = {
     if (serverQueue) {
       const fourPer = serverQueue.songs[0].sDur / 25;
       const elSecs = Math.floor(
-        (new Date().getTime() - Gres.musicBotPlayTime.getTime()) / 1000
+        (Date.now() - Gres.musicBotPlayTime.getTime()) / 1000
       );
       const nonElSecs = serverQueue.songs[0].sDur - elSecs;
 

@@ -33,7 +33,7 @@ module.exports = {
       }
       return;
     }
-    const elMsecs = new Date().getTime() - Gres.musicBotPlayTime.getTime();
+    const elMsecs = Date.now() - Gres.musicBotPlayTime.getTime();
     await Guild.updateOne(
       {
         guildID: int.guild.id,

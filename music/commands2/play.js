@@ -25,6 +25,7 @@ const config = require("../../config.json");
 const voice = require("@discordjs/voice");
 const LMessages = require(`../../messages/`);
 const { followReply } = require("../../utils/functions");
+const short = require("short-uuid");
 
 module.exports = {
   name: "play",
@@ -103,6 +104,7 @@ module.exports = {
                 }
               ).url,
               seek: null,
+              uuid: short.generate(),
             };
             resolve(song);
           })
@@ -146,6 +148,7 @@ module.exports = {
                 : Math.floor(parseTimestamp(video.duration) / 1000),
               thumbnail: video.bestThumbnail.url,
               seek: null,
+              uuid: short.generate(),
             };
             resolve(song);
           })
@@ -169,6 +172,7 @@ module.exports = {
                 sDur: e.isLive ? "LIVE!" : e.durationSec,
                 thumbnail: e.thumbnails.pop().url,
                 seek: null,
+                uuid: short.generate(),
               });
             });
             resolve({

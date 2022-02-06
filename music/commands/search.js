@@ -22,6 +22,7 @@ const Guild = require("../../models/guild");
 const config = require("../../config.json");
 const voice = require("@discordjs/voice");
 const LMessages = require(`../../messages/`);
+const short = require("short-uuid");
 
 module.exports = {
   name: "search",
@@ -176,6 +177,7 @@ module.exports = {
                   : Math.floor(parseTimestamp(tracks[index].duration) / 1000),
                 thumbnail: tracks[index].thumbnails.pop().url,
                 seek: null,
+                uuid: short.generate(),
               };
               await Guild.updateOne(
                 {

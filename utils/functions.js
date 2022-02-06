@@ -46,11 +46,6 @@ function commafy(number) {
 /**
  * Shuffles array in place.
  * @param {Object[]} array - An array containing the items.
- * @param {string} array[].title - Title of the song.
- * @param {string} array[].url - Shortest url of the song.
- * @param {string} array[].author - Name of the autor of the song.
- * @param {string} array[].duration - Duration in 00:00:00 format.
- * @param {string} array[].thumbnail - Thumbnail url of the video.
  * @returns {Object[]} - Array of shuffled song objects.
  */
 function shuffle(array) {

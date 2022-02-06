@@ -109,7 +109,7 @@ async function get(int) {
       .on("end", () => {
         if (msg) {
           msg.components.forEach((r) => {
-            r.forEach((b) => {
+            r.components.forEach((b) => {
               b.setDisabled(true);
             });
           });

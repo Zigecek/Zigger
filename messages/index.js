@@ -840,6 +840,8 @@ module.exports = {
         "**<:tickNo:870239550163779604> **This command requires you to either have a role named** `DJ` **or** `%role%` **or the** `Správa kanálů` **permission to use it** *(being alone with the bot also works)*",
       alreadyVoted: "**:thumbsup: You have already voted.**",
       skipped: ":fast_forward: **Skipped** :thumbsup:",
+      differentUUID:
+        ":x: **This control panel is expired, use the newest one.**",
     },
     otherCmds: {
       disconnect: ":stop_button: **Disconnected!** :thumbsup:",

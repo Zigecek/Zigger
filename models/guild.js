@@ -134,22 +134,6 @@ const guildSchema = new mongoose.Schema({
     default: false,
     type: Boolean,
   },
-  musicBotSkipSongs: {
-    default: 1,
-    type: Number,
-  },
-  musicBotSkipTimes: {
-    default: 0,
-    type: Boolean,
-  },
-  musicBotSkipVotedMembersID: {
-    default: [],
-    type: Array,
-  },
-  musicBotSkipVotesNeeded: {
-    default: 0,
-    type: Number,
-  },
   musicBotTxtChannelID: {
     default: null,
     type: String,
