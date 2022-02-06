@@ -58,18 +58,10 @@ module.exports = {
           );
           return;
         }
-      } else if (int.options.getSubcommand() == "blacklist") {
+      } else if (int.options.getSubcommandGroup() == "blacklist") {
         if (int.options.getSubcommand() == "info") {
-          var channels = int.guild.channels
-            .fetch()
-            .filter((x) => Gres.blacklist.includes(x.id));
-          console.log(
-            template(
-              LMessages.settings.blacklist.info,
-              { channels: channels.map((x) => `\n <#${x.id}>`) },
-              { before: "%", after: "%" }
-            )
-          );
+          var channels = await int.guild.channels.fetch();
+          channels = channels.filter((x) => Gres.blacklist.includes(x.id));
           followReply(int, {
             content: template(
               LMessages.settings.blacklist.info,

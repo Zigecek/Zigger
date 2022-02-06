@@ -127,7 +127,6 @@ function deleteMessages(messages) {
 
 async function followReply(interaction, content) {
   content.fetchReply = true;
-  console.log(content);
   try {
     var message = interaction.replied
       ? await interaction.followUp(content)
