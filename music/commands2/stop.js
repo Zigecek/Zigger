@@ -34,6 +34,7 @@ module.exports = {
       serverQueue.songs = [];
       if (serverQueue.audioPlayer) {
         serverQueue.audioPlayer.stop();
+        serverQueue.audioPlayer.unpause();
       }
     } else {
       if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {

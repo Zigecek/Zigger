@@ -243,6 +243,7 @@ const play = async (guild, song, errored) => {
                 if (serverQueue) {
                   if (serverQueue.audioPlayer) {
                     serverQueue.audioPlayer.stop();
+                    serverQueue.audioPlayer.unpause();
                   }
                 }
 
@@ -569,6 +570,7 @@ async function stopET(id, serverQueue) {
   if (serverQueue) {
     if (serverQueue.audioPlayer) {
       serverQueue.audioPlayer.stop();
+      serverQueue.audioPlayer.unpause();
     }
     queue.delete(id);
   }

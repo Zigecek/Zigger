@@ -62,6 +62,7 @@ module.exports = {
     if (serverQueue) {
       if (serverQueue.audioPlayer) {
         serverQueue.audioPlayer.stop();
+        serverQueue.audioPlayer.unpause();
       }
     }
 
