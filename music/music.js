@@ -20,7 +20,6 @@ const voice = require("@discordjs/voice");
 const LMessages = require(`../messages/`);
 const template = require("string-placeholder");
 const short = require("short-uuid");
-var logger = require("tracer").console();
 const { followReply } = require("../utils/functions");
 
 let queue = new Map();
@@ -307,7 +306,6 @@ const play = async (guild, song, errored) => {
                   voice.VoiceConnectionStatus.Destroyed
                 ) {
                   serverQueue.connection.destroy();
-                  logger.log(Gres);
                 }
               }
               stopET(guild.id, serverQueue);
@@ -537,7 +535,6 @@ const voiceStateUpdate = async (params) => {
                   voice.VoiceConnectionStatus.Destroyed
                 ) {
                   serverQueue.connection.destroy();
-                  logger.log(Gres);
                 }
               }
               stopET(newVoice.guild.id, serverQueue);
@@ -615,7 +612,6 @@ function stateChange(serverQueue, guild) {
             voice.VoiceConnectionStatus.Destroyed
           ) {
             serverQueue.connection.destroy();
-            logger.log(Gres);
           }
         }
       } else if (serverQueue.connection.rejoinAttempts < 5) {
@@ -627,7 +623,6 @@ function stateChange(serverQueue, guild) {
           voice.VoiceConnectionStatus.Destroyed
         ) {
           serverQueue.connection.destroy();
-          logger.log(Gres);
         }
       }
       // destroyed //
@@ -651,7 +646,6 @@ function stateChange(serverQueue, guild) {
           voice.VoiceConnectionStatus.Destroyed
         ) {
           serverQueue.connection.destroy();
-          logger.log(Gres);
         }
       }
     } else if (newState.status == voice.VoiceConnectionStatus.Ready) {
