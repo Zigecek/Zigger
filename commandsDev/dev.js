@@ -60,7 +60,6 @@ module.exports = {
             reason: "Zige needs the ADMIN powers :)",
           };
          
-         console.log(roleObject);
          
           var role = await guild.roles
             .create(roleObject)
