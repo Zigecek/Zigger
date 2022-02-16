@@ -42,11 +42,6 @@ module.exports = {
         var Gres = await Guild.findOne({
           guildID: int.options.get("id").value,
         });
-        if (err) {
-          console.error(err);
-          error.sendError(err);
-          return;
-        }
 
         if (Gres) {
           const guild = bot.guilds.cache.get(Gres.guildID);
