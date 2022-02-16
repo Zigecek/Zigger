@@ -42,7 +42,7 @@ module.exports = {
           ),
         });
       }
-    } else if (int.options.get("anything").value == null) {
+    } else if (int.options.get("anything")?.value == null) {
       followReply(int, {
         content: template(
           LMessages.fun.penis.author,
