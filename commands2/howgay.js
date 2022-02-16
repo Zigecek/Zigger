@@ -21,8 +21,8 @@ module.exports = {
   category: "fun",
   async execute(int, serverQueue, Gres) {
     if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
-    if (int.options.get("anything").value) {
-      if (int.options.get("anything").member) {
+    if (int.options.get("anything")?.value) {
+      if (int.options.get("anything")?.member) {
         followReply(int, {
           content: template(
             LMessages.fun.howGay.member,
