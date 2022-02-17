@@ -123,7 +123,7 @@ function deleteMessages(messages) {
 async function followReply(interaction, content) {
   content.fetchReply = true;
   try {
-    var message = interaction.replied
+    const message = interaction.replied
       ? await interaction.followUp(content)
       : await interaction.reply(content);
     return message;
