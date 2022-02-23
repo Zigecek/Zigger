@@ -20,6 +20,7 @@ const Guild = require("../models/guild");
 const ready = async () => {
   bot.guilds.cache.each(async (guild) => {
     var res = await Guild.exists({ guildID: guild.id });
+    console.log(guild.id, res);
 
     if (res == false) {
       const guildJoin = new Guild({
