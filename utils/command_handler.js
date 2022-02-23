@@ -195,7 +195,9 @@ const messageCreate = async (params) => {
             }
 
             ////
-            console.log(command + ` (${message.guild.id})`);
+            console.log(
+              config.index + ": " + command + ` (${message.guild.id})`
+            );
             ////
             if (map.values().next().value.category == "music") {
               if (Gres.blacklist.includes(message.channel.id)) {
@@ -307,7 +309,7 @@ const interactionCreate = async (params) => {
     }
 
     ////
-    console.log("/ " + int.commandName + ` (${int.guild.id})`);
+    console.log(config.index + ": / " + int.commandName + ` (${int.guild.id})`);
     ////
 
     if (mapNextValue.category == "music") {
