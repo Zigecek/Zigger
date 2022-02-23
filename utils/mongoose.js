@@ -11,7 +11,7 @@ __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_____/\\\\\\\\\\\\__/\\\\\\\\\\\\\\\_
 *****************************************************************************/
 
 const mongoose = require("mongoose");
-const config = require("../config.json");
+const config = require("../config");
 
 module.exports = {
   init: () => {

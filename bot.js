@@ -10,12 +10,6 @@ __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_____/\\\\\\\\\\\\__/\\\\\\\\\\\\\\\_
         _\///////////////__\///////////___\////////////____\///////////////__
 *****************************************************************************/
 
-console.log(
-  `using ytdl version: ${require("ytdl-core").version} from ${require.resolve(
-    "ytdl-core"
-  )}`
-);
-
 /////////// START OF LOGGING ///////////
 
 console.log("____ _                       ");
@@ -26,14 +20,14 @@ console.log("        <___'<___'           ");
 
 /////////// VARIABLES ///////////
 
-require("dotenv").config();
+const config = require("./config");
+require("dotenv").config({ path: config.index == 1 ? ".env" : ".env2" });
 const fs = require("fs");
 const Discord = require("discord.js");
 const mongoose = require("mongoose");
 const template = require("string-placeholder");
 const Guild = require("./models/guild");
 const Streams = require("./models/streamguilds");
-const config = require("./config.json");
 const { AutoPoster } = require("topgg-autoposter");
 const mongooseFile = require("./utils/mongoose");
 const LMessages = require(`./messages/`);
@@ -88,7 +82,7 @@ const ready = async () => {
     }
   }, 10000);
 
-  if (!(process.platform != "linux" && config.ofi != true)) {
+  if (process.platform == "linux" && config.ofi == true && config.index == 1) {
     AutoPoster(process.env.TOPGG_TOKEN, bot);
   }
   const Com = require("./deploy/commands");

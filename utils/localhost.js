@@ -3,8 +3,9 @@ const express = require("express");
 const Config = require("../models/Config");
 const Discord = require("discord.js");
 const { bot } = require("../bot");
+const config = require('../config');S
 
-const port = 3321;
+const port = config.index == 1 ? 3321 : 3322;
 const app = express();
 
 app.use(bodyParser.json());
