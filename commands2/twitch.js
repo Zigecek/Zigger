@@ -205,7 +205,7 @@ module.exports = {
         if (int.options.getSubcommand() == "enable") {
           var res = await Streams.exists({ guildIDs: int.guild.id });
 
-          if (res != true) {
+          if (!res) {
             await Streams.updateOne(
               { note: "555" },
               { $push: { guildIDs: int.guild.id } }
@@ -221,7 +221,7 @@ module.exports = {
         } else if (int.options.getSubcommand() == "disable") {
           var res = await Streams.exists({ guildIDs: int.guild.id });
 
-          if (res == true) {
+          if (res) {
             await Streams.updateOne(
               { note: "555" },
               { $pull: { guildIDs: int.guild.id } },

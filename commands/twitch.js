@@ -200,7 +200,7 @@ module.exports = {
       } else if (args[0] == "on") {
         var res = await Streams.exists({ guildIDs: message.guild.id });
 
-        if (res != true) {
+        if (!res) {
           await Streams.updateOne(
             { note: "555" },
             { $push: { guildIDs: message.guild.id } }
@@ -216,7 +216,7 @@ module.exports = {
       } else if (args[0] == "off") {
         var res = await Streams.exists({ guildIDs: message.guild.id });
 
-        if (res == true) {
+        if (res) {
           await Streams.updateOne(
             { note: "555" },
             { $pull: { guildIDs: message.guild.id } },

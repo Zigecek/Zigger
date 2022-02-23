@@ -83,7 +83,7 @@ const messageCreate = async (params) => {
       var gExist = false;
       var res = await Guild.exists({ guildID: message.guild.id });
 
-      if (res == false) {
+      if (!res) {
         const guildJoin = new Guild({
           _id: mongoose.Types.ObjectId(),
           guildID: message.guild.id,

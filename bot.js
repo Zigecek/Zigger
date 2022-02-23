@@ -146,7 +146,7 @@ const guildDelete = async (params) => {
 
   var res = await Streams.exists({ guildIDs: guild.id });
 
-  if (res == true) {
+  if (res) {
     await Streams.updateOne(
       { note: "555" },
       { $pull: { guildIDs: guild.id } },
