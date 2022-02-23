@@ -13,7 +13,7 @@ __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_____/\\\\\\\\\\\\__/\\\\\\\\\\\\\\\_
 const Discord = require("discord.js");
 const Guild = require("../models/guild.js");
 const Streams = require("../models/streamguilds.js");
-const config = require("../config.json");
+const config = require("../config.js");
 const template = require("string-placeholder");
 const request = require("request");
 const error = require("../utils/error");

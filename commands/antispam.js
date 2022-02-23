@@ -13,7 +13,7 @@ __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_____/\\\\\\\\\\\\__/\\\\\\\\\\\\\\\_
 const Discord = require("discord.js");
 const Guild = require("../models/guild.js");
 const botFile = require("../bot");
-const config = require("../config.json");
+const config = require("../config.js");
 const template = require("string-placeholder");
 const error = require("../utils/error");
 const LMessages = require(`../messages/`);

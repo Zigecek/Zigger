@@ -13,7 +13,7 @@ __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_____/\\\\\\\\\\\\__/\\\\\\\\\\\\\\\_
 const Discord = require("discord.js");
 const { bot } = require("../../bot");
 const template = require("string-placeholder");
-const config = require("../../config.json");
+const config = require("../../config.js");
 const LMessages = require(`../../messages/`);
 
 module.exports = {

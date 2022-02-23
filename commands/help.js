@@ -11,7 +11,7 @@ __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_____/\\\\\\\\\\\\__/\\\\\\\\\\\\\\\_
 *****************************************************************************/
 
 const Discord = require("discord.js");
-const config = require("../config.json");
+const config = require("../config.js");
 const template = require("string-placeholder");
 const LMessages = require(`../messages/`);
 

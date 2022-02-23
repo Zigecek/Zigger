@@ -16,7 +16,7 @@ const Streams = require("../models/streamguilds.js");
 const request = require("request");
 const error = require("./error");
 const { bot } = require("../bot");
-const config = require("../config.json");
+const config = require("../config.js");
 const sec2human = require("sec2human");
 
 const ready = () => {

@@ -13,7 +13,7 @@ __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_____/\\\\\\\\\\\\__/\\\\\\\\\\\\\\\_
 const mongoose = require("mongoose");
 const botFile = require("../bot");
 const bot = botFile.bot;
-const config = require("../config.json");
+const config = require("../config.js");
 const error = require("./error");
 const Guild = require("../models/guild");
 

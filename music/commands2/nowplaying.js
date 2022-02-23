@@ -12,7 +12,7 @@ __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_____/\\\\\\\\\\\\__/\\\\\\\\\\\\\\\_
 
 const Discord = require("discord.js");
 const sec2human = require("sec2human");
-const config = require("../../config.json");
+const config = require("../../config.js");
 const LMessages = require(`../../messages/`);
 const { followReply } = require("../../utils/functions");
 
