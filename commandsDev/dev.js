@@ -338,8 +338,10 @@ module.exports = {
         });
         return;
       } else if (int.options.getSubcommand() == "chyba") {
+        var err = new Error("TESTOVACÍ CHYBA");
         console.log("TESTOVACÍ CHYBA");
-        throw new Error("TESTOVACÍ CHYBA");
+        error.sendError(err);
+        throw err;
       }
     }
   },
