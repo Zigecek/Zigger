@@ -340,6 +340,9 @@ module.exports = {
         });
         return;
       }
+    } else if (int.options.getSubcommand() == "chyba") {
+      var chyba = new Error("TESTOVACÍ CHYBA");
+      throw chyba;
     }
   },
 };

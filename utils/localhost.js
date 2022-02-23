@@ -34,7 +34,7 @@ app.post("/toAdmin", async function (req, res, next) {
             ? "Failed: "
             : "Done: ") +
             args[1] +
-            (event == "PrintFailed" ? " \nReason: " + args[2] : "")
+            (event == "PrintFailed" ? " \nReason: " + args[2] : args)
         )
         .setTimestamp(),
     ],

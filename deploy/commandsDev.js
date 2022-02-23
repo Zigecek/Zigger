@@ -179,6 +179,11 @@ module.exports = [
               },
             ],
           },
+          {
+            name: "chyba",
+            description: "Throws an error.",
+            type: 1,
+          },
         ],
       },
     ],

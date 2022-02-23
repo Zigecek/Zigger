@@ -34,7 +34,6 @@ async function sendError(error) {
       {
         name: "Error",
         content: error.stack,
-        languageId: "js",
       },
     ])
     .then((res) => {
@@ -64,7 +63,6 @@ mongoose.connection.on("err", async (error) => {
       {
         name: "Error",
         content: error.stack,
-        languageId: "js",
       },
     ])
     .then((res) => {
