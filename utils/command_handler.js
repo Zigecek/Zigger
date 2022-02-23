@@ -319,7 +319,11 @@ const interactionCreate = async (params) => {
       }
     }
 
-    bot.commands2.get(mapNextValue.name).execute(int, serverQueue, Gres);
+    try {
+      bot.commands2.get(mapNextValue.name).execute(int, serverQueue, Gres);
+    } catch (error) {
+      error.sendError(error);
+    }
 
     await Guild.updateOne(
       {
