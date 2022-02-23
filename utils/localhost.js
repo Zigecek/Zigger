@@ -3,7 +3,7 @@ const express = require("express");
 const Config = require("../models/Config");
 const Discord = require("discord.js");
 const { bot } = require("../bot");
-const config = require('../config');S
+const config = require("../config");
 
 const port = config.index == 1 ? 3321 : 3322;
 const app = express();
