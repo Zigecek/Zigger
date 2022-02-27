@@ -44,7 +44,7 @@ app.post("/toAdmin", async function (req, res) {
         ],
       });
       break;
-    case "PrintCancelled":
+    case "PrintFailed":
       user.send({
         embeds: [
           new Discord.MessageEmbed()
