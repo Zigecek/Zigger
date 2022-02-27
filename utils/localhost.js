@@ -16,30 +16,50 @@ app.get("/", function (req, res, next) {
   res.sendStatus(200);
 });
 
-app.post("/toAdmin", async function (req, res, next) {
-  var args = req.body.args;
-  const event = req.body.event;
+app.post("/toAdmin", async function (req, res) {
   var Gres = await Config.findOne({
     number: 1,
   });
   const user = await bot.users.fetch(Gres.botAdminDiscordID[0]);
 
-  user.send({
-    embeds: [
-      new Discord.MessageEmbed()
-        .setTitle(args[0])
-        .setDescription(
-          (event == "PrintStarted"
-            ? "Started: "
-            : event == "PrintFailed"
-            ? "Failed: "
-            : "Done: ") +
-            args[1] +
-            (event == "PrintFailed" ? " \nReason: " + args[2] : args)
-        )
-        .setTimestamp(),
-    ],
-  });
+  switch (req.body.event) {
+    case "PrintDone":
+      user.send({
+        embeds: [
+          new Discord.MessageEmbed()
+            .setTitle(req.body.event)
+            .setDescription(`${req.body.data.file} - ${req.body.data.time}`)
+            .setImage(req.body.data.image)
+            .setTimestamp(),
+        ],
+      });
+      break;
+    case "PrintStarted":
+      user.send({
+        embeds: [
+          new Discord.MessageEmbed()
+            .setTitle(req.body.event)
+            .setDescription(`${req.body.data.file}`)
+            .setTimestamp(),
+        ],
+      });
+      break;
+    case "PrintCancelled":
+      user.send({
+        embeds: [
+          new Discord.MessageEmbed()
+            .setTitle(req.body.event)
+            .setDescription(
+              `${req.body.data.file} - ${
+                req.body.data.cancelled ? "Cancelled" : "Due to error"
+              }`
+            )
+            .setTimestamp(),
+        ],
+      });
+      break;
+  }
+
   res.sendStatus(200);
 });
 
