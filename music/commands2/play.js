@@ -233,8 +233,15 @@ module.exports = {
       } else if (ytpl.validateID(int.options.get("song").value)) {
         mode = 2;
         var pl = await createPlaylist();
-        playlist = pl.items;
-        playlistInfo = pl.info;
+        if (pl) {
+          playlist = pl.items;
+          playlistInfo = pl.info;
+        } else {
+          if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+            followReply(int, { content: LMessages.musicWrongUrl });
+          }
+          return;
+        }
       } else {
         if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
           followReply(int, { content: LMessages.musicWrongUrl });

@@ -146,52 +146,54 @@ module.exports = {
           components: [row, row2],
         });
         const filter = (inter) => inter.member.id == int.member.id;
-        const collector = smessage
-          .createMessageComponentCollector({ filter, time: 30_000 })
-          .on("collect", (interact) => {
-            if (!interact.isButton()) return;
-            var id = Number(interact.component.customId);
-            interact.component.setStyle("DANGER");
-            interact.message.components.forEach((row) => {
-              row.components.forEach((butt) => {
-                butt.setDisabled();
+        if (smessage) {
+          const collector = smessage
+            .createMessageComponentCollector({ filter, time: 30_000 })
+            .on("collect", (interact) => {
+              if (!interact.isButton()) return;
+              var id = Number(interact.component.customId);
+              interact.component.setStyle("DANGER");
+              interact.message.components.forEach((row) => {
+                row.components.forEach((butt) => {
+                  butt.setDisabled();
+                });
               });
-            });
 
-            if (id == 1) {
-              rSearch(0, int, tracks, collector);
-            } else if (id == 2) {
-              rSearch(1, int, tracks, collector);
-            } else if (id == 3) {
-              rSearch(2, int, tracks, collector);
-            } else if (id == 4) {
-              rSearch(3, int, tracks, collector);
-            } else if (id == 5) {
-              rSearch(4, int, tracks, collector);
-            } else if (id == 6) {
-              rSearch(5, int, tracks, collector);
-            } else if (id == 7) {
-              rSearch(6, int, tracks, collector);
-            } else if (id == 8) {
-              rSearch(7, int, tracks, collector);
-            } else if (id == 9) {
-              rSearch(8, int, tracks, collector);
-            } else if (id == 10) {
-              rSearch(9, int, tracks, collector);
-            } else {
-              collector.stop();
-              return;
-            }
-          })
-          .on("end", () => {
-            if (smessage) {
-              if (smessage.deletable) {
-                if (int.guild.me.permissions.has("MANAGE_MESSAGES")) {
-                  smessage.delete();
+              if (id == 1) {
+                rSearch(0, int, tracks, collector);
+              } else if (id == 2) {
+                rSearch(1, int, tracks, collector);
+              } else if (id == 3) {
+                rSearch(2, int, tracks, collector);
+              } else if (id == 4) {
+                rSearch(3, int, tracks, collector);
+              } else if (id == 5) {
+                rSearch(4, int, tracks, collector);
+              } else if (id == 6) {
+                rSearch(5, int, tracks, collector);
+              } else if (id == 7) {
+                rSearch(6, int, tracks, collector);
+              } else if (id == 8) {
+                rSearch(7, int, tracks, collector);
+              } else if (id == 9) {
+                rSearch(8, int, tracks, collector);
+              } else if (id == 10) {
+                rSearch(9, int, tracks, collector);
+              } else {
+                collector.stop();
+                return;
+              }
+            })
+            .on("end", () => {
+              if (smessage) {
+                if (smessage.deletable) {
+                  if (int.guild.me.permissions.has("MANAGE_MESSAGES")) {
+                    smessage.delete();
+                  }
                 }
               }
-            }
-          });
+            });
+        }
         async function rSearch(index, int, tracks, collector) {
           collector.stop();
           const voiceChannel = int.member.voice.channel;
