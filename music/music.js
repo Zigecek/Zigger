@@ -441,11 +441,9 @@ const play = async (guild, song, errored) => {
           var Gres = await Guild.findOne({
             guildID: guild.id,
           });
-          if (err) {
-            console.error(err);
-            error.sendError(err);
-            return;
-          }
+
+          console.error("410");
+
           var channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
           if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
             channel.send(
@@ -468,6 +466,7 @@ const play = async (guild, song, errored) => {
           return;
         } else {
           console.error(err);
+          error.sendError(err);
           var Gres = await Guild.findOne({
             guildID: guild.id,
           });
