@@ -23,13 +23,13 @@ const guildSchema = new mongoose.Schema({
     default: true,
     type: Boolean,
   },
-  autoRoleIDs: {
-    default: [],
-    type: Array,
-  },
   autoRoleID: {
     default: null,
     type: String,
+  },
+  autoRoleIDs: {
+    default: [],
+    type: Array,
   },
   blacklist: {
     default: [],
@@ -94,28 +94,20 @@ const guildSchema = new mongoose.Schema({
   },
   guildID: String,
   guildName: String,
-  musicBotCounter: {
-    default: 0,
-    type: Number,
-  },
-  musicBotCounter2: {
-    default: 0,
-    type: Number,
-  },
-  musicBotCounter3: {
-    default: 0,
-    type: Number,
-  },
   musicBotDefaultVolume: {
     default: 80,
     type: Number,
+  },
+  musicBotLastUUID: {
+    default: null,
+    type: String,
   },
   musicBotLoop: {
     default: false,
     type: Boolean,
   },
   musicBotPaused: {
-    default: null,
+    default: false,
     type: Boolean,
   },
   musicBotPauseElapsed: {
@@ -138,12 +130,8 @@ const guildSchema = new mongoose.Schema({
     default: null,
     type: String,
   },
-  musicBotVoiceChannelID: {
-    default: null,
-    type: String,
-  },
   musicBotVolume: {
-    default: 100,
+    default: 80,
     type: Number,
   },
   plus: {
@@ -211,10 +199,6 @@ const guildSchema = new mongoose.Schema({
     type: String,
   },
   welChannelID: {
-    default: null,
-    type: String,
-  },
-  musicBotLastUUID: {
     default: null,
     type: String,
   },

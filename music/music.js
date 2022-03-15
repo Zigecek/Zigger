@@ -28,10 +28,23 @@ function wait(time) {
   return new Promise((resolve) => setTimeout(resolve, time).unref());
 }
 
-const ready = () => {
+const ready = async () => {
   console.log(" ");
   console.log("MusicBot - Hraju!");
-  //callLoop();
+
+  await Guild.update(
+    {},
+    {
+      musicBotLastUUID: null,
+      musicBotLoop: false,
+      musicBotPaused: false,
+      musicBotPauseElapsed: 0,
+      musicBotPlaying: false,
+      musicBotQueueLoop: false,
+      musicBotTxtChannelID: null,
+      musicBotVolume: 80
+    }
+  );
 };
 
 const play = async (guild, song, errored) => {
@@ -580,9 +593,6 @@ async function stopET(id, serverQueue) {
       guildID: id,
     },
     {
-      musicBotCounter: 0,
-      musicBotCounter2: 0,
-      musicBotCounter3: 0,
       musicBotPaused: false,
       musicBotPlaying: false,
       musicBotTxtChannelID: null,
@@ -647,17 +657,6 @@ function stateChange(serverQueue, guild) {
           serverQueue.connection.destroy();
         }
       }
-    } else if (newState.status == voice.VoiceConnectionStatus.Ready) {
-      await Guild.updateOne(
-        {
-          guildID: guild.id,
-        },
-        {
-          musicBotCounter: 0,
-          musicBotCounter2: 0,
-          musicBotCounter3: 0,
-        }
-      );
     }
   });
 }
