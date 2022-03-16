@@ -19,7 +19,7 @@ module.exports = {
   cooldown: 1,
   aliases: [],
   category: "other",
-  async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
+  execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
       return;
 

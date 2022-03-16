@@ -20,7 +20,7 @@ module.exports = {
   aliases: [],
   cooldown: 2,
   category: "fun",
-  async execute(int, serverQueue, Gres) {
+  execute(int, serverQueue, Gres) {
     if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
     if (!int.guild.me.permissions.has("EMBED_LINKS"))
       return followReply(int, { content: LMessages.help.noPermission });

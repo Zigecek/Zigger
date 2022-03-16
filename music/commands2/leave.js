@@ -20,7 +20,7 @@ module.exports = {
   cooldown: 1,
   aliases: [],
   category: "music",
-  async execute(int, serverQueue, Gres) {
+  execute(int, serverQueue, Gres) {
     if (
       !int.member.voice.channel ||
       int.member.voice.channel != int.guild.me.voice.channel

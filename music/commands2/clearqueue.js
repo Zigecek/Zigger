@@ -18,7 +18,7 @@ module.exports = {
   cooldown: 2,
   aliases: ["queueclear"],
   category: "music",
-  async execute(int, serverQueue, Gres) {
+  execute(int, serverQueue, Gres) {
     if (
       !int.member.voice.channel ||
       int.member.voice.channel != int.guild.me.voice.channel

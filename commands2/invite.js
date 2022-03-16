@@ -19,7 +19,7 @@ module.exports = {
   cooldown: 3,
   aliases: [],
   category: "other",
-  async execute(int, serverQueue, Gres) {
+  execute(int, serverQueue, Gres) {
     if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
     if (
       !int.member.voice.channel

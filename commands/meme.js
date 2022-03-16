@@ -19,7 +19,7 @@ module.exports = {
   aliases: [],
   cooldown: 2,
   category: "fun",
-  async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
+  execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
       return;
     if (!message.guild.me.permissions.has("EMBED_LINKS"))

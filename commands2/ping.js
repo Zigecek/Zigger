@@ -20,7 +20,7 @@ module.exports = {
   cooldown: 1,
   aliases: [],
   category: "other",
-  async execute(int, serverQueue, Gres) {
+  execute(int, serverQueue, Gres) {
     if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
 
     followReply(int, { content: LMessages.pingingMessage }).then(

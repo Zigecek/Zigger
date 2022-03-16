@@ -20,7 +20,7 @@ module.exports = {
   cooldown: 3,
   aliases: ["np", "playing"],
   category: "music",
-  async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
+  execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     const start = "╞";
     const end = "╡";
     const prog = "═";
