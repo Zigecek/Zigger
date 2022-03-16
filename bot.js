@@ -35,7 +35,7 @@ const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
 
 const rest = new REST({ version: "9" }).setToken(
-  process.platform != "linux" && config.ofi != true
+  process.platform != "linux" && !config.ofi
     ? process.env.TOKEN2
     : process.env.TOKEN
 );
@@ -82,7 +82,7 @@ const ready = async () => {
     }
   }, 10000);
 
-  if (process.platform == "linux" && config.ofi == true && config.index == 1) {
+  if (process.platform == "linux" && config.ofi && config.index == 1) {
     AutoPoster(process.env.TOPGG_TOKEN, bot);
   }
   const Com = require("./deploy/commands");
@@ -130,7 +130,6 @@ const guildCreate = (params) => {
   guildJoin.save().catch((err) => {
     console.error(err);
     error.sendError(err);
-    return;
   });
   console.log("MongoDB - Guilda zapsána.");
 
@@ -164,43 +163,33 @@ const guildMemberAdd = async (params) => {
   var Gres = await Guild.findOne({
     guildID: member.guild.id,
   });
-  if (Gres.autoroleEnabled == true) {
-    if (Gres.autoRoleIDs.length >= 1) {
-      Gres.autoRoleIDs.forEach((rID) => {
-        var role = member.guild.roles.cache.get(rID);
-        if (role) {
-          if (!role.editable) {
-            Gres.autoRoleIDs.splice(Gres.autoRoleIDs.indexOf(rID), 1);
-          }
-        } else {
-          Gres.autoRoleIDs.splice(Gres.autoRoleIDs.indexOf(rID), 1);
-        }
-      });
-      if (member.guild.me.permissions.has("MANAGE_ROLES")) {
-        try {
-          await member.roles.add(Gres.autoRoleIDs);
-        } catch (error) {
-          if (!error.message.includes("Missing Permissions"))
-            return console.error(error);
-        }
+  if (Gres.autoroleEnabled && Gres.autoRoleIDs.length >= 1) {
+    Gres.autoRoleIDs.forEach((rID) => {
+      var role = member.guild.roles.cache.get(rID);
+      if (!role?.editable) {
+        Gres.autoRoleIDs.splice(Gres.autoRoleIDs.indexOf(rID), 1);
+      }
+    });
+    if (member.guild.me.permissions.has("MANAGE_ROLES")) {
+      try {
+        await member.roles.add(Gres.autoRoleIDs);
+      } catch (error) {
+        if (!error.message.includes("Missing Permissions"))
+          return console.error(error);
       }
     }
   }
 
-  if (Gres.welChannelID == null) {
-    return;
-  } else {
+  if (Gres.welChannelID != null) {
     let welChannel = bot.channels.cache.get(Gres.welChannelID);
-    if (welChannel) {
-      if (member.guild.me.permissions.has("SEND_MESSAGES")) {
-        welChannel.send(
-          template(
-            LMessages.joinMessage,
-            { member: `<@${member.user.id}>` },
-            { before: "%", after: "%" }
-          )
-        );
-      }
+    if (welChannel && member.guild.me.permissions.has("SEND_MESSAGES")) {
+      welChannel.send(
+        template(
+          LMessages.joinMessage,
+          { member: `<@${member.user.id}>` },
+          { before: "%", after: "%" }
+        )
+      );
     }
   }
 };
@@ -248,7 +237,7 @@ require("./event_handler");
 
 mongooseFile.init();
 bot.login(
-  process.platform != "linux" && config.ofi != true
+  process.platform != "linux" && !config.ofi
     ? process.env.TOKEN2
     : process.env.TOKEN
 );

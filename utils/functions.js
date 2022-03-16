@@ -27,21 +27,6 @@ function addReactions(message, emojis) {
     }
   }
 }
-/**
- * Adds commas after every 3 numbers.
- * @param {(Number|String)} number The number to commafy.
- * @returns {String} Commafied number.
- */
-function commafy(number) {
-  var str = number.toString().split(".");
-  if (str[0].length >= 5) {
-    str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, "$1,");
-  }
-  if (str[1] && str[1].length >= 5) {
-    str[1] = str[1].replace(/(\d{3})/g, "$1 ");
-  }
-  return str.join(".");
-}
 
 /**
  * Shuffles array in place.
@@ -141,7 +126,6 @@ module.exports = {
   followReply: followReply,
   addReactions: addReactions,
   shuffle: shuffle,
-  commafy: commafy,
   curDT: curDT,
   shout: shout,
   deleteMessages: deleteMessages,
