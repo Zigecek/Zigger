@@ -1,4 +1,3 @@
-
 const { bot } = require("../bot");
 const error = require("./error");
 const mongoose = require("mongoose");

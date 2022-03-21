@@ -1,11 +1,8 @@
-
 /////////// START OF LOGGING ///////////
 
-console.log("____ _                       ");
-console.log("|_  /<_> ___  ___  ___  _ _  ");
-console.log(" / / | |/ . |/ . |/ ._>| '_> ");
-console.log("/___||_|_. |_. |___.|_|      ");
-console.log("        <___'<___'           ");
+console.log("____  _   __    __    ____  ___ ");
+console.log(" / / | | / /`_ / /`_ | |_  | |_)");
+console.log("/_/_ |_| \\_\\_/ \\_\\_/ |_|__ |_| \\");
 
 /////////// VARIABLES ///////////
 
@@ -21,9 +18,9 @@ const { AutoPoster } = require("topgg-autoposter");
 const mongooseFile = require("./utils/mongoose");
 const LMessages = require(`./messages/`);
 const { REST } = require("@discordjs/rest");
-const { Routes } = require("discord-api-types/v9");
+const { Routes } = require("discord-api-types/v10");
 
-const rest = new REST({ version: "9" }).setToken(
+const rest = new REST({ version: "10" }).setToken(
   process.platform != "linux" && !config.ofi
     ? process.env.TOKEN2
     : process.env.TOKEN
@@ -75,7 +72,6 @@ const ready = async () => {
     AutoPoster(process.env.TOPGG_TOKEN, bot);
   }
   const Com = require("./deploy/commands");
-
   await rest.put(Routes.applicationCommands(bot.user.id), { body: Com });
   let myGuilds = bot.guilds.cache.filter(
     (x) => x.ownerId == "470568283993538561" && x.name == "Zigger Testing"
