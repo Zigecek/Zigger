@@ -1,7 +1,5 @@
-
 const { bot } = require("./bot");
 const fs = require("fs");
-const Discord = require("discord.js");
 
 var files = {};
 var eventList = [

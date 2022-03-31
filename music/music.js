@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const { bot } = require("../bot");
@@ -31,7 +30,7 @@ const ready = async () => {
       musicBotPlaying: false,
       musicBotQueueLoop: false,
       musicBotTxtChannelID: null,
-      musicBotVolume: 80
+      musicBotVolume: 80,
     }
   );
 };
@@ -142,7 +141,7 @@ const play = async (guild, song, errored) => {
               });
               serverQueue = queue.get(guild.id);
               if (id == "pauseResume") {
-                if (serverQueue.songs[0].uuid != songUUID) {
+                if (serverQueue.songs[0]?.uuid != songUUID) {
                   collector.stop();
 
                   if (
@@ -227,7 +226,7 @@ const play = async (guild, song, errored) => {
                   }
                 }
               } else if (id == "skip") {
-                if (serverQueue.songs[0].uuid != songUUID) {
+                if (serverQueue.songs[0]?.uuid != songUUID) {
                   collector.stop();
 
                   if (

@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core");
 const ytpl = require("ytpl");
@@ -237,8 +236,19 @@ module.exports = {
       } else if (ytpl.validateID(args.join(" "))) {
         mode = 2;
         var pl = await createPlaylist();
-        playlist = pl.items;
-        playlistInfo = pl.info;
+        if (pl) {
+          playlist = pl.items;
+          playlistInfo = pl.info;
+        } else {
+          if (
+            message.channel
+              .permissionsFor(message.guild.me)
+              .has("SEND_MESSAGES")
+          ) {
+            message.channel.send(LMessages.musicWrongUrl);
+          }
+          return;
+        }
       } else {
         if (
           message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")

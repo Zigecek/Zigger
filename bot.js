@@ -8,7 +8,6 @@ console.log("/_/_ |_| \\_\\_/ \\_\\_/ |_|__ |_| \\");
 
 const config = require("./config");
 require("dotenv").config({ path: config.index == 1 ? ".env" : ".env2" });
-const fs = require("fs");
 const Discord = require("discord.js");
 const mongoose = require("mongoose");
 const template = require("string-placeholder");
@@ -53,10 +52,15 @@ const ready = async () => {
   setInterval(async () => {
     switch (mode) {
       case 1:
+        /*
         bot.user.setActivity(
           `for ${bot.guilds.cache
             .map((g) => g.memberCount)
             .reduce((a, c) => a + c)} users <3`
+        );
+        */
+        bot.user.setActivity(
+          `for ${bot.users.cache.filter((u) => !u.bot).size} users <3`
         );
         mode = 2;
         break;
