@@ -384,7 +384,7 @@ const play = async (guild, song, errored) => {
         );
 
         if (
-          guild.me.voice.channel.members.filter((x) => !x.user.bot).size > 0
+          guild.me.voice.channel?.members.filter((x) => !x.user.bot).size > 0
         ) {
           const uid = short.generate();
           await Guild.updateOne(
