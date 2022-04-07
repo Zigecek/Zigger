@@ -279,6 +279,9 @@ const play = async (guild, song, errored) => {
   if (!serverQueue.audioPlayer) {
     serverQueue.audioPlayer = voice.createAudioPlayer();
 
+    queue.set(guild.id, serverQueue);
+    serverQueue = queue.get(guild.id);
+
     serverQueue.audioPlayer.on("stateChange", async (oldState, newState) => {
       if (
         // Paused
@@ -379,7 +382,7 @@ const play = async (guild, song, errored) => {
         var Gres = await Guild.findOne({
           guildID: guild.id,
         });
-        serverQueue.audioPlayer.state?.resource.volume.setVolume(
+        serverQueue.audioPlayer.state?.resource?.volume.setVolume(
           Number(Gres.musicBotVolume) / 100
         );
 
