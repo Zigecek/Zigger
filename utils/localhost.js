@@ -17,6 +17,7 @@ app.get("/", function (req, res, next) {
 });
 
 app.post("/toAdmin", async function (req, res) {
+  console.log('posílám');
   var Gres = await Config.findOne({
     number: 1,
   });
