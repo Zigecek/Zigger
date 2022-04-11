@@ -4,6 +4,7 @@ const Config = require("../models/Config");
 const Discord = require("discord.js");
 const { bot } = require("../bot");
 const config = require("../config");
+const sec2human = require("sec2human");
 
 const port = config.index == 1 ? 3321 : 3322;
 const app = express();
@@ -28,7 +29,11 @@ app.post("/toAdmin", async function (req, res) {
         embeds: [
           new Discord.MessageEmbed()
             .setTitle(req.body.event)
-            .setDescription(`${req.body.data.file} - ${req.body.data.time}`)
+            .setDescription(
+              `${req.body.data.file} - ${sec2human(
+                Math.floor(req.body.data.time)
+              )}`
+            )
             .setImage(req.body.data.image)
             .setTimestamp(),
         ],
