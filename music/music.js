@@ -515,7 +515,7 @@ const voiceStateUpdate = async (params) => {
         stopET(newVoice.guild.id, serverQueue);
       }
     } else {
-      if (oldVoice.channel.members.filter((x) => !x.user.bot).size == 0) {
+      if (newVoice.channel.members.filter((x) => !x.user.bot).size == 0) {
         const uid = short.generate();
         await Guild.updateOne(
           {
@@ -527,7 +527,7 @@ const voiceStateUpdate = async (params) => {
         );
         setTimeout(async () => {
           var Gres = await Guild.findOne({
-            guildID: oldVoice.guild.id,
+            guildID: newVoice.guild.id,
           });
           if (uid == Gres.musicBotLastUUID) {
             const serverQueue = queue.get(newVoice.guild.id);
