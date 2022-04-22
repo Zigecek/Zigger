@@ -296,7 +296,7 @@ module.exports = {
           followReply(int, { content: "**:x: Failed.**" });
         }
       } else if (int.options.getSubcommand() == "shout") {
-        var gGuilds = Guild.find({});
+        var gGuilds = await Guild.find({});
         gGuilds.forEach((e) => {
           let guild = bot.guilds.cache.get(e.guildID);
           if (guild) {
