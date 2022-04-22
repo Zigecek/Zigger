@@ -515,7 +515,7 @@ const voiceStateUpdate = async (params) => {
         stopET(newVoice.guild.id, serverQueue);
       }
     } else {
-      if (newVoice.channel.members.filter((x) => !x.user.bot).size == 0) {
+      if (oldVoice.channel.members.filter((x) => !x.user.bot).size - 1 == 0) {
         const uid = short.generate();
         await Guild.updateOne(
           {
