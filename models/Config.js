@@ -7,22 +7,6 @@ const configSchema = mongoose.Schema({
     deafult: [],
     type: Array
   },
-  ngrokRpiSSH: {
-    default: "",
-    type: String
-  },
-  ngrokUrl: {
-    default: null,
-    type: String
-  },
-  ngrokZeroSSH: {
-    default: "",
-    type: String
-  },
-  ngrokZeroUrl: {
-    default: "",
-    type: String
-  },
   number: {
     default: 1,
     type: Number
