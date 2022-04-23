@@ -1,8 +1,8 @@
 {
   "version": "1.44.0",
   "scripts": {
-    "i": "npm i @discordjs/opus@latest axios@latest body-parser@latest discord.js@latest dotenv@latest emoji-regex@latest express@latest ffmpeg-static@latest fs@latest is-url@latest moment@latest mongoose@latest ms-to-timecode@latest sourcebin@latest string-placeholder@latest ytdl-core@latest ytpl@latest ytsr@latest ent@latest request@latest sec2human@latest m3u8stream@latest child_process@latest axios@latest @discordjs/voice@latest tweetnacl@latest topgg-autoposter@latest systeminformation@latest short-uuid@latest discord-api-types@latest @discordjs/rest@latest cross-fetch@latest hash-wasm@latest",
-    "uni": "npm uninstall @discordjs/opus axios body-parser discord.js dotenv emoji-regex express ffmpeg-static fs is-url moment mongoose ms-to-timecode sourcebin string-placeholder ytdl-core ytpl ytsr ent request sec2human m3u8stream child_process topgg-autoposter systeminformation @discordjs/voice axios tweetnacl short-uuid discord-api-types @discordjs/rest cross-fetch hash-wasm",
+    "i": "npm i @discordjs/opus@latest axios@latest body-parser@latest discord.js@latest dotenv@latest emoji-regex@latest express@latest fs@latest is-url@latest moment@latest mongoose@latest ms-to-timecode@latest sourcebin@latest string-placeholder@latest ytdl-core@latest ytpl@latest ytsr@latest ent@latest request@latest sec2human@latest m3u8stream@latest child_process@latest axios@latest @discordjs/voice@latest tweetnacl@latest topgg-autoposter@latest systeminformation@latest short-uuid@latest discord-api-types@latest @discordjs/rest@latest cross-fetch@latest hash-wasm@latest",
+    "uni": "npm uninstall @discordjs/opus axios body-parser discord.js dotenv emoji-regex express fs is-url moment mongoose ms-to-timecode sourcebin string-placeholder ytdl-core ytpl ytsr ent request sec2human m3u8stream child_process topgg-autoposter systeminformation @discordjs/voice axios tweetnacl short-uuid discord-api-types @discordjs/rest cross-fetch hash-wasm",
     "start": "pm2 start ./bot.js --time -- trace-warnings",
     "start2": "node ./bot.js"
   },
@@ -20,7 +20,6 @@
     "emoji-regex": "^10.1.0",
     "ent": "^2.2.0",
     "express": "^4.17.3",
-    "ffmpeg-static": "^5.0.0",
     "fs": "^0.0.1-security",
     "hash-wasm": "^4.9.0",
     "is-url": "^1.2.4",
