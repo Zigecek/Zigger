@@ -1,8 +1,8 @@
-const { bot } = require("./bot");
+const { bot } = require("../bot");
 const fs = require("fs");
 
 var files = {};
-var eventList = [
+const eventList = [
   "applicationCommandCreate",
   "applicationCommandDelete",
   "applicationCommandUpdate",
@@ -72,13 +72,12 @@ var eventList = [
 
 // eventList = array of all event names (strings)
 
-var other = ["./bot.js", "./music/music.js"];
+var other = ["../bot.js", "../music/music.js"];
 
 var utilFiles = fs
   .readdirSync("./utils")
-  .filter((file) => file.endsWith(".js"));
-utilFiles = utilFiles.map((s) => `./utils/${s}`);
-
+  .filter((file) => file.endsWith(".js") && !file.includes("event_handler.js"));
+utilFiles = utilFiles.map((s) => `./${s}`);
 const store = (file) => {
   // u - file
   // p - name of an event in the file
@@ -99,7 +98,7 @@ other.forEach(store);
 Object.keys(files).forEach((p) => {
   bot.on(p, (...args) => {
     files[p].forEach((u) => {
-      u.events[p](args);
+      u.events[p](...args);
     });
   });
 });

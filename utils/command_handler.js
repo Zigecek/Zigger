@@ -16,60 +16,48 @@ bot.commands2 = new Discord.Collection();
 bot.commandsDev = new Discord.Collection();
 
 /////////// IMPORT ///////////
+[
+  {
+    path: "./commands",
+    group: 1,
+  },
+  {
+    path: "./music/commands",
+    group: 1,
+  },
+  {
+    path: "./commands2",
+    group: 2,
+  },
+  {
+    path: "./music/commands2",
+    group: 2,
+  },
+  {
+    path: "./commandsDev",
+    group: 2,
+  },
+].forEach((commandFolder) => {
+  const commandFiles = fs
+    .readdirSync(commandFolder.path)
+    .filter((file) => file.endsWith(".js"));
+  for (const file of commandFiles) {
+    const command = require(`.${commandFolder.path}/${file}`);
 
-const commandFiles = fs
-  .readdirSync("./commands")
-  .filter((file) => file.endsWith(".js"));
-for (const file of commandFiles) {
-  const command = require(`../commands/${file}`);
-
-  bot.commands.set(command.name, command);
-}
-
-const commandFiles2 = fs
-  .readdirSync("./music/commands")
-  .filter((file) => file.endsWith(".js"));
-for (const file of commandFiles2) {
-  const command2 = require(`../music/commands/${file}`);
-
-  bot.commands.set(command2.name, command2);
-}
-
-const commandFiles3 = fs
-  .readdirSync("./commands2")
-  .filter((file) => file.endsWith(".js"));
-for (const file of commandFiles3) {
-  const command3 = require(`../commands2/${file}`);
-
-  bot.commands2.set(command3.name, command3);
-}
-
-const commandFiles4 = fs
-  .readdirSync("./music/commands2")
-  .filter((file) => file.endsWith(".js"));
-for (const file of commandFiles4) {
-  const command4 = require(`../music/commands2/${file}`);
-
-  bot.commands2.set(command4.name, command4);
-}
-
-const commandFiles5 = fs
-  .readdirSync("./commandsDev")
-  .filter((file) => file.endsWith(".js"));
-for (const file of commandFiles5) {
-  const command5 = require(`../commandsDev/${file}`);
-
-  bot.commands2.set(command5.name, command5);
-}
+    if (commandFolder.group == 1) {
+      bot.commands.set(command.name, command);
+    } else if (commandFolder.group == 2) {
+      bot.commands2.set(command.name, command);
+    }
+  }
+});
 
 /////////// ///////////
 
-const messageCreate = async (params) => {
-  var message = params[0];
+const messageCreate = async (message) => {
   if (message.channel.type != "DM" && message.author != bot.user) {
     if (message.author != bot.user && message.author.bot == false) {
-      var gExist = false;
-      var res = await Guild.exists({ guildID: message.guild.id });
+      let res = await Guild.exists({ guildID: message.guild.id });
 
       if (!res) {
         const guildJoin = new Guild({
@@ -78,32 +66,27 @@ const messageCreate = async (params) => {
           guildName: message.guild.name,
           prefix: config.DefaultPrefix,
         });
-        guildJoin.save().catch((err) => {
+        try {
+          await guildJoin.save();
+          console.log(" ");
+          console.log("MongoDB - Guilda zapsána.");
+        } catch (err) {
           console.error(err);
           error.sendError(err);
-          return;
-        });
-        console.log(" ");
-        console.log("MongoDB - Guilda zapsána.");
-        bot.emit("message", message);
-        return;
-      } else {
-        gExist = true;
+        }
+
+        return bot.emit("message", message);
       }
 
-      if (gExist == false) {
-        return;
-      }
-
-      var Gres = await Guild.findOne({
+      let Gres = await Guild.findOne({
         guildID: message.guild.id,
       });
 
-      var prefix = Gres.prefix;
+      let prefix = Gres.prefix;
 
       //if (message.attachments.size > 0 || message.channel.nsfw != true) require('./noreq/anti-nsfw').execute(message, LMessages);
 
-      var roleID = message.guild.me.roles.cache
+      let roleID = message.guild.me.roles.cache
         .filter((x) => x.managed == true)
         .first()?.id;
 
@@ -116,7 +99,7 @@ const messageCreate = async (params) => {
         const serverQueue = music.queue.get(message.guild.id);
 
         let args = [];
-        var mention = false;
+        let mention = false;
         if (message.content.startsWith("<@" + bot.user.id + ">")) {
           args = message.content
             .slice(`<@${bot.user.id}>`.length)
@@ -150,10 +133,8 @@ const messageCreate = async (params) => {
                 )
               );
             }
-            return;
-          } else {
-            return;
           }
+          return;
         }
 
         const command = args.shift().toLowerCase();
@@ -175,7 +156,7 @@ const messageCreate = async (params) => {
             Gres.cooldowns[map.values().next().value.name] == undefined ||
             Gres.cooldowns[map.values().next().value.name] == null
           ) {
-            var isFS = false;
+            let isFS = false;
             if (map.values().next().value.name == "skip") {
               if (map.values().next().value.aliases.includes(command)) {
                 isFS = true;
@@ -224,8 +205,7 @@ const messageCreate = async (params) => {
   }
 };
 
-const interactionCreate = async (params) => {
-  var int = params[0];
+const interactionCreate = async (int) => {
   if (!int.isCommand()) return;
   if (!int.inGuild()) return;
   if (int.channel.type == "DM") return;
@@ -241,18 +221,19 @@ const interactionCreate = async (params) => {
       guildName: int.guild.name,
       prefix: config.DefaultPrefix,
     });
-    await guildJoin.save().catch((err) => {
+    try {
+      await guildJoin.save();
+      console.log(" ");
+      console.log("MongoDB - Guilda zapsána.");
+    } catch (err) {
       console.error(err);
       error.sendError(err);
-      return;
-    });
-    console.log(" ");
-    console.log("MongoDB - Guilda zapsána.");
-    bot.emit("interactionCreate", int);
-    return;
+    }
+
+    return bot.emit("message", message);
   }
 
-  var Gres = await Guild.findOne({
+  let Gres = await Guild.findOne({
     guildID: int.guild.id,
   });
 

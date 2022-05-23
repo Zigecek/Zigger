@@ -52,13 +52,6 @@ const ready = async () => {
   setInterval(async () => {
     switch (mode) {
       case 1:
-        /*
-        bot.user.setActivity(
-          `for ${bot.guilds.cache
-            .map((g) => g.memberCount)
-            .reduce((a, c) => a + c)} users <3`
-        );
-        */
         bot.user.setActivity(
           `for ${bot.users.cache.filter((u) => !u.bot).size} users <3`
         );
@@ -220,7 +213,7 @@ module.exports.events = {
 
 /////////// EVENT HANDLER ///////////
 
-require("./event_handler");
+require("./utils/event_handler");
 
 /////////// LOGIN ///////////
 

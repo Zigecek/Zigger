@@ -1,10 +1,8 @@
-
 const { bot } = require("../bot");
 const error = require("./error");
 const Guild = require("../models/guild");
 
-const messageCreate = async (params) => {
-  var message = params[0];
+const messageCreate = async (message) => {
   if (!message) return;
   if (message.partial) await message.fetch();
   if (message.guild == null) await message.fetch();
@@ -242,8 +240,7 @@ function delMesss(array) {
   });
 }
 
-const channelCreate = async (params) => {
-  var channel = params[0];
+const channelCreate = async (channel) => {
   if (channel.type == "DM") {
     return;
   }
@@ -274,8 +271,7 @@ const channelCreate = async (params) => {
   }
 };
 
-const channelUpdate = async (params) => {
-  var channel = params[0];
+const channelUpdate = async (channel) => {
   if (channel.type == "DM") {
     return;
   }
@@ -317,8 +313,7 @@ const channelUpdate = async (params) => {
   }
 };
 
-const guildMemberRemove = async (params) => {
-  var member = params[0];
+const guildMemberRemove = async (member) => {
   if (member.user == bot.user) return;
   var Gres = await Guild.findOne({
     guildID: member.guild.id,
@@ -339,8 +334,7 @@ const guildMemberRemove = async (params) => {
   }
 };
 
-const roleDelete = async (params) => {
-  var role = params[0];
+const roleDelete = async (role) => {
   var Gres = await Guild.findOne({
     guildID: role.guild.id,
   });
@@ -364,8 +358,7 @@ const roleDelete = async (params) => {
   }
 };
 
-const roleUpdate = async (params) => {
-  var role = params[0];
+const roleUpdate = async (role) => {
   var Gres = await Guild.findOne({
     guildID: role.guild.id,
   });

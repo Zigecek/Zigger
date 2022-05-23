@@ -441,12 +441,8 @@ module.exports = {
           10000
         );
       } catch (err) {
-        try {
-          throw Error(err);
-        } catch (err) {
-          console.error(err);
-          error.sendError(err);
-        }
+        console.error(err);
+        error.sendError(err);
 
         //music.queue.delete(message.guild.id);
         if (
@@ -454,6 +450,8 @@ module.exports = {
         ) {
           message.channel.send(LMessages.musicError);
         }
+
+        serverQueue.connection.destroy();
         return;
       }
 

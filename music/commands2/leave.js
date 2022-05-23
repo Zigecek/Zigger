@@ -30,7 +30,6 @@ module.exports = {
         }
       }
     }
-    music.stopET(int.guild.id, serverQueue);
 
     if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
       followReply(int, { content: LMessages.music.otherCmds.disconnect });

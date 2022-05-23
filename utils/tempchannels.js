@@ -1,4 +1,3 @@
-
 const { bot } = require("../bot");
 const error = require("./error");
 const Guild = require("../models/guild");
@@ -8,9 +7,7 @@ const ready = () => {
   console.log("Tempchannels - Ok.");
 };
 
-const voiceStateUpdate = async (params) => {
-  var oldMember = params[0];
-  var newMember = params[1];
+const voiceStateUpdate = async (oldMember, newMember) => {
   var Gres = await Guild.findOne({
     guildID: newMember.guild.id,
   });
@@ -71,8 +68,7 @@ const voiceStateUpdate = async (params) => {
   }
 };
 
-const channelDelete = async (params) => {
-  var channel = params[0];
+const channelDelete = async (channel) => {
   var Gres = await Guild.findOne({
     guildID: channel.guild.id,
   });

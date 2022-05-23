@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const Guild = require("../models/guild.js");
 const Streams = require("../models/streamguilds.js");
@@ -163,25 +162,23 @@ function callLoop() {
   }, 10000);
 }
 
-const getStream = (clientID, channelID) => {
-  return new Promise((resolve, reject) => {
-    request.get(
-      `https://api.twitch.tv/kraken/streams/${channelID}`,
-      {
-        json: true,
-        headers: {
-          Accept: "application/vnd.twitchtv.v5+json",
-          "Client-ID": `${clientID}`,
-        },
+const getStream = async (clientID, channelID) => {
+  request.get(
+    `https://api.twitch.tv/kraken/streams/${channelID}`,
+    {
+      json: true,
+      headers: {
+        Accept: "application/vnd.twitchtv.v5+json",
+        "Client-ID": `${clientID}`,
       },
-      (err, res, body) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(body);
+    },
+    (err, res, body) => {
+      if (err) {
+        return err;
       }
-    );
-  });
+      return body;
+    }
+  );
 };
 
 module.exports = {

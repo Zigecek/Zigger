@@ -1,4 +1,3 @@
-
 const { bot } = require("../bot");
 const error = require("./error");
 const Guild = require("../models/guild");
@@ -177,8 +176,7 @@ function callLoop() {
   }, 10 * 60 * 1000);
 }
 
-const channelDelete = async (params) => {
-  var channel = params[0];
+const channelDelete = async (channel) => {
   var Gres = await Guild.findOne({
     guildID: channel.guild.id,
   });

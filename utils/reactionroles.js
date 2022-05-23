@@ -1,4 +1,3 @@
-
 const { bot } = require("../bot");
 const functions = require("../utils/functions");
 const error = require("./error");
@@ -9,9 +8,7 @@ const ready = () => {
   console.log("RR - Reaguji.");
 };
 
-const messageReactionAdd = async (params) => {
-  var react = params[0];
-  var user = params[1];
+const messageReactionAdd = async (react, user) => {
   let reaction;
   if (react.partial) {
     reaction = await react.fetch();
@@ -49,9 +46,7 @@ const messageReactionAdd = async (params) => {
   });
 };
 
-const messageReactionRemove = async (params) => {
-  var react = params[0];
-  var user = params[1];
+const messageReactionRemove = async (react, user) => {
   let reaction;
   if (react.partial) {
     reaction = await react.fetch();
@@ -92,8 +87,7 @@ const messageReactionRemove = async (params) => {
   });
 };
 
-const messageDelete = async (params) => {
-  var message = params[0];
+const messageDelete = async (message) => {
   var Gres = await Guild.findOne({
     guildID: message.guild.id,
   });

@@ -10,7 +10,7 @@ const template = require("string-placeholder");
 const short = require("short-uuid");
 const { followReply } = require("../utils/functions");
 
-let queue = new Map();
+var queue = new Map();
 
 function wait(time) {
   return new Promise((resolve) => setTimeout(resolve, time).unref());
@@ -36,7 +36,7 @@ const ready = async () => {
 };
 
 const play = async (guild, song, errored) => {
-  var serverQueue = queue.get(guild.id);
+  let serverQueue = queue.get(guild.id);
   if (!song) {
     await Guild.updateOne(
       {
@@ -48,13 +48,13 @@ const play = async (guild, song, errored) => {
     );
     return;
   }
-  var Gres = await Guild.findOne({
+  let Gres = await Guild.findOne({
     guildID: guild.id,
   });
   if (!errored) {
     if (song.seek == null) {
-      var content;
-      var channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
+      let content;
+      let channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
       if (channel) {
         if (Gres.annouce == 1) {
           if (guild.me.permissions.has("EMBED_LINKS")) {
@@ -90,8 +90,6 @@ const play = async (guild, song, errored) => {
                 ")`**",
             };
           }
-        } else if (Gres.annouce == 0) {
-          return;
         } else if (Gres.annouce == 3) {
           content = {
             content:
@@ -119,7 +117,7 @@ const play = async (guild, song, errored) => {
         ]);
         if (song.sDur != "LIVE!") {
           content.components = [controlRow];
-          var msg = await channel.send(content);
+          let msg = await channel.send(content);
           const songUUID = song.uuid;
           const collector = msg.createMessageComponentCollector({
             time: song.sDur * 1000,
@@ -134,7 +132,7 @@ const play = async (guild, song, errored) => {
                 interact.guild.me.voice.channelId
               )
                 return;
-              var id = interact.component.customId;
+              let id = interact.component.customId;
 
               Gres = await Guild.findOne({
                 guildID: guild.id,
@@ -176,7 +174,7 @@ const play = async (guild, song, errored) => {
                       serverQueue.audioPlayer.unpause();
                     }
                   }
-                  var timerMS =
+                  let timerMS =
                     serverQueue.songs[0].sDur * 1000 -
                     (Date.now() - Gres.musicBotPlayTime.getTime());
                   collector.resetTimer({
@@ -280,7 +278,6 @@ const play = async (guild, song, errored) => {
     serverQueue.audioPlayer = voice.createAudioPlayer();
 
     queue.set(guild.id, serverQueue);
-    serverQueue = queue.get(guild.id);
 
     serverQueue.audioPlayer.on("stateChange", async (oldState, newState) => {
       if (
@@ -364,7 +361,7 @@ const play = async (guild, song, errored) => {
           }
         }, 300 * 1000); // 300
 
-        var Gres = await Guild.findOne({
+        let Gres = await Guild.findOne({
           guildID: guild.id,
         });
         if (!Gres.musicBotLoop) {
@@ -379,7 +376,7 @@ const play = async (guild, song, errored) => {
       } else if (newState.status === voice.AudioPlayerStatus.Playing) {
         // on start
 
-        var Gres = await Guild.findOne({
+        let Gres = await Guild.findOne({
           guildID: guild.id,
         });
         serverQueue.audioPlayer.state?.resource?.volume.setVolume(
@@ -416,10 +413,9 @@ const play = async (guild, song, errored) => {
   }
 
   serverQueue.audioPlayer.removeAllListeners("error");
-  serverQueue.audioPlayer.on("error", (err) => {
+  serverQueue.audioPlayer.on("error", () => {
     serverQueue.audioPlayer.removeAllListeners("error");
     serverQueue.audioPlayer.removeAllListeners("stateChange");
-    serverQueue.audioPlayer = null;
     play(guild, song, true);
   });
 
@@ -440,15 +436,12 @@ const play = async (guild, song, errored) => {
         });
       })
       .catch(async (err) => {
+        let Gres = await Guild.findOne({
+          guildID: guild.id,
+        });
+        let channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
+
         if (err.statusCode == 410) {
-          console.log("errrrr 410");
-          var Gres = await Guild.findOne({
-            guildID: guild.id,
-          });
-
-          console.error("410");
-
-          var channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
           if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
             channel.send(
               template(
@@ -460,7 +453,7 @@ const play = async (guild, song, errored) => {
               )
             );
           }
-          var serverQueue = queue.get(guild.id);
+          let serverQueue = queue.get(guild.id);
           if (serverQueue) {
             if (serverQueue.songs.length > 0) {
               serverQueue.songs.shift();
@@ -471,10 +464,6 @@ const play = async (guild, song, errored) => {
         } else {
           console.error(err);
           error.sendError(err);
-          var Gres = await Guild.findOne({
-            guildID: guild.id,
-          });
-          var channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
           if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
             channel.send(LMessages.musicError);
           }
@@ -484,7 +473,7 @@ const play = async (guild, song, errored) => {
 
     return stream;
   }
-  var stream = await createSafeYTDL(song.url, guild);
+  let stream = await createSafeYTDL(song.url, guild);
   if (stream) {
     serverQueue.audioPlayer.play(
       voice.createAudioResource(stream, {
@@ -497,9 +486,7 @@ const play = async (guild, song, errored) => {
   return;
 };
 
-const voiceStateUpdate = async (params) => {
-  var oldVoice = params[0];
-  var newVoice = params[1];
+const voiceStateUpdate = async (oldVoice, newVoice) => {
   if (newVoice.channel == null) {
     if (newVoice.member == newVoice.guild.me) {
       const serverQueue = queue.get(newVoice.guild.id);
@@ -526,7 +513,7 @@ const voiceStateUpdate = async (params) => {
           }
         );
         setTimeout(async () => {
-          var Gres = await Guild.findOne({
+          let Gres = await Guild.findOne({
             guildID: newVoice.guild.id,
           });
           if (uid == Gres.musicBotLastUUID) {
@@ -549,9 +536,8 @@ const voiceStateUpdate = async (params) => {
   }
 };
 
-const channelDelete = async (params) => {
-  var channel = params[0];
-  var Gres = await Guild.findOne({
+const channelDelete = async (channel) => {
+  let Gres = await Guild.findOne({
     guildID: channel.guild.id,
   });
   if (Gres.blacklist.includes(channel.id)) {
@@ -575,7 +561,7 @@ async function stopET(id, serverQueue) {
     queue.delete(id);
   }
 
-  var Gres = await Guild.findOne({
+  let Gres = await Guild.findOne({
     guildID: id,
   });
 
@@ -651,6 +637,7 @@ function stateChange(serverQueue, guild) {
     }
   });
 }
+
 module.exports = {
   queue: queue,
   play: play,

@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 const botFile = require("../bot");
 const bot = botFile.bot;
