@@ -81,8 +81,7 @@ const ready = async () => {
   });
 };
 
-const guildCreate = (params) => {
-  var guild = params[0];
+const guildCreate = (guild) => {
   let channel = guild.channels.cache
     .filter(
       (x) =>
@@ -121,8 +120,7 @@ const guildCreate = (params) => {
   }
 };
 
-const guildDelete = async (params) => {
-  var guild = params[0];
+const guildDelete = async (guild) => {
   console.log("-Guilda: " + guild.name + ".");
 
   var res = await Streams.exists({ guildIDs: guild.id });
@@ -140,8 +138,7 @@ const guildDelete = async (params) => {
   console.log("MongoDB - Guilda smazána.");
 };
 
-const guildMemberAdd = async (params) => {
-  var member = params[0];
+const guildMemberAdd = async (member) => {
   var Gres = await Guild.findOne({
     guildID: member.guild.id,
   });
@@ -176,8 +173,7 @@ const guildMemberAdd = async (params) => {
   }
 };
 
-const guildMemberRemove = async (params) => {
-  var member = params[0];
+const guildMemberRemove = async (member) => {
   if (member.user == bot.user) return;
   var Gres = await Guild.findOne({
     guildID: member.guild.id,

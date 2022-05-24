@@ -73,10 +73,11 @@ const eventList = [
 // eventList = array of all event names (strings)
 
 var other = ["../bot.js", "../music/music.js"];
+var filter = ["event_handler.js"];
 
 var utilFiles = fs
   .readdirSync("./utils")
-  .filter((file) => file.endsWith(".js") && !file.includes("event_handler.js"));
+  .filter((file) => file.endsWith(".js") && !filter.includes(file));
 utilFiles = utilFiles.map((s) => `./${s}`);
 const store = (file) => {
   // u - file

@@ -35,7 +35,7 @@ module.exports = {
 
   adminNotified: "**<:tickYes:870238031603462154> Admin has been called.**",
 
-  nsfwBlocked: "**<:tickNo:870239550163779604> NSFW isn't allowed!!!**",
+  nsfwBlocked: "**<:tickNo:870239550163779604> NSFW isn't allowed !!!**",
 
   /// CHANNELS ///
   channels: {
