@@ -1,4 +1,3 @@
-
 const Config = require("../models/Config");
 const Guild = require("../models/guild.js");
 const Discord = require("discord.js");
@@ -282,9 +281,16 @@ module.exports = {
         var gls = [];
         var gGuilds = await Guild.find({});
         gGuilds.forEach((e) => {
-          gls.push(`**${e.guildName}** - ${e.guildID} \n`);
+          gls.push(`${e.guildName} - ${e.guildID}`);
         });
-        followReply(int, { content: gls.join(" ") });
+        followReply(int, {
+          files: [
+            new Discord.MessageAttachment().setFile(
+              Buffer.from(gls.join("\n"), "utf8"),
+              "guilds.txt"
+            ),
+          ],
+        });
 
         return;
       } else if (int.options.getSubcommand() == "deploy") {
