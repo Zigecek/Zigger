@@ -54,7 +54,7 @@ function callLoop() {
                       Math.floor(createdTime.getTime() / 1000)
                   );
 
-                  const streamEmbed = new Discord.MessageEmbed()
+                  const streamEmbed = new Discord.EmbedBuilder()
                     .setColor(config.colors.purple)
                     .setTitle(Tres.stream.channel.status)
                     .setURL(Tres.stream.channel.url)
@@ -65,8 +65,18 @@ function callLoop() {
                     })
                     .setThumbnail(Tres.stream.channel.logo)
                     .setDescription("@everyone Come to the stream!")
-                    .addField("Game", Tres.stream.channel.game + ".", true)
-                    .addField("Duration:", messageTime + " ", true)
+                    .addFields([
+                      {
+                        name: "Game",
+                        value: Tres.stream.channel.game + ".",
+                        inline: true,
+                      },
+                      {
+                        name: "Duration:",
+                        value: messageTime + " ",
+                        inline: true,
+                      },
+                    ])
                     .setImage(Tres.stream.preview.large)
                     .setFooter({
                       text: config.name,
@@ -76,8 +86,12 @@ function callLoop() {
                   let chan = bot.channels.cache.get(e.streamNotifyChannelID);
 
                   if (chan) {
-                    if (chan.guild.me.permissions.has("SEND_MESSAGES")) {
-                      if (chan.guild.me.permissions.has("EMBED_LINKS")) {
+                    if (
+                      chan.guild.members.me.permissions.has("SEND_MESSAGES")
+                    ) {
+                      if (
+                        chan.guild.members.me.permissions.has("EMBED_LINKS")
+                      ) {
                         var message = await chan.send({
                           embeds: [streamEmbed],
                         });
@@ -112,7 +126,7 @@ function callLoop() {
                       Math.floor(createdTime.getTime() / 1000)
                   );
 
-                  const streamEmbed = new Discord.MessageEmbed()
+                  const streamEmbed = new Discord.EmbedBuilder()
                     .setColor(config.colors.purple)
                     .setTitle(Tres.stream.channel.status)
                     .setURL(Tres.stream.channel.url)
@@ -123,8 +137,18 @@ function callLoop() {
                     })
                     .setThumbnail(Tres.stream.channel.logo)
                     .setDescription("@everyone Come to the stream!")
-                    .addField("Game", Tres.stream.channel.game + ".", true)
-                    .addField("Duration:", messageTime + " ", true)
+                    .addFields([
+                      {
+                        name: "Game",
+                        value: Tres.stream.channel.game + ".",
+                        inline: true,
+                      },
+                      {
+                        name: "Duration:",
+                        value: messageTime + " ",
+                        inline: true,
+                      },
+                    ])
                     .setImage(Tres.stream.preview.large)
                     .setFooter({
                       text: config.name,
@@ -134,13 +158,15 @@ function callLoop() {
                     e.streamMessageChannelID
                   );
                   if (channel) {
-                    if (channel.guild.me.permissions.has("EMBED_LINKS")) {
+                    if (
+                      channel.guild.members.me.permissions.has("EMBED_LINKS")
+                    ) {
                       let message = channel.messages.cache.get(
                         e.streamMessageID
                       );
                       if (message) {
                         if (
-                          message.guild.me.permissions.has([
+                          message.guild.members.me.permissions.has([
                             "MANAGE_MESSAGES",
                             "SEND_MESSAGES",
                           ])

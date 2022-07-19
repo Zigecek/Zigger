@@ -9,7 +9,7 @@ module.exports = {
   aliases: [],
   category: "other",
   execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
+    if (!message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES"))
       return;
 
     message.channel.send(LMessages.pingingMessage).then((resultMessage) => {

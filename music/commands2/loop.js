@@ -12,15 +12,15 @@ module.exports = {
   async execute(int, serverQueue, Gres) {
     if (
       !int.member.voice.channel ||
-      int.member.voice.channel != int.guild.me.voice.channel
+      int.member.voice.channel != int.guild.members.me.voice.channel
     ) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.music.need.toBeInVoiceWithBot });
       }
       return;
     }
     if (!serverQueue) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.musicNothingPlaying });
       }
       return;
@@ -36,11 +36,11 @@ module.exports = {
     );
 
     if (Gres.musicBotLoop == true) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.music.loop.disabled });
       }
     } else if (Gres.musicBotLoop == false) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.music.loop.enabled });
       }
     }

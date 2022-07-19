@@ -9,8 +9,9 @@ module.exports = {
   cooldown: 3,
   category: "fun",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
-    if (!int.guild.me.permissions.has("EMBED_LINKS"))
+    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES"))
+      return;
+    if (!int.guild.members.me.permissions.has("EMBED_LINKS"))
       return followReply(int, { content: LMessages.help.noPermission });
     get(int);
   },
@@ -32,13 +33,13 @@ async function get(int) {
 
   function getRow(ind, bod) {
     ind = Number(ind);
-    return new Discord.MessageActionRow().setComponents([
-      new Discord.MessageButton()
+    return new Discord.ActionRowBuilder().setComponents([
+      new Discord.ButtonBuilder()
         .setCustomId("prev")
         .setLabel("←")
         .setStyle("PRIMARY")
         .setDisabled(ind == 0 ? true : false),
-      new Discord.MessageButton()
+      new Discord.ButtonBuilder()
         .setCustomId("next")
         .setLabel("→")
         .setStyle("PRIMARY")
@@ -47,12 +48,12 @@ async function get(int) {
   }
   function getEmbed(ind, bod) {
     ind = Number(ind);
-    return new Discord.MessageEmbed()
+    return new Discord.EmbedBuilder()
       .setColor("NOT_QUITE_BLACK")
       .setURL(bod[ind].permalink)
       .setTitle(bod[ind].word)
       .setDescription(bod[ind].definition)
-      .addField("Example", bod[ind].example, false)
+      .addFields([{ name: "Example", value: bod[ind].example, inline: false }])
       .setFooter({
         text: `by ${bod[ind].author} \n👍${bod[ind].thumbs_up} 👎${
           bod[ind].thumbs_down

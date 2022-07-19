@@ -11,13 +11,13 @@ module.exports = {
   category: "music",
   async execute(int, serverQueue, Gres) {
     if (!int.member.voice.channel) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.music.need.toBeInVoice });
       }
       return;
     }
     if (!serverQueue) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.musicNothingPlaying });
       }
       return;
@@ -41,7 +41,7 @@ module.exports = {
       }
     }
 
-    if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+    if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
       followReply(int, { content: LMessages.music.otherCmds.resume });
     }
   },

@@ -15,7 +15,7 @@ module.exports = {
     let voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.music.need.toBeInVoice);
       }
@@ -30,20 +30,20 @@ module.exports = {
       }
     );
     try {
-      if (message.guild.me.voice.channel) {
-        if (message.guild.me.voice.channel.id == voiceChannel.id) {
+      if (message.guild.members.me.voice.channel) {
+        if (message.guild.members.me.voice.channel.id == voiceChannel.id) {
           if (
             message.channel
-              .permissionsFor(message.guild.me)
+              .permissionsFor(message.guild.members.me)
               .has("SEND_MESSAGES")
           ) {
             message.channel.send(LMessages.music.otherCmds.alreadyInTheChannel);
           }
         }
-        if (message.guild.me.voice.channel.id != voiceChannel.id) {
+        if (message.guild.members.me.voice.channel.id != voiceChannel.id) {
           if (
             message.channel
-              .permissionsFor(message.guild.me)
+              .permissionsFor(message.guild.members.me)
               .has("SEND_MESSAGES")
           ) {
             message.channel.send(
@@ -66,7 +66,7 @@ module.exports = {
         }
       } else {
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           message.channel.send(
             template(
@@ -86,7 +86,7 @@ module.exports = {
           }
         );
       }
-      if (voiceChannel.permissionsFor(message.guild.me).has("CONNECT")) {
+      if (voiceChannel.permissionsFor(message.guild.members.me).has("CONNECT")) {
         if (!serverQueue) {
           music.queue.set(voiceChannel.guild.id, {
             connection: null,
@@ -119,7 +119,7 @@ module.exports = {
           music.queue.delete(message.guild.id);
           if (
             message.channel
-              .permissionsFor(message.guild.me)
+              .permissionsFor(message.guild.members.me)
               .has("SEND_MESSAGES")
           ) {
             message.channel.send(LMessages.musicError);
@@ -133,7 +133,7 @@ module.exports = {
       music.queue.delete(message.guild.id);
 
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.musicError);
       }

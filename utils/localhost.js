@@ -27,7 +27,7 @@ app.post("/toAdmin", async function (req, res) {
     case "PrintDone":
       user.send({
         embeds: [
-          new Discord.MessageEmbed()
+          new Discord.EmbedBuilder()
             .setTitle(req.body.event)
             .setDescription(
               `${req.body.data.file} - ${sec2human(
@@ -42,7 +42,7 @@ app.post("/toAdmin", async function (req, res) {
     case "PrintStarted":
       user.send({
         embeds: [
-          new Discord.MessageEmbed()
+          new Discord.EmbedBuilder()
             .setTitle(req.body.event)
             .setDescription(`${req.body.data.file}`)
             .setTimestamp(),
@@ -52,7 +52,7 @@ app.post("/toAdmin", async function (req, res) {
     case "PrintFailed":
       user.send({
         embeds: [
-          new Discord.MessageEmbed()
+          new Discord.EmbedBuilder()
             .setTitle(req.body.event)
             .setDescription(
               `${req.body.data.file} - ${

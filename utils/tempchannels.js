@@ -50,7 +50,7 @@ const voiceStateUpdate = async (oldMember, newMember) => {
       var chan = oldMember.guild.channels.cache.get(tc2.channelID);
       if (chan) {
         if (chan.members.size < 1) {
-          if (chan.guild.me.permissions.has("MANAGE_CHANNELS")) {
+          if (chan.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
             chan.delete();
           }
           await Guild.updateOne(

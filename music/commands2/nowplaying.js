@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const sec2human = require("sec2human");
 const config = require("../../config.js");
@@ -15,7 +14,8 @@ module.exports = {
     const end = "╡";
     const prog = "═";
     const curs = "🔘";
-    if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
+    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES"))
+      return;
     if (serverQueue) {
       const fourPer = serverQueue.songs[0].sDur / 25;
       const elSecs = Math.floor(
@@ -23,7 +23,7 @@ module.exports = {
       );
       const nonElSecs = serverQueue.songs[0].sDur - elSecs;
 
-      const Embed = new Discord.MessageEmbed()
+      const Embed = new Discord.EmbedBuilder()
         .setColor(config.colors.red)
         .setTitle(LMessages.musicNowPlaying)
         .setThumbnail(serverQueue.songs[0].thumbnail)
@@ -38,23 +38,33 @@ module.exports = {
           }
         );
       if (serverQueue.songs[0].duration == "LIVE!") {
-        Embed.addField(LMessages.musicDuration, serverQueue.songs[0].duration);
+        Embed.addFields([
+          {
+            name: LMessages.musicDuration,
+            value: serverQueue.songs[0].duration,
+          },
+        ]);
       } else {
-        Embed.addField(
-          LMessages.musicProgress,
-          sec2human(elSecs) +
-            " / " +
-            serverQueue.songs[0].duration +
-            " " +
-            (start +
-              prog.repeat(Math.floor(elSecs / fourPer)) +
-              curs +
-              prog.repeat(Math.floor(nonElSecs / fourPer)) +
-              end)
-        );
+        Embed.addFields([
+          {
+            name: LMessages.musicProgress,
+            value:
+              sec2human(elSecs) +
+              " / " +
+              serverQueue.songs[0].duration +
+              " " +
+              (start +
+                prog.repeat(Math.floor(elSecs / fourPer)) +
+                curs +
+                prog.repeat(Math.floor(nonElSecs / fourPer)) +
+                end),
+          },
+        ]);
       }
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
-        if (int.guild.me.permissions.has("EMBED_LINKS")) {
+      if (
+        int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")
+      ) {
+        if (int.guild.members.me.permissions.has("EMBED_LINKS")) {
           followReply(int, { embeds: [Embed] });
         } else {
           int.channel.send(
@@ -69,7 +79,9 @@ module.exports = {
         }
       }
     } else {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (
+        int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")
+      ) {
         followReply(int, { content: LMessages.musicNothingPlaying });
       }
     }

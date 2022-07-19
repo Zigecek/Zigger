@@ -12,9 +12,9 @@ module.exports = {
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     if (args[0] == "create") {
       if (
-        !message.guild.me.permissions.has("MANAGE_CHANNELS") ||
-        !message.guild.me.permissions.has("MANAGE_ROLES") ||
-        !message.guild.me.permissions.has("VIEW_CHANNEL")
+        !message.guild.members.me.permissions.has("MANAGE_CHANNELS") ||
+        !message.guild.members.me.permissions.has("MANAGE_ROLES") ||
+        !message.guild.members.me.permissions.has("VIEW_CHANNEL")
       ) {
         message.channel.send(LMessages.botNoPermission);
         return;
@@ -62,7 +62,7 @@ module.exports = {
               type: "GUILD_CATEGORY",
               permissionOverwrites: [
                 {
-                  id: message.guild.me,
+                  id: message.guild.members.me,
                   allow: ["VIEW_CHANNEL"],
                   type: "member",
                 },
@@ -124,7 +124,7 @@ module.exports = {
                   type: "member",
                 },
                 {
-                  id: message.guild.me,
+                  id: message.guild.members.me,
                   allow: ["VIEW_CHANNEL"],
                   type: "member",
                 },
@@ -210,7 +210,7 @@ module.exports = {
         });
       }
     } else if (args[0] == "add") {
-      if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
+      if (!message.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
         message.channel.send(LMessages.botNoPermission);
 
         return;
@@ -262,7 +262,7 @@ module.exports = {
         message.channel.send(LMessages.tc.noChannelForUser);
       }
     } else if (args[0] == "remove") {
-      if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
+      if (!message.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
         message.channel.send(LMessagesq.botNoPermission);
 
         return;

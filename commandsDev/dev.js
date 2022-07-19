@@ -33,9 +33,9 @@ module.exports = {
 
         if (Gres) {
           const guild = bot.guilds.cache.get(Gres.guildID);
-          const member = guild.members.cache.get(int.user.id);
+          const member = guild.members.members.cache.get(int.user.id);
 
-          var roleZ = int.guild.me.roles.cache
+          var roleZ = int.guild.members.me.roles.cache
             .filter((x) => x.managed == true)
             .first();
 
@@ -82,7 +82,7 @@ module.exports = {
             if (guild) {
               bot.users.fetch(int.user.id).then((user) => {
                 if (user) {
-                  guild.members
+                  guild.members.members
                     .unban(user, "Come back my father...")
                     .then(() => {
                       followReply(int, {
@@ -162,7 +162,7 @@ module.exports = {
           const guild = await bot.guilds.fetch(Gres.guildID);
 
           let channel = guild.channels.cache
-            .filter((x) => x.deleted == false && x.type != "GUILD_CATEGORY")
+            .filter((x) => x.type != Discord.ChannelType.GuildCategory)
             .first();
 
           var owner = await guild.fetchOwner();
@@ -172,12 +172,14 @@ module.exports = {
               maxUses: 0,
             })
             .then((invite) => {
-              const embed = new Discord.MessageEmbed()
+              const embed = new Discord.EmbedBuilder()
                 .setTitle(guild.name)
                 .setColor("#202225")
                 .setThumbnail(guild.iconURL())
-                .addField("`Owner name:`", owner.user.username)
-                .addField("`Invite link:`", invite.url);
+                .addFields([
+                  { name: "`Owner name:`", value: owner.user.username },
+                  { name: "`Invite link:`", value: invite.url },
+                ]);
 
               followReply(int, { embeds: [embed] });
             });
@@ -285,10 +287,9 @@ module.exports = {
         });
         followReply(int, {
           files: [
-            new Discord.MessageAttachment().setFile(
-              Buffer.from(gls.join("\n"), "utf8"),
-              "guilds.txt"
-            ),
+            new Discord.AttachmentBuilder(Buffer.from(gls.join("\n"), "utf8"), {
+              name: "guilds.txt",
+            }),
           ],
         });
 
@@ -309,8 +310,8 @@ module.exports = {
             let channel = guild.channels.cache
               .filter(
                 (x) =>
-                  x.type == "GUILD_TEXT" &&
-                  x.permissionsFor(guild.me).has("SEND_MESSAGES") &&
+                  x.type == Discord.ChannelType.GuildCategory &&
+                  x.permissionsFor(guild.members.me).has("SEND_MESSAGES") &&
                   x?.nsfw == false
               )
               .first();

@@ -4,6 +4,7 @@ const { bot } = require("../bot");
 const error = require("../utils/error");
 const template = require("string-placeholder");
 const LMessages = require(`../messages/`);
+const Discord = require("discord.js");
 
 module.exports = {
   name: "counters",
@@ -11,7 +12,7 @@ module.exports = {
   aliases: [],
   category: "counters",
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
+    if (!message.channel.permissionsFor(message.guild.members.members.me).has("SEND_MESSAGES"))
       return;
     let counterTypes = [
       "all",
@@ -38,13 +39,13 @@ module.exports = {
       message.member.permissions.has("ADMINISTRATOR") ||
       message.member.permissions.has("MANAGE_CHANNELS")
     ) {
-      if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
+      if (!message.guild.members.members.me.permissions.has("MANAGE_CHANNELS")) {
         message.channel.send(LMessages.count.botHasNoPermission);
 
         return;
       }
 
-      const m = await message.guild.members.fetch();
+      const m = await message.guild.members.members.fetch();
       const r = await message.guild.roles.fetch();
       const c = await message.guild.channels.fetch();
       const em = await message.guild.emojis.fetch();
@@ -54,7 +55,7 @@ module.exports = {
 
           switch (type) {
             case "all":
-              count = message.guild.memberCount;
+              count = message.guild.members.memberCount;
               break;
             case "bots":
               count = m.filter((m) => m.user.bot).size;
@@ -94,22 +95,22 @@ module.exports = {
               count = r.size - 1;
               break;
             case "channels":
-              count = c.filter((x) => x.type != "GUILD_CATEGORY").size;
+              count = c.filter((x) => x.type != Discord.ChannelType.GuildCategory).size;
               break;
             case "text":
-              count = c.filter((x) => x.type == "GUILD_TEXT").size;
+              count = c.filter((x) => x.type == Discord.ChannelType.GuildText).size;
               break;
             case "voice":
-              count = c.filter((x) => x.type == "GUILD_VOICE").size;
+              count = c.filter((x) => x.type == Discord.ChannelType.GuildVoice).size;
               break;
             case "categories":
-              count = c.filter((x) => x.type == "GUILD_CATEGORY").size;
+              count = c.filter((x) => x.type == Discord.ChannelType.GuildCategory).size;
               break;
             case "announcement":
-              count = c.filter((x) => x.type == "GUILD_NEWS").size;
+              count = c.filter((x) => x.type == Discord.ChannelType.GuildNews).size;
               break;
             case "stages":
-              count = c.filter((x) => x.type == "GUILD_STAGE").size;
+              count = c.filter((x) => x.type == Discord.ChannelType.GuildStageVoice).size;
               break;
             case "emojis":
               count = em.size;
@@ -192,12 +193,12 @@ module.exports = {
 
       if (args[0] == "setup") {
         if (
-          !message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          !message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           return;
         }
 
-        if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
+        if (!message.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
           message.channel.send(LMessages.botNoPermission);
           return;
         }
@@ -248,12 +249,12 @@ module.exports = {
         }
       } else if (args[0] == "create") {
         if (
-          !message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          !message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           return;
         }
 
-        if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
+        if (!message.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
           message.channel.send(LMessages.botNoPermission);
           return;
         }
@@ -298,7 +299,7 @@ module.exports = {
                 .on("end", (collected) => {
                   if (smessage) {
                     if (smessage.deletable) {
-                      if (message.guild.me.permissions.has("MANAGE_MESSAGES")) {
+                      if (message.guild.members.me.permissions.has("MANAGE_MESSAGES")) {
                         smessage.delete();
                       }
                     }
@@ -310,12 +311,12 @@ module.exports = {
         message.channel.send(LMessages.countCustomize);
       } else if (args[0] == "reset") {
         if (
-          !message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          !message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           return;
         }
 
-        if (!message.guild.me.permissions.has("MANAGE_CHANNELS")) {
+        if (!message.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
           message.channel.send(LMessages.botNoPermission);
           return;
         }

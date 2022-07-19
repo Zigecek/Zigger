@@ -20,25 +20,25 @@ module.exports = {
   aliases: [],
   category: "music",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
+    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
     const voiceChannel = int.member.voice.channel;
     if (!voiceChannel) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.music.need.toBeInVoice });
       }
       return;
     }
     const permissions = voiceChannel.permissionsFor(int.client.user);
     if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.musicBotHasNoPermission });
       }
       return;
     }
-    if (int.guild.me.voice.channel) {
+    if (int.guild.members.me.voice.channel) {
       if (Gres.musicBotPlaying) {
-        if (int.guild.me.voice.channel.id != int.member.voice.channel.id) {
-          if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (int.guild.members.me.voice.channel.id != int.member.voice.channel.id) {
+          if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
             followReply(int, { content: LMessages.music.botIsPlaying });
           }
           return;
@@ -46,7 +46,7 @@ module.exports = {
       }
     }
 
-    if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
       return;
     }
 
@@ -71,7 +71,7 @@ module.exports = {
     }).then(async (result) => {
       const tracks = result.items.filter((x) => x.type == "video").slice(0, 10);
       if (!tracks) {
-        if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           followReply(int, { content: LMessages.musicNothingFound });
         }
         return;
@@ -81,47 +81,47 @@ module.exports = {
         "```\n" +
         tracks.map((track) => `\n${++i}. ${decode(track.title)}`) +
         "\n```";
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
-        const row = new Discord.MessageActionRow().setComponents([
-          new Discord.MessageButton()
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+        const row = new Discord.ActionRowBuilder().setComponents([
+          new Discord.ButtonBuilder()
             .setCustomId("1")
             .setLabel("1")
             .setStyle("PRIMARY"),
-          new Discord.MessageButton()
+          new Discord.ButtonBuilder()
             .setCustomId("2")
             .setLabel("2")
             .setStyle("PRIMARY"),
-          new Discord.MessageButton()
+          new Discord.ButtonBuilder()
             .setCustomId("3")
             .setLabel("3")
             .setStyle("PRIMARY"),
-          new Discord.MessageButton()
+          new Discord.ButtonBuilder()
             .setCustomId("4")
             .setLabel("4")
             .setStyle("PRIMARY"),
-          new Discord.MessageButton()
+          new Discord.ButtonBuilder()
             .setCustomId("5")
             .setLabel("5")
             .setStyle("PRIMARY"),
         ]);
-        const row2 = new Discord.MessageActionRow().setComponents([
-          new Discord.MessageButton()
+        const row2 = new Discord.ActionRowBuilder().setComponents([
+          new Discord.ButtonBuilder()
             .setCustomId("6")
             .setLabel("6")
             .setStyle("PRIMARY"),
-          new Discord.MessageButton()
+          new Discord.ButtonBuilder()
             .setCustomId("7")
             .setLabel("7")
             .setStyle("PRIMARY"),
-          new Discord.MessageButton()
+          new Discord.ButtonBuilder()
             .setCustomId("8")
             .setLabel("8")
             .setStyle("PRIMARY"),
-          new Discord.MessageButton()
+          new Discord.ButtonBuilder()
             .setCustomId("9")
             .setLabel("9")
             .setStyle("PRIMARY"),
-          new Discord.MessageButton()
+          new Discord.ButtonBuilder()
             .setCustomId("10")
             .setLabel("10")
             .setStyle("PRIMARY"),
@@ -176,7 +176,7 @@ module.exports = {
             .on("end", () => {
               if (smessage) {
                 if (smessage.deletable) {
-                  if (int.guild.me.permissions.has("MANAGE_MESSAGES")) {
+                  if (int.guild.members.me.permissions.has("MANAGE_MESSAGES")) {
                     smessage.delete();
                   }
                 }
@@ -220,8 +220,8 @@ module.exports = {
             serverQueue = music.queue.get(int.guild.id);
 
             try {
-              if (int.guild.me.voice.channel) {
-                if (int.guild.me.voice.channel.id != voiceChannel.id) {
+              if (int.guild.members.me.voice.channel) {
+                if (int.guild.members.me.voice.channel.id != voiceChannel.id) {
                   followReply(int, {
                     content: template(
                       LMessages.music.otherCmds.joined,
@@ -285,7 +285,7 @@ module.exports = {
                 }
                 music.queue.delete(int.guild.id);
                 if (
-                  int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")
+                  int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")
                 ) {
                   followReply(int, { content: LMessages.musicError });
                 }
@@ -303,7 +303,7 @@ module.exports = {
             serverQueue.songs.push(song);
 
             if (Gres.annouce == 1) {
-              const Embed = new Discord.MessageEmbed()
+              const Embed = new Discord.EmbedBuilder()
                 .setColor(config.colors.red)
                 .setTitle(LMessages.musicSongAddToQueue)
                 .setThumbnail(song.thumbnail)
@@ -319,9 +319,9 @@ module.exports = {
                 );
 
               if (
-                int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")
+                int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")
               ) {
-                if (int.guild.me.permissions.has("EMBED_LINKS")) {
+                if (int.guild.members.me.permissions.has("EMBED_LINKS")) {
                   followReply(int, { embeds: [Embed] });
                 } else {
                   followReply(int, {

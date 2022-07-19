@@ -11,13 +11,13 @@ module.exports = {
   aliases: ["q"],
   category: "music",
   execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
+    if (!message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES"))
       return;
-    if (!message.guild.me.permissions.has("EMBED_LINKS"))
+    if (!message.guild.members.me.permissions.has("EMBED_LINKS"))
       return message.channel.send(LMessages.help.noPermission);
     if (!serverQueue) {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.musicEmptyQueue);
       }
@@ -58,7 +58,7 @@ module.exports = {
     });
 
     if (args[0] == null) {
-      const Embed = new Discord.MessageEmbed()
+      const Embed = new Discord.EmbedBuilder()
         .setColor(config.colors.green)
         .setTitle(LMessages.music.queue.queue)
         .setAuthor({
@@ -86,7 +86,7 @@ module.exports = {
             LMessages.music.queue.anotherPageUse,
         });
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send({ embeds: [Embed] });
       }
@@ -105,13 +105,13 @@ module.exports = {
 
       if (number > pages.length) {
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           message.channel.send(LMessages.music.queue.invalidPage);
         }
         return;
       }
-      const Embed = new Discord.MessageEmbed()
+      const Embed = new Discord.EmbedBuilder()
         .setColor(config.colors.green)
         .setTitle(LMessages.music.queue.queue)
         .setAuthor({
@@ -139,13 +139,13 @@ module.exports = {
             LMessages.music.queue.anotherPageUse,
         });
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send({ embeds: [Embed] });
       }
     } else {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.music.queue.invalidNumber);
       }

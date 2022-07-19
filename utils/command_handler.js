@@ -55,7 +55,7 @@ bot.commandsDev = new Discord.Collection();
 /////////// ///////////
 
 const messageCreate = async (message) => {
-  if (message.channel.type != "DM" && message.author != bot.user) {
+  if (message.channel.type != Discord.ChannelType.DM && message.author != bot.user) {
     if (message.author != bot.user && message.author.bot == false) {
       let res = await Guild.exists({ guildID: message.guild.id });
 
@@ -86,7 +86,7 @@ const messageCreate = async (message) => {
 
       //if (message.attachments.size > 0 || message.channel.nsfw != true) require('./noreq/anti-nsfw').execute(message, LMessages);
 
-      let roleID = message.guild.me.roles.cache
+      let roleID = message.guild.members.me.roles.cache
         .filter((x) => x.managed == true)
         .first()?.id;
 
@@ -124,7 +124,7 @@ const messageCreate = async (message) => {
 
         if (args == null || args == [] || args[0] == "") {
           if (mention) {
-            if (message.guild.me.permissions.has("SEND_MESSAGES")) {
+            if (message.guild.members.me.permissions.has("SEND_MESSAGES")) {
               message.channel.send(
                 template(
                   LMessages.mention,
@@ -189,7 +189,7 @@ const messageCreate = async (message) => {
               }
             );
           } else {
-            if (int.guild.me.permissions.has("SEND_MESSAGES")) {
+            if (int.guild.members.me.permissions.has("SEND_MESSAGES")) {
               int.channel.send(
                 template(
                   LMessages.cooldownMess,
@@ -206,9 +206,9 @@ const messageCreate = async (message) => {
 };
 
 const interactionCreate = async (int) => {
-  if (!int.isCommand()) return;
+  if (int.type != Discord.InteractionType.ApplicationCommand) return;
   if (!int.inGuild()) return;
-  if (int.channel.type == "DM") return;
+  if (int.channel.type == Discord.ChannelType.DM) return;
   if (int.member.id == bot.user.id) return;
   if (int.member.user.bot) return;
 
@@ -266,7 +266,7 @@ const interactionCreate = async (int) => {
     }
 
     if (elapsedFloor < mapNextValue.cooldown) {
-      if (int.guild.me.permissions.has("SEND_MESSAGES")) {
+      if (int.guild.members.me.permissions.has("SEND_MESSAGES")) {
         return followReply(int, {
           content: template(
             LMessages.cooldownMess,

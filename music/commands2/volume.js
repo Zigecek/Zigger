@@ -13,17 +13,17 @@ module.exports = {
   async execute(int, serverQueue, Gres) {
     if (
       !int.member.voice.channel ||
-      int.member.voice.channel != int.guild.me.voice.channel
+      int.member.voice.channel != int.guild.members.me.voice.channel
     ) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.music.need.toBeInVoiceWithBot });
       }
       return;
     }
     if (!int.options.get("volume").value) {
-      if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES"))
+      if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES"))
         return;
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, {
           content: template(
             LMessages.music.volume.currentVolume,
@@ -53,7 +53,7 @@ module.exports = {
           );
         }
 
-        if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           followReply(int, {
             content: template(
               LMessages.music.volume.set,
@@ -79,7 +79,7 @@ module.exports = {
           );
         }
 
-        if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           followReply(int, {
             content: template(
               LMessages.music.volume.set,
@@ -90,7 +90,7 @@ module.exports = {
         }
         return;
       } else {
-        if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           followReply(int, { content: LMessages.music.volume.use });
         }
       }

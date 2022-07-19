@@ -15,7 +15,7 @@ module.exports = {
       number: 1,
     });
 
-    let admin = int.guild.members.cache.get(Gres.botAdminDiscordID[0]);
+    let admin = int.guild.members.members.cache.get(Gres.botAdminDiscordID[0]);
 
     if (admin) {
       admin.send("**Error:** " + int.url + " \nGuildID:" + int.guild.id);

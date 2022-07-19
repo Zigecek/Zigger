@@ -10,8 +10,8 @@ module.exports = {
   cooldown: 2,
   category: "fun",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
-    if (!int.guild.me.permissions.has("EMBED_LINKS"))
+    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
+    if (!int.guild.members.me.permissions.has("EMBED_LINKS"))
       return followReply(int, { content: LMessages.help.noPermission });
     meme(int);
   },
@@ -19,7 +19,7 @@ module.exports = {
 
 async function meme(int) {
   var body = await getMEME();
-  const Embed = new Discord.MessageEmbed()
+  const Embed = new Discord.EmbedBuilder()
     .setColor("RANDOM")
     .setImage(body.url);
   followReply(int, { embeds: [Embed] });

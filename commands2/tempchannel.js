@@ -13,9 +13,9 @@ module.exports = {
   async execute(int, serverQueue, Gres) {
     if (int.options.getSubcommand() == "create") {
       if (
-        !int.guild.me.permissions.has("MANAGE_CHANNELS") ||
-        !int.guild.me.permissions.has("MANAGE_ROLES") ||
-        !int.guild.me.permissions.has("VIEW_CHANNEL")
+        !int.guild.members.me.permissions.has("MANAGE_CHANNELS") ||
+        !int.guild.members.me.permissions.has("MANAGE_ROLES") ||
+        !int.guild.members.me.permissions.has("VIEW_CHANNEL")
       ) {
         followReply(int, { content: LMessages.botNoPermission });
         return;
@@ -64,7 +64,7 @@ module.exports = {
               type: "GUILD_CATEGORY",
               permissionOverwrites: [
                 {
-                  id: int.guild.me,
+                  id: int.guild.members.me,
                   allow: ["VIEW_CHANNEL"],
                   type: "member",
                 },
@@ -126,7 +126,7 @@ module.exports = {
                   type: "member",
                 },
                 {
-                  id: int.guild.me,
+                  id: int.guild.members.me,
                   allow: ["VIEW_CHANNEL"],
                   type: "member",
                 },
@@ -212,7 +212,7 @@ module.exports = {
         });
       }
     } else if (int.options.getSubcommand() == "add") {
-      if (!int.guild.me.permissions.has("MANAGE_CHANNELS")) {
+      if (!int.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
         followReply(int, { content: LMessages.botNoPermission });
         return;
       }
@@ -273,7 +273,7 @@ module.exports = {
         return;
       }
     } else if (int.options.getSubcommand() == "remove") {
-      if (!int.guild.me.permissions.has("MANAGE_CHANNELS")) {
+      if (!int.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
         followReply(int, { content: LMessagesq.botNoPermission });
         return;
       }

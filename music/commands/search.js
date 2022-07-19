@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const ytsr = require("ytsr");
 const { bot } = require("../../bot");
@@ -19,12 +18,12 @@ module.exports = {
   aliases: [],
   category: "music",
   execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
+    if (!message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES"))
       return;
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.music.need.toBeInVoice);
       }
@@ -33,20 +32,20 @@ module.exports = {
     const permissions = voiceChannel.permissionsFor(message.client.user);
     if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.musicBotHasNoPermission);
       }
       return;
     }
-    if (message.guild.me.voice.channel) {
+    if (message.guild.members.me.voice.channel) {
       if (Gres.musicBotPlaying) {
         if (
-          message.guild.me.voice.channel.id != message.member.voice.channel.id
+          message.guild.members.me.voice.channel.id != message.member.voice.channel.id
         ) {
           if (
             message.channel
-              .permissionsFor(message.guild.me)
+              .permissionsFor(message.guild.members.me)
               .has("SEND_MESSAGES")
           ) {
             message.channel.send(LMessages.music.botIsPlaying);
@@ -57,14 +56,14 @@ module.exports = {
     }
     if (args.join(" ") == "" || args.join(" ") == " ") {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.musicNoQuery);
       }
       return;
     }
 
-    if (message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) {
+    if (message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")) {
       message.channel.send(
         template(
           LMessages.musicSearching,
@@ -88,7 +87,7 @@ module.exports = {
       const tracks = result.items.filter((x) => x.type == "video").slice(0, 10);
       if (!tracks) {
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           message.channel.send(LMessages.musicNothingFound);
         }
@@ -100,7 +99,7 @@ module.exports = {
         tracks.map((track) => `\n${++i}. ${decode(track.title)}`) +
         "\n```";
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel
           .send(
@@ -144,7 +143,7 @@ module.exports = {
               .on("end", (collected) => {
                 if (smessage) {
                   if (smessage.deletable) {
-                    if (message.guild.me.permissions.has("MANAGE_MESSAGES")) {
+                    if (message.guild.members.me.permissions.has("MANAGE_MESSAGES")) {
                       smessage.delete();
                     }
                   }
@@ -168,6 +167,17 @@ module.exports = {
                 seek: null,
                 uuid: short.generate(),
               };
+              console.log(serverQueue);
+              var newQueue = serverQueue
+                ? serverQueue.songs.length == 0
+                  ? true
+                  : false
+                : true;
+              var newJoin = message.guild.members.me.voice.channel
+                ? message.guild.members.me.voice.channel.id != voiceChannel.id
+                  ? true
+                  : false
+                : true;
               await Guild.updateOne(
                 {
                   guildID: message.guild.id,
@@ -183,14 +193,14 @@ module.exports = {
                 songs: [],
               };
 
-              if (!serverQueue) {
+              if (!newQueue) {
                 queueConstructor.songs.push(song);
                 music.queue.set(message.guild.id, queueConstructor);
                 serverQueue = music.queue.get(message.guild.id);
 
                 try {
-                  if (message.guild.me.voice.channel) {
-                    if (message.guild.me.voice.channel.id != voiceChannel.id) {
+                  if (message.guild.members.me.voice.channel) {
+                    if (message.guild.members.me.voice.channel.id != voiceChannel.id) {
                       message.channel.send(
                         template(
                           LMessages.music.otherCmds.joined,
@@ -258,7 +268,7 @@ module.exports = {
                     music.queue.delete(message.guild.id);
                     if (
                       message.channel
-                        .permissionsFor(message.guild.me)
+                        .permissionsFor(message.guild.members.me)
                         .has("SEND_MESSAGES")
                     ) {
                       message.channel.send(LMessages.musicError);
@@ -277,7 +287,7 @@ module.exports = {
                 serverQueue.songs.push(song);
 
                 if (Gres.annouce == 1) {
-                  const Embed = new Discord.MessageEmbed()
+                  const Embed = new Discord.EmbedBuilder()
                     .setColor(config.colors.red)
                     .setTitle(LMessages.musicSongAddToQueue)
                     .setThumbnail(song.thumbnail)
@@ -294,10 +304,10 @@ module.exports = {
 
                   if (
                     message.channel
-                      .permissionsFor(message.guild.me)
+                      .permissionsFor(message.guild.members.me)
                       .has("SEND_MESSAGES")
                   ) {
-                    if (message.guild.me.permissions.has("EMBED_LINKS")) {
+                    if (message.guild.members.me.permissions.has("EMBED_LINKS")) {
                       message.channel.send({ embeds: [Embed] });
                     } else {
                       message.channel.send(

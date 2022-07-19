@@ -11,13 +11,13 @@ module.exports = {
   category: "music",
   async execute(int, serverQueue, Gres) {
     if (!int.member.voice.channel) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.music.need.toBeInVoice });
       }
       return;
     }
     if (serverQueue.songs.length == 0) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.musicNothingPlaying });
       }
       return;
@@ -38,7 +38,7 @@ module.exports = {
         serverQueue.audioPlayer.pause(true);
       }
     }
-    if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+    if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
       followReply(int, { content: LMessages.music.otherCmds.pause });
     }
   },

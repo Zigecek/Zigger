@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const Guild = require("../models/guild.js");
 const botFile = require("../bot");
@@ -13,12 +12,12 @@ module.exports = {
   aliases: ["as"],
   category: "moderation",
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
+    if (!message.channel.permissionsFor(message.guild.members.members.me).has("SEND_MESSAGES"))
       return;
     if (!message.member.permissions.has("ADMINISTRATOR"))
       return message.channel.send(LMessages.noPermission);
     if (args[0] == null) {
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.EmbedBuilder()
         .setColor(config.colors.green)
         .setTitle(LMessages.antispam.cmds.antispam)
         .setAuthor({
@@ -49,9 +48,9 @@ module.exports = {
           }
         );
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
-        if (message.guild.me.permissions.has("EMBED_LINKS")) {
+        if (message.guild.members.members.me.permissions.has("EMBED_LINKS")) {
           message.channel.send({ embeds: [embed] });
         } else {
           message.channel.send(
@@ -84,10 +83,10 @@ module.exports = {
       if (Gres.spamMuteRoleID != null) {
         var role = await message.guild.roles.fetch(Gres.spamMuteRoleID);
         if (!role) {
-          var roleZ = message.guild.me.roles.cache
+          var roleZ = message.guild.members.members.me.roles.cache
             .filter((x) => x.managed == true)
             .first();
-          if (message.guild.me.permissions.has("MANAGE_ROLES")) {
+          if (message.guild.members.members.me.permissions.has("MANAGE_ROLES")) {
             role = await message.guild.roles.create({
               data: {
                 name: "Muted",
@@ -99,8 +98,8 @@ module.exports = {
             message.guild.channels.cache
               .filter(
                 (channel) =>
-                  channel.type == "GUILD_TEXT" ||
-                  channel.type == "GUILD_CATEGORY"
+                  channel.type == Discord.ChannelType.GuildText ||
+                  channel.type == Discord.ChannelType.GuildCategory
               )
               .forEach((channel) => {
                 channel.createOverwrite(
@@ -143,10 +142,10 @@ module.exports = {
           )
         );
       } else {
-        var roleZ = message.guild.me.roles.cache
+        var roleZ = message.guild.members.members.me.roles.cache
           .filter((x) => x.managed == true)
           .first();
-        if (message.guild.me.permissions.has("MANAGE_ROLES")) {
+        if (message.guild.members.members.me.permissions.has("MANAGE_ROLES")) {
           role = await message.guild.roles.create({
             data: {
               name: "Muted",
@@ -158,7 +157,8 @@ module.exports = {
           message.guild.channels.cache
             .filter(
               (channel) =>
-                channel.type == "GUILD_TEXT" || channel.type == "GUILD_CATEGORY"
+                channel.type == Discord.ChannelType.GuildText ||
+                channel.type == Discord.ChannelType.GuildCategory
             )
             .forEach((channel) => {
               channel.permissionOverwrites.create(
@@ -201,7 +201,7 @@ module.exports = {
       }
       var role = await message.guild.roles.fetch(Gres.spamMuteRoleID);
       if (role) {
-        if (message.guild.me.permissions.has("MANAGE_ROLES")) {
+        if (message.guild.members.members.me.permissions.has("MANAGE_ROLES")) {
           role.delete("Antispam function disabling.");
         } else {
           message.channel.send(LMessages.botNoPermission);

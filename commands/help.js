@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const config = require("../config.js");
 const template = require("string-placeholder");
@@ -10,12 +9,16 @@ module.exports = {
   aliases: [],
   category: "help",
   execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
+    if (
+      !message.channel
+        .permissionsFor(message.guild.members.me)
+        .has("SEND_MESSAGES")
+    )
       return;
-    if (!message.guild.me.permissions.has("EMBED_LINKS"))
+    if (!message.guild.members.me.permissions.has("EMBED_LINKS"))
       return message.channel.send(LMessages.help.noPermission);
     if (args[0] == null) {
-      const helpEmbed = new Discord.MessageEmbed()
+      const helpEmbed = new Discord.EmbedBuilder()
         .setColor(config.colors.green)
         .setAuthor({
           name: config.name,
@@ -26,14 +29,14 @@ module.exports = {
         .setFooter({ text: LMessages.help.footer });
 
       for (const [key, value] of Object.entries(LMessages.help.categories)) {
-        helpEmbed.addField(value.label, value.commands);
+        helpEmbed.addFields([{ name: value.label, value: value.commands }]);
       }
 
       message.channel.send({ embeds: [helpEmbed] });
     } else if (args[0] != null) {
       if (LMessages.help.helpCommands.hasOwnProperty(args[0])) {
         var fullCommand = args[0];
-        const commandEmbed = new Discord.MessageEmbed()
+        const commandEmbed = new Discord.EmbedBuilder()
           .setColor(config.colors.green)
           .setTitle(
             template(
@@ -48,61 +51,77 @@ module.exports = {
             url: config.webUrl,
           });
 
-        commandEmbed.addField(
-          LMessages.help.helpCommands.labels.usage,
-          LMessages.help.helpCommands[fullCommand].usage,
-          true
-        );
+        commandEmbed.addFields([
+          {
+            name: LMessages.help.helpCommands.labels.usage,
+            value: LMessages.help.helpCommands[fullCommand].usage,
+            inline: true,
+          },
+        ]);
 
         if (LMessages.help.helpCommands[fullCommand].params != "") {
-          commandEmbed.addField(
-            LMessages.help.helpCommands.labels.params,
-            LMessages.help.helpCommands[fullCommand].params,
-            true
-          );
+          commandEmbed.addFields([
+            {
+              name: LMessages.help.helpCommands.labels.params,
+              value: LMessages.help.helpCommands[fullCommand].params,
+              inline: true,
+            },
+          ]);
         }
 
-        commandEmbed.addField(
-          LMessages.help.helpCommands.labels.description,
-          LMessages.help.helpCommands[fullCommand].description,
-          false
-        );
+        commandEmbed.addFields([
+          {
+            name: LMessages.help.helpCommands.labels.description,
+            value: LMessages.help.helpCommands[fullCommand].description,
+            inline: false,
+          },
+        ]);
 
         if (LMessages.help.helpCommands[fullCommand].aliases != "") {
-          commandEmbed.addField(
-            LMessages.help.helpCommands.labels.aliases,
-            LMessages.help.helpCommands[fullCommand].aliases,
-            true
-          );
+          commandEmbed.addFields([
+            {
+              name: LMessages.help.helpCommands.labels.aliases,
+              value: LMessages.help.helpCommands[fullCommand].aliases,
+              inline: true,
+            },
+          ]);
         }
 
         if (LMessages.help.helpCommands[fullCommand].required != "") {
-          commandEmbed.addField(
-            LMessages.help.helpCommands.labels.required,
-            LMessages.help.helpCommands[fullCommand].required,
-            true
-          );
+          commandEmbed.addFields([
+            {
+              name: LMessages.help.helpCommands.labels.required,
+              value: LMessages.help.helpCommands[fullCommand].required,
+              inline: true,
+            },
+          ]);
         }
         if (LMessages.help.helpCommands[fullCommand].permissions != "") {
-          commandEmbed.addField(
-            LMessages.help.helpCommands.labels.permissions,
-            LMessages.help.helpCommands[fullCommand].permissions,
-            true
-          );
+          commandEmbed.addFields([
+            {
+              name: LMessages.help.helpCommands.labels.permissions,
+              value: LMessages.help.helpCommands[fullCommand].permissions,
+              inline: true,
+            },
+          ]);
         }
         if (LMessages.help.helpCommands[fullCommand].exception != "") {
-          commandEmbed.addField(
-            LMessages.help.helpCommands.labels.exception,
-            LMessages.help.helpCommands[fullCommand].exception,
-            true
-          );
+          commandEmbed.addFields([
+            {
+              name: LMessages.help.helpCommands.labels.exception,
+              value: LMessages.help.helpCommands[fullCommand].exception,
+              inline: true,
+            },
+          ]);
         }
 
-        commandEmbed.addField(
-          LMessages.help.helpCommands.labels.category,
-          LMessages.help.helpCommands[fullCommand].category,
-          true
-        );
+        commandEmbed.addFields([
+          {
+            name: LMessages.help.helpCommands.labels.category,
+            value: LMessages.help.helpCommands[fullCommand].category,
+            inline: true,
+          },
+        ]);
 
         message.channel.send({ embeds: [commandEmbed] });
       } else {

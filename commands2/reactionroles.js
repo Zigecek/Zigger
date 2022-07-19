@@ -24,7 +24,7 @@ module.exports = {
   aliases: ["rr"],
   category: "reactionroles",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
+    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
 
     var content = "";
     var regexEmoji = /<a:.+?:\d+>|<:.+?:\d+>/;
@@ -42,7 +42,7 @@ module.exports = {
       int.member.permissions.has("ADMINISTRATOR") ||
       int.member.permissions.has("MANAGE_ROLES")
     ) {
-      if (int.guild.me.permissions.has("MANAGE_ROLES")) {
+      if (int.guild.members.me.permissions.has("MANAGE_ROLES")) {
         if (int.options.getSubcommand() == "create") {
           if (!int.options.get("channel").channel) {
             followReply(int, { content: LMessages.rr.invalidChannel });
@@ -63,7 +63,7 @@ module.exports = {
             }
 
             if (
-              int.guild.me.roles.highest.position <
+              int.guild.members.me.roles.highest.position <
               int.options.get(`role${index}`).role.position
             ) {
               break;

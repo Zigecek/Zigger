@@ -24,7 +24,7 @@ module.exports = {
             const messages = await message.channel.messages.fetch({
               limit: Number(args[0]),
             });
-            if (message.guild.me.permissions.has("MANAGE_MESSAGES")) {
+            if (message.guild.members.members.me.permissions.has("MANAGE_MESSAGES")) {
               await msg.edit(LMessages.clear.deleting);
             } else {
               message.channel.send(LMessages.botNoPermission);
@@ -35,7 +35,7 @@ module.exports = {
                 Date.now() - v.createdTimestamp < 1209595000 &&
                 v.deletable == true
             );
-            if (message.guild.me.permissions.has("MANAGE_MESSAGES")) {
+            if (message.guild.members.members.me.permissions.has("MANAGE_MESSAGES")) {
               message.channel.bulkDelete(secMessages).catch((err) => {
                 if (err.code != 10008) {
                   console.error(err);
@@ -47,7 +47,7 @@ module.exports = {
             }
             if (msg) {
               if (msg.deletable) {
-                if (message.guild.me.permissions.has("MANAGE_MESSAGES")) {
+                if (message.guild.members.members.me.permissions.has("MANAGE_MESSAGES")) {
                   await msg.delete().catch((err) => {
                     if (err.code != 10008) {
                       console.error(err);
@@ -65,7 +65,7 @@ module.exports = {
               );
               if (msg2) {
                 if (msg2.deletable) {
-                  if (message.guild.me.permissions.has("MANAGE_MESSAGES")) {
+                  if (message.guild.members.members.me.permissions.has("MANAGE_MESSAGES")) {
                     await msg2.delete({ timeout: 5000 }).catch((err) => {
                       if (err.code != 10008) {
                         console.error(err);

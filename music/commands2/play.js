@@ -28,20 +28,20 @@ module.exports = {
       return;
     }
     if (
-      !voiceChannel.permissionsFor(int.guild.me).has("CONNECT") ||
-      !voiceChannel.permissionsFor(int.guild.me).has("SPEAK") ||
+      !voiceChannel.permissionsFor(int.guild.members.me).has("CONNECT") ||
+      !voiceChannel.permissionsFor(int.guild.members.me).has("SPEAK") ||
       !voiceChannel.joinable ||
       !voiceChannel.viewable
     ) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.musicBotHasNoPermission });
       }
       return;
     }
-    if (int.guild.me.voice.channel) {
+    if (int.guild.members.me.voice.channel) {
       if (Gres.musicBotPlaying) {
-        if (int.guild.me.voice.channel.id != int.member.voice.channel.id) {
-          if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (int.guild.members.me.voice.channel.id != int.member.voice.channel.id) {
+          if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
             followReply(int, { content: LMessages.music.botIsPlaying });
           }
           return;
@@ -58,7 +58,7 @@ module.exports = {
       }
     );
 
-    if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+    if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
       followReply(int, {
         content: template(
           LMessages.musicSearching,
@@ -181,8 +181,8 @@ module.exports = {
     var playlist = null;
     var playlistInfo;
     var mode;
-    var newJoin = int.guild.me.voice.channel
-      ? int.guild.me.voice.channel.id != voiceChannel.id
+    var newJoin = int.guild.members.me.voice.channel
+      ? int.guild.members.me.voice.channel.id != voiceChannel.id
         ? true
         : false
       : true;
@@ -226,13 +226,13 @@ module.exports = {
           playlist = pl.items;
           playlistInfo = pl.info;
         } else {
-          if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+          if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
             followReply(int, { content: LMessages.musicWrongUrl });
           }
           return;
         }
       } else {
-        if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           followReply(int, { content: LMessages.musicWrongUrl });
         }
         return;
@@ -241,7 +241,7 @@ module.exports = {
       mode = 1;
       song = await createSongNonURL();
       if (song == null) {
-        if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           followReply(int, { content: LMessages.musicNothingFound });
         }
         return;
@@ -271,7 +271,7 @@ module.exports = {
 
     const annouceSP = (res) => {
       if (Gres.annouce == 1) {
-        const Embed = new Discord.MessageEmbed();
+        const Embed = new Discord.EmbedBuilder();
         if (mode == 1) {
           Embed.setColor(config.colors.red)
             .setTitle(LMessages.musicSongAddToQueue)
@@ -304,8 +304,8 @@ module.exports = {
                         }*/
             );
         }
-        if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
-          if (int.guild.me.permissions.has("EMBED_LINKS")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+          if (int.guild.members.me.permissions.has("EMBED_LINKS")) {
             followReply(int, { embeds: [Embed] });
           } else {
             if (mode == 2) {
@@ -381,7 +381,7 @@ module.exports = {
             musicBotQueueLoop: false,
           }
         );
-        if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           followReply(int, {
             content: template(
               LMessages.music.otherCmds.joined,
@@ -417,7 +417,7 @@ module.exports = {
           error.sendError(err);
         }
 
-        if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           followReply(int, { content: LMessages.musicError });
         }
         return;

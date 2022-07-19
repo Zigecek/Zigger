@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const si = require("systeminformation");
 const { exec } = require("child_process");
@@ -43,44 +42,64 @@ module.exports = {
       (mi.total / 1000 / 1000 / 1000).toFixed(2) +
       " Gb";
 
-    var embed = new Discord.MessageEmbed()
-      .addField(
-        `**${emojis.find((e) => e.name == "box").toString()} | Bot's version**`,
-        pkg,
-        false
-      )
-      .addField(
-        `**${emojis.find((e) => e.name == "nodejs").toString()} | Node.js**`,
-        node,
-        false
-      )
-      .addField(
-        `**${emojis.find((e) => e.name == "npm").toString()} | NPM**`,
-        npm,
-        false
-      )
-      .addField(
-        `**${emojis.find((e) => e.name == "djs").toString()} | Discord.js**`,
-        djs,
-        false
-      )
-      .addField(
-        `**${emojis.find((e) => e.name == "mem").toString()} | RAM**`,
-        mem,
-        false
-      )
-      .addField(
-        `**${emojis.find((e) => e.name == "cpu").toString()} | CPU**`,
-        arch,
-        false
-      )
-      .addField(`**System**`, sys, false);
+    var embed = new Discord.EmbedBuilder()
+      .addFields([
+        {
+          name: `**${emojis
+            .find((e) => e.name == "box")
+            .toString()} | Bot's version**`,
+          value: pkg,
+          inline: false,
+        },
+      ])
+      .addFields([
+        {
+          name: `**${emojis
+            .find((e) => e.name == "nodejs")
+            .toString()} | Node.js**`,
+          value: node,
+          inline: false,
+        },
+      ])
+      .addFields([
+        {
+          name: `**${emojis.find((e) => e.name == "npm").toString()} | NPM**`,
+          value: npm,
+          inline: false,
+        },
+      ])
+      .addFields([
+        {
+          name: `**${emojis
+            .find((e) => e.name == "djs")
+            .toString()} | Discord.js**`,
+          value: djs,
+          inline: false,
+        },
+      ])
+      .addFields([
+        {
+          name: `**${emojis.find((e) => e.name == "mem").toString()} | RAM**`,
+          value: mem,
+          inline: false,
+        },
+      ])
+      .addFields([
+        {
+          name: `**${emojis.find((e) => e.name == "cpu").toString()} | CPU**`,
+          value: arch,
+          inline: false,
+        },
+      ])
+      .addFields([{ name: `**System**`, value: sys, inline: false }]);
     if (process.platform == "linux") {
-      embed.addField(
-        `**${emojis.find((e) => e.name == "pm2").toString()} | PM2**`,
-        pm2,
-        false
-      );
+      embed.addFields([
+        {
+          name: `**${emojis.find((e) => e.name == "pm2").toString()} | PM2**`,
+          value: pm2,
+          inline: false,
+        },
+      ]);
     }
     followReply(int, { embeds: [embed] });
   },

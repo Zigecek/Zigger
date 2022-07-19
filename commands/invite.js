@@ -8,13 +8,13 @@ module.exports = {
   aliases: [],
   category: "other",
   execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
+    if (!message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES"))
       return;
     if (
       !message.member.voice.channel
-        ?.permissionsFor(message.guild.me)
+        ?.permissionsFor(message.guild.members.me)
         .has("CREATE_INSTANT_INVITE") ||
-      !message.guild.me.permissions.has("CREATE_INSTANT_INVITE")
+      !message.guild.members.me.permissions.has("CREATE_INSTANT_INVITE")
     ) {
       message.channel.send(LMessages.botNoPermission);
 

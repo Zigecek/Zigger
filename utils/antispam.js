@@ -1,6 +1,7 @@
 const { bot } = require("../bot");
 const error = require("./error");
 const Guild = require("../models/guild");
+const Discord = require("discord.js");
 
 const messageCreate = async (message) => {
   if (!message) return;
@@ -72,7 +73,7 @@ const messageCreate = async (message) => {
         delMesss(sp.lastMesss);
         sp.lastMesss = [];
 
-        if (message.guild.me.permissions.has("SEND_MESSAGES")) {
+        if (message.guild.members.me.permissions.has("SEND_MESSAGES")) {
           message.reply(LMessages.antispam.util.stopSpaming);
         }
 
@@ -100,7 +101,7 @@ const messageCreate = async (message) => {
           let mRole = message.guild.roles.cache.get(Gres.spamMuteRoleID);
           if (mRole) {
             if (!message.member.roles.cache.has(mRole.id)) {
-              if (message.guild.me.permissions.has("MANAGE_ROLES")) {
+              if (message.guild.members.me.permissions.has("MANAGE_ROLES")) {
                 message.member.roles.add(mRole);
               }
               setTimeout(async () => {
@@ -115,7 +116,7 @@ const messageCreate = async (message) => {
                 if (spam.length > 0) {
                   if (spam[0].mutes == sp.mutes) {
                     if (message.member.roles.cache.has(mRole.id)) {
-                      if (message.guild.me.permissions.has("MANAGE_ROLES")) {
+                      if (message.guild.members.me.permissions.has("MANAGE_ROLES")) {
                         message.member.roles.remove(mRole);
                       }
                     }
@@ -147,7 +148,7 @@ const messageCreate = async (message) => {
           let mRole = message.guild.roles.cache.get(Gres.spamMuteRoleID);
           if (mRole) {
             if (!message.member.roles.cache.has(mRole.id)) {
-              if (message.guild.me.permissions.has("MANAGE_ROLES")) {
+              if (message.guild.members.me.permissions.has("MANAGE_ROLES")) {
                 message.member.roles.add(mRole);
               }
               setTimeout(async () => {
@@ -162,7 +163,7 @@ const messageCreate = async (message) => {
                 if (spam.length > 0) {
                   if (spam[0].mutes == sp.mutes) {
                     if (message.member.roles.cache.has(mRole.id)) {
-                      if (message.guild.me.permissions.has("MANAGE_ROLES")) {
+                      if (message.guild.members.me.permissions.has("MANAGE_ROLES")) {
                         message.member.roles.remove(mRole);
                       }
                     }
@@ -194,7 +195,7 @@ const messageCreate = async (message) => {
             { $pull: { spam: spam[0] } }
           );
           if (message.member.kickable) {
-            if (message.guild.me.permissions.has("KICK_MEMBERS")) {
+            if (message.guild.members.me.permissions.has("KICK_MEMBERS")) {
               message.member.kick("Spam.");
             }
           }
@@ -231,7 +232,7 @@ function delMesss(array) {
   array.forEach(async (e) => {
     var channel = await bot.channels.fetch(e[1]);
     try {
-      if (channel.guild.me.permissions.has("MANAGE_MESSAGES")) {
+      if (channel.guild.members.me.permissions.has("MANAGE_MESSAGES")) {
         await channel.messages.delete(e[0]);
       }
     } catch (error) {
@@ -241,9 +242,7 @@ function delMesss(array) {
 }
 
 const channelCreate = async (channel) => {
-  if (channel.type == "DM") {
-    return;
-  }
+  if (channel.type == Discord.ChannelType.DM) return;
 
   var Gres = await Guild.findOne({
     guildID: channel.guild.id,
@@ -257,7 +256,7 @@ const channelCreate = async (channel) => {
     let mRole = channel.guild.roles.cache.get(Gres.spamMuteRoleID);
 
     if (mRole) {
-      if (channel.guild.me.permissions.has("MANAGE_ROLES")) {
+      if (channel.guild.members.me.permissions.has("MANAGE_ROLES")) {
         channel.createOverwrite(
           mRole,
           {
@@ -272,7 +271,7 @@ const channelCreate = async (channel) => {
 };
 
 const channelUpdate = async (channel) => {
-  if (channel.type == "DM") {
+  if (channel.type == Discord.ChannelType.DM) {
     return;
   }
 
@@ -297,7 +296,7 @@ const channelUpdate = async (channel) => {
           channel.permissionsFor(mRole).has("SEND_MESSAGES") &&
           channel.permissionsFor(mRole).has("SEND_TTS_MESSAGES")
         ) {
-          if (channel.guild.me.permissions.has("MANAGE_ROLES")) {
+          if (channel.guild.members.me.permissions.has("MANAGE_ROLES")) {
             channel.createOverwrite(
               mRole,
               {
@@ -368,7 +367,7 @@ const roleUpdate = async (role) => {
       return;
     }
     if (role.id == Gres.spamMuteRoleID) {
-      if (role.guild.me.permissions.has("MANAGE_ROLES")) {
+      if (role.guild.members.me.permissions.has("MANAGE_ROLES")) {
         role.permissions.remove("SEND_MESSAGES", "SEND_TTS_MESSAGES");
       }
     }

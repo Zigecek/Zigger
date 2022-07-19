@@ -12,11 +12,11 @@ module.exports = {
   aliases: ["q"],
   category: "music",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
-    if (!int.guild.me.permissions.has("EMBED_LINKS"))
+    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
+    if (!int.guild.members.me.permissions.has("EMBED_LINKS"))
       return followReply(int, { content: LMessages.help.noPermission });
     if (!serverQueue) {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.musicEmptyQueue });
       }
       return;
@@ -56,7 +56,7 @@ module.exports = {
     });
 
     if (!int.options.get("page")?.value) {
-      const Embed = new Discord.MessageEmbed()
+      const Embed = new Discord.EmbedBuilder()
         .setColor(config.colors.green)
         .setTitle(LMessages.music.queue.queue)
         .setAuthor({
@@ -83,7 +83,7 @@ module.exports = {
             "\n" +
             LMessages.music.queue.anotherPageUse,
         });
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { embeds: [Embed] });
       }
     } else if (int.options.get("page").value == "clear") {
@@ -96,12 +96,12 @@ module.exports = {
       var number = Number(int.options.get("page").value);
 
       if (number > pages.length) {
-        if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           followReply(int, { content: LMessages.music.queue.invalidPage });
         }
         return;
       }
-      const Embed = new Discord.MessageEmbed()
+      const Embed = new Discord.EmbedBuilder()
         .setColor(config.colors.green)
         .setTitle(LMessages.music.queue.queue)
         .setAuthor({
@@ -128,11 +128,11 @@ module.exports = {
             "\n" +
             LMessages.music.queue.anotherPageUse,
         });
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { embeds: [Embed] });
       }
     } else {
-      if (int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
         followReply(int, { content: LMessages.music.queue.invalidNumber });
       }
       return;

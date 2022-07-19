@@ -1,4 +1,3 @@
-
 const error = require("../../utils/error");
 const template = require("string-placeholder");
 const Guild = require("../../models/guild");
@@ -12,10 +11,10 @@ module.exports = {
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     if (
       !message.member.voice.channel ||
-      message.member.voice.channel != message.guild.me.voice.channel
+      message.member.voice.channel != message.guild.members.me.voice.channel
     ) {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.music.need.toBeInVoiceWithBot);
       }
@@ -23,11 +22,11 @@ module.exports = {
     }
     if (!args[0]) {
       if (
-        !message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        !message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       )
         return;
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(
           template(
@@ -50,13 +49,17 @@ module.exports = {
         );
 
         if (serverQueue != undefined) {
-          serverQueue.audioPlayer.state?.resource.volume.setVolume(
-            Number(args[0]) / 100
-          );
+          if (serverQueue.audioPlayer.state) {
+            if (serverQueue.audioPlayer.state.resource.volume) {
+              serverQueue.audioPlayer.state.resource.volume.setVolume(
+                Number(args[0]) / 100
+              );
+            }
+          }
         }
 
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           message.channel.send(
             template(
@@ -84,7 +87,7 @@ module.exports = {
         }
 
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           message.channel.send(
             template(
@@ -97,7 +100,7 @@ module.exports = {
         return;
       } else {
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           message.channel.send(LMessages.music.volume.use);
         }

@@ -10,10 +10,10 @@ module.exports = {
   execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     if (
       !message.member.voice.channel ||
-      message.member.voice.channel != message.guild.me.voice.channel
+      message.member.voice.channel != message.guild.members.me.voice.channel
     ) {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.music.need.toBeInVoiceWithBot);
       }
@@ -22,7 +22,7 @@ module.exports = {
 
     if (!serverQueue) {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.musicNothingPlaying);
       }
@@ -34,7 +34,7 @@ module.exports = {
         if (serverQueue.songs[Number(args[0])]) {
           if (
             message.channel
-              .permissionsFor(message.guild.me)
+              .permissionsFor(message.guild.members.me)
               .has("SEND_MESSAGES")
           ) {
             message.channel.send(
@@ -49,7 +49,7 @@ module.exports = {
         } else {
           if (
             message.channel
-              .permissionsFor(message.guild.me)
+              .permissionsFor(message.guild.members.me)
               .has("SEND_MESSAGES")
           ) {
             message.channel.send(LMessages.music.remove.songNotExist);
@@ -58,7 +58,7 @@ module.exports = {
         }
       } else {
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           message.channel.send(LMessages.music.remove.invalidNumber);
         }
@@ -66,7 +66,7 @@ module.exports = {
       }
     } else {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.music.remove.use);
       }

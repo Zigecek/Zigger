@@ -12,7 +12,7 @@ module.exports = {
   aliases: [],
   category: "counters",
   async execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
+    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
     let counterTypes = [
       "all",
       "members",
@@ -39,13 +39,13 @@ module.exports = {
       int.member.permissions.has("ADMINISTRATOR") ||
       int.member.permissions.has("MANAGE_CHANNELS")
     ) {
-      if (!int.guild.me.permissions.has("MANAGE_CHANNELS")) {
+      if (!int.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
         followReply(int, { content: LMessages.count.botHasNoPermission });
 
         return;
       }
 
-      const m = await int.guild.members.fetch({ withPresences: true });
+      const m = await int.guild.members.members.fetch({ withPresences: true });
       const r = await int.guild.roles.fetch();
       const c = await int.guild.channels.fetch();
       const em = await int.guild.emojis.fetch();
@@ -55,7 +55,7 @@ module.exports = {
 
           switch (type) {
             case "all":
-              count = int.guild.memberCount;
+              count = int.guild.members.memberCount;
               break;
             case "bots":
               count = m.filter((m) => m.user.bot).size;
@@ -95,22 +95,22 @@ module.exports = {
               count = r.size - 1;
               break;
             case "channels":
-              count = c.filter((x) => x.type != "GUILD_CATEGORY").size;
+              count = c.filter((x) => x.type != Discord.ChannelType.GuildCategory).size;
               break;
             case "text":
-              count = c.filter((x) => x.type == "GUILD_TEXT").size;
+              count = c.filter((x) => x.type == Discord.ChannelType.GuildText).size;
               break;
             case "voice":
-              count = c.filter((x) => x.type == "GUILD_VOICE").size;
+              count = c.filter((x) => x.type == Discord.ChannelType.GuildVoice).size;
               break;
             case "categories":
-              count = c.filter((x) => x.type == "GUILD_CATEGORY").size;
+              count = c.filter((x) => x.type == Discord.ChannelType.GuildCategory).size;
               break;
             case "announcement":
-              count = c.filter((x) => x.type == "GUILD_NEWS").size;
+              count = c.filter((x) => x.type == Discord.ChannelType.GuildNews).size;
               break;
             case "stages":
-              count = c.filter((x) => x.type == "GUILD_STAGE").size;
+              count = c.filter((x) => x.type == Discord.ChannelType.GuildStageVoice).size;
               break;
             case "emojis":
               count = em.size;
@@ -190,11 +190,11 @@ module.exports = {
       }
 
       if (int.options.getSubcommand() == "setup") {
-        if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           return;
         }
 
-        if (!int.guild.me.permissions.has("MANAGE_CHANNELS")) {
+        if (!int.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
           followReply(int, { content: LMessages.botNoPermission });
           return;
         }
@@ -244,11 +244,11 @@ module.exports = {
           });
         }
       } else if (int.options.getSubcommand() == "create") {
-        if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           return;
         }
 
-        if (!int.guild.me.permissions.has("MANAGE_CHANNELS")) {
+        if (!int.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
           followReply(int, { content: LMessages.botNoPermission });
           return;
         }
@@ -281,11 +281,11 @@ module.exports = {
       } else if (int.options.getSubcommand() == "customize") {
         followReply(int, { content: LMessages.countCustomize });
       } else if (int.options.getSubcommand() == "reset") {
-        if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) {
+        if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
           return;
         }
 
-        if (!int.guild.me.permissions.has("MANAGE_CHANNELS")) {
+        if (!int.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
           followReply(int, { content: LMessages.botNoPermission });
           return;
         }

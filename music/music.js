@@ -9,6 +9,7 @@ const LMessages = require(`../messages/`);
 const template = require("string-placeholder");
 const short = require("short-uuid");
 const { followReply } = require("../utils/functions");
+const { Converter } = require("ffmpeg-stream");
 
 var queue = new Map();
 
@@ -57,8 +58,8 @@ const play = async (guild, song, errored) => {
       let channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
       if (channel) {
         if (Gres.annouce == 1) {
-          if (guild.me.permissions.has("EMBED_LINKS")) {
-            const Embed = new Discord.MessageEmbed()
+          if (guild.members.me.permissions.has("EMBED_LINKS")) {
+            const Embed = new Discord.EmbedBuilder()
               .setColor(config.colors.red)
               .setTitle(LMessages.musicNowPlaying)
               .setThumbnail(song.thumbnail)
@@ -103,13 +104,13 @@ const play = async (guild, song, errored) => {
               ")`**",
           };
         }
-        var controlRow = new Discord.MessageActionRow().setComponents([
-          new Discord.MessageButton()
+        var controlRow = new Discord.ActionRowBuilder().setComponents([
+          new Discord.ButtonBuilder()
             .setCustomId("pauseResume")
             .setLabel("⏯")
             .setStyle("DANGER")
             .setDisabled(false),
-          new Discord.MessageButton()
+          new Discord.ButtonBuilder()
             .setCustomId("skip")
             .setLabel("⏭")
             .setStyle("PRIMARY")
@@ -126,10 +127,10 @@ const play = async (guild, song, errored) => {
             .on("collect", async (interact) => {
               if (!interact.isButton()) return;
               if (!interact.member.voice.channelId) return;
-              if (!interact.guild.me.voice.channelId) return;
+              if (!interact.guild.members.me.voice.channelId) return;
               if (
                 interact.member.voice.channelId !=
-                interact.guild.me.voice.channelId
+                interact.guild.members.me.voice.channelId
               )
                 return;
               let id = interact.component.customId;
@@ -144,7 +145,7 @@ const play = async (guild, song, errored) => {
 
                   if (
                     interact.channel
-                      .permissionsFor(interact.guild.me)
+                      .permissionsFor(interact.guild.members.me)
                       .has("SEND_MESSAGES")
                   ) {
                     followReply(interact, {
@@ -183,7 +184,7 @@ const play = async (guild, song, errored) => {
 
                   if (
                     interact.channel
-                      .permissionsFor(interact.guild.me)
+                      .permissionsFor(interact.guild.members.me)
                       .has("SEND_MESSAGES")
                   ) {
                     followReply(interact, {
@@ -215,7 +216,7 @@ const play = async (guild, song, errored) => {
 
                   if (
                     interact.channel
-                      .permissionsFor(interact.guild.me)
+                      .permissionsFor(interact.guild.members.me)
                       .has("SEND_MESSAGES")
                   ) {
                     followReply(interact, {
@@ -229,7 +230,7 @@ const play = async (guild, song, errored) => {
 
                   if (
                     interact.channel
-                      .permissionsFor(interact.guild.me)
+                      .permissionsFor(interact.guild.members.me)
                       .has("SEND_MESSAGES")
                   ) {
                     followReply(interact, {
@@ -247,7 +248,7 @@ const play = async (guild, song, errored) => {
 
                 if (
                   interact.channel
-                    .permissionsFor(interact.guild.me)
+                    .permissionsFor(interact.guild.members.me)
                     .has("SEND_MESSAGES")
                 ) {
                   followReply(interact, {
@@ -384,7 +385,7 @@ const play = async (guild, song, errored) => {
         );
 
         if (
-          guild.me.voice.channel?.members.filter((x) => !x.user.bot).size > 0
+          guild.members.me.voice.channel?.members.filter((x) => !x.user.bot).size > 0
         ) {
           const uid = short.generate();
           await Guild.updateOne(
@@ -442,7 +443,7 @@ const play = async (guild, song, errored) => {
         let channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
 
         if (err.statusCode == 410) {
-          if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+          if (channel.permissionsFor(guild.members.me).has("SEND_MESSAGES")) {
             channel.send(
               template(
                 LMessages.music.error,
@@ -464,12 +465,59 @@ const play = async (guild, song, errored) => {
         } else {
           console.error(err);
           error.sendError(err);
-          if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+          if (channel.permissionsFor(guild.members.me).has("SEND_MESSAGES")) {
             channel.send(LMessages.musicError);
           }
           return;
         }
       });
+
+    const converter = new Converter();
+
+    // get a writable input stream and pipe an image file to it
+    const input = converter.createInputStream({
+      //vcodec: "opus",
+    });
+    stream.pipe(input);
+
+    // create an output stream, crop/scale image, save to file via node stream
+    let retStream = converter.createOutputStream({
+      vn: "",
+      af: "bass=g=3:f=110:w=0.6",
+      //acodec: "libmp3lame",
+    });
+
+    try {
+      await converter.run();
+      stream = retStream;
+    } catch (ferr) {
+      if (ferr) {
+        console.error(ferr);
+        let Gres = await Guild.findOne({
+          guildID: guild.id,
+        });
+        let channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
+        if (channel.permissionsFor(guild.members.me).has("SEND_MESSAGES")) {
+          channel.send(
+            template(
+              LMessages.music.error,
+              {
+                errr: "FFMpeg: " + ferr,
+              },
+              { before: "%", after: "%" }
+            )
+          );
+        }
+        let serverQueue = queue.get(guild.id);
+        if (serverQueue) {
+          if (serverQueue.songs.length > 0) {
+            serverQueue.songs.shift();
+            play(guild, serverQueue.songs[0], false);
+          }
+        }
+        return;
+      }
+    }
 
     return stream;
   }
@@ -488,7 +536,7 @@ const play = async (guild, song, errored) => {
 
 const voiceStateUpdate = async (oldVoice, newVoice) => {
   if (newVoice.channel == null) {
-    if (newVoice.member == newVoice.guild.me) {
+    if (newVoice.member == newVoice.guild.members.me) {
       const serverQueue = queue.get(newVoice.guild.id);
       if (serverQueue) {
         if (serverQueue.connection) {

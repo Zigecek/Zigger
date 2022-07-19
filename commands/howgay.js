@@ -9,7 +9,7 @@ module.exports = {
   aliases: ["hg"],
   category: "fun",
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
+    if (!message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES"))
       return;
     if (args[0]) {
       if (

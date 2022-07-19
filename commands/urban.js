@@ -8,9 +8,13 @@ module.exports = {
   cooldown: 3,
   category: "fun",
   execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
+    if (
+      !message.channel
+        .permissionsFor(message.guild.members.me)
+        .has("SEND_MESSAGES")
+    )
       return;
-    if (!message.guild.me.permissions.has("EMBED_LINKS"))
+    if (!message.guild.members.me.permissions.has("EMBED_LINKS"))
       return message.channel.send(LMessages.help.noPermission);
     if (!args[0]) {
       return message.channel.send(LMessages.urban.enterQuery);
@@ -35,13 +39,13 @@ async function get(message, args) {
 
   function getRow(ind, bod) {
     ind = Number(ind);
-    return new Discord.MessageActionRow().setComponents([
-      new Discord.MessageButton()
+    return new Discord.ActionRowBuilder().setComponents([
+      new Discord.ButtonBuilder()
         .setCustomId("prev")
         .setLabel("←")
         .setStyle("PRIMARY")
         .setDisabled(ind == 0 ? true : false),
-      new Discord.MessageButton()
+      new Discord.ButtonBuilder()
         .setCustomId("next")
         .setLabel("→")
         .setStyle("PRIMARY")
@@ -50,12 +54,12 @@ async function get(message, args) {
   }
   function getEmbed(ind, bod) {
     ind = Number(ind);
-    return new Discord.MessageEmbed()
+    return new Discord.EmbedBuilder()
       .setColor("NOT_QUITE_BLACK")
       .setURL(bod[ind].permalink)
       .setTitle(bod[ind].word)
       .setDescription(bod[ind].definition)
-      .addField("Example", bod[ind].example, false)
+      .addFields([{ name: "Example", value: bod[ind].example, inline: false }])
       .setFooter({
         text: `by ${bod[ind].author} \n👍${bod[ind].thumbs_up} 👎${
           bod[ind].thumbs_down

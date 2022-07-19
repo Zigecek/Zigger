@@ -13,7 +13,7 @@ module.exports = {
   aliases: [],
   category: "moderation",
   async execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
+    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
     if (
       int.member.permissions.has("ADMINISTRATOR") ||
       int.member.permissions.has("MANAGE_ROLES")

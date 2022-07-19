@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 var moment = require("moment");
 
@@ -9,7 +8,7 @@ var moment = require("moment");
  */
 function addReactions(message, emojis) {
   if (emojis.length != 0) {
-    if (message.guild.me.permissions.has("ADD_REACTIONS")) {
+    if (message.guild.members.me.permissions.has("ADD_REACTIONS")) {
       message.react(emojis.shift()).then(() => {
         addReactions(message, emojis);
       });
@@ -51,13 +50,13 @@ function shout(content, guild) {
       let channel = guild.channels.cache
         .filter(
           (x) =>
-            x.type == "GUILD_TEXT" &&
-            x.permissionsFor(guild.me).has("SEND_MESSAGES") &&
+            x.type == Discord.ChannelType.GuildText &&
+            x.permissionsFor(guild.members.me).has("SEND_MESSAGES") &&
             x?.nsfw == false
         )
         .first();
       if (channel) {
-        if (guild.me.permissions.has("SEND_MESSAGES")) {
+        if (guild.members.me.permissions.has("SEND_MESSAGES")) {
           channel
             .send(content)
             .then((message) => {
@@ -86,7 +85,7 @@ function deleteMessages(messages) {
   messages.forEach(async (message) => {
     if (message) {
       if (message.deletable) {
-        if (message.guild.me.permissions.has("MANAGE_MESSAGES")) {
+        if (message.guild.members.me.permissions.has("MANAGE_MESSAGES")) {
           await message.delete();
         }
       }

@@ -23,7 +23,7 @@ module.exports = {
   aliases: ["rr"],
   category: "reactionroles",
   execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES"))
+    if (!message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES"))
       return;
 
     var content = "";
@@ -45,7 +45,7 @@ module.exports = {
       message.member.permissions.has("ADMINISTRATOR") ||
       message.member.permissions.has("MANAGE_ROLES")
     ) {
-      if (message.guild.me.permissions.has("MANAGE_ROLES")) {
+      if (message.guild.members.me.permissions.has("MANAGE_ROLES")) {
         if (args[0] == "create") {
           msgsToDel.push(message);
 
@@ -189,7 +189,7 @@ module.exports = {
                             );
 
                             if (
-                              m.guild.me.roles.highest.comparePositionTo(role) >
+                              m.guild.members.me.roles.highest.comparePositionTo(role) >
                               0
                             ) {
                               reactionRoleIDs.push(

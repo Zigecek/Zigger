@@ -26,26 +26,26 @@ module.exports = {
       return;
     }
     if (
-      !voiceChannel.permissionsFor(message.guild.me).has("CONNECT") ||
-      !voiceChannel.permissionsFor(message.guild.me).has("SPEAK") ||
+      !voiceChannel.permissionsFor(message.guild.members.me).has("CONNECT") ||
+      !voiceChannel.permissionsFor(message.guild.members.me).has("SPEAK") ||
       !voiceChannel.joinable ||
       !voiceChannel.viewable
     ) {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.musicBotHasNoPermission);
       }
       return;
     }
-    if (message.guild.me.voice.channel) {
+    if (message.guild.members.me.voice.channel) {
       if (Gres.musicBotPlaying) {
         if (
-          message.guild.me.voice.channel.id != message.member.voice.channel.id
+          message.guild.members.me.voice.channel.id != message.member.voice.channel.id
         ) {
           if (
             message.channel
-              .permissionsFor(message.guild.me)
+              .permissionsFor(message.guild.members.me)
               .has("SEND_MESSAGES")
           ) {
             message.channel.send(LMessages.music.botIsPlaying);
@@ -56,7 +56,7 @@ module.exports = {
     }
     if (args.join(" ") == "" || args.join(" ") == " ") {
       if (
-        message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
       ) {
         message.channel.send(LMessages.musicNoQuery);
       }
@@ -72,7 +72,7 @@ module.exports = {
       }
     );
 
-    if (message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")) {
+    if (message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")) {
       message.channel.send(
         template(
           LMessages.musicSearching,
@@ -195,8 +195,8 @@ module.exports = {
     var playlist = null;
     var playlistInfo;
     var mode;
-    var newJoin = message.guild.me.voice.channel
-      ? message.guild.me.voice.channel.id != voiceChannel.id
+    var newJoin = message.guild.members.me.voice.channel
+      ? message.guild.members.me.voice.channel.id != voiceChannel.id
         ? true
         : false
       : true;
@@ -242,7 +242,7 @@ module.exports = {
         } else {
           if (
             message.channel
-              .permissionsFor(message.guild.me)
+              .permissionsFor(message.guild.members.me)
               .has("SEND_MESSAGES")
           ) {
             message.channel.send(LMessages.musicWrongUrl);
@@ -251,7 +251,7 @@ module.exports = {
         }
       } else {
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           message.channel.send(LMessages.musicWrongUrl);
         }
@@ -262,7 +262,7 @@ module.exports = {
       song = await createSongNonURL();
       if (song == null) {
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           message.channel.send(LMessages.musicNothingFound);
         }
@@ -293,7 +293,7 @@ module.exports = {
 
     const annouceSP = (res) => {
       if (Gres.annouce == 1) {
-        const Embed = new Discord.MessageEmbed();
+        const Embed = new Discord.EmbedBuilder();
         if (mode == 1) {
           Embed.setColor(config.colors.red)
             .setTitle(LMessages.musicSongAddToQueue)
@@ -327,9 +327,9 @@ module.exports = {
             );
         }
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
-          if (message.guild.me.permissions.has("EMBED_LINKS")) {
+          if (message.guild.members.me.permissions.has("EMBED_LINKS")) {
             message.channel.send({ embeds: [Embed] });
           } else {
             if (mode == 2) {
@@ -402,7 +402,7 @@ module.exports = {
           }
         );
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           message.channel.send(
             template(
@@ -446,7 +446,7 @@ module.exports = {
 
         //music.queue.delete(message.guild.id);
         if (
-          message.channel.permissionsFor(message.guild.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
         ) {
           message.channel.send(LMessages.musicError);
         }

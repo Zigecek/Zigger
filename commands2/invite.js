@@ -9,12 +9,12 @@ module.exports = {
   aliases: [],
   category: "other",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.me).has("SEND_MESSAGES")) return;
+    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
     if (
       !int.member.voice.channel
-        ?.permissionsFor(int.guild.me)
+        ?.permissionsFor(int.guild.members.me)
         .has("CREATE_INSTANT_INVITE") ||
-      !int.guild.me.permissions.has("CREATE_INSTANT_INVITE")
+      !int.guild.members.me.permissions.has("CREATE_INSTANT_INVITE")
     ) {
       followReply(int, { content: LMessages.botNoPermission });
 
