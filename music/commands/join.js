@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const music = require("../music");
 const error = require("../../utils/error");
 const template = require("string-placeholder");
@@ -15,7 +15,9 @@ module.exports = {
     let voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.need.toBeInVoice);
       }
@@ -66,7 +68,9 @@ module.exports = {
         }
       } else {
         if (
-          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+          message.channel
+            .permissionsFor(message.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           message.channel.send(
             template(
@@ -86,7 +90,11 @@ module.exports = {
           }
         );
       }
-      if (voiceChannel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.ManageRoles)) {
+      if (
+        voiceChannel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.ManageRoles)
+      ) {
         if (!serverQueue) {
           music.queue.set(voiceChannel.guild.id, {
             connection: null,
@@ -133,7 +141,9 @@ module.exports = {
       music.queue.delete(message.guild.id);
 
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.musicError);
       }

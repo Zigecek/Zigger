@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const ytsr = require("ytsr");
 const { bot } = require("../../bot");
@@ -20,25 +19,47 @@ module.exports = {
   aliases: [],
   category: "music",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) return;
+    if (
+      !int.channel
+        .permissionsFor(int.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    )
+      return;
     const voiceChannel = int.member.voice.channel;
     if (!voiceChannel) {
-      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+      if (
+        int.channel
+          .permissionsFor(int.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
+      ) {
         followReply(int, { content: LMessages.music.need.toBeInVoice });
       }
       return;
     }
     const permissions = voiceChannel.permissionsFor(int.client.user);
-    if (!permissions.has(Discord.PermissionFlagsBits.ManageRoles) || !permissions.has(Discord.PermissionFlagsBits.Speak)) {
-      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+    if (
+      !permissions.has(Discord.PermissionFlagsBits.ManageRoles) ||
+      !permissions.has(Discord.PermissionFlagsBits.Speak)
+    ) {
+      if (
+        int.channel
+          .permissionsFor(int.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
+      ) {
         followReply(int, { content: LMessages.musicBotHasNoPermission });
       }
       return;
     }
     if (int.guild.members.me.voice.channel) {
       if (Gres.musicBotPlaying) {
-        if (int.guild.members.me.voice.channel.id != int.member.voice.channel.id) {
-          if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+        if (
+          int.guild.members.me.voice.channel.id != int.member.voice.channel.id
+        ) {
+          if (
+            int.channel
+              .permissionsFor(int.guild.members.me)
+              .has(Discord.PermissionFlagsBits.SendMessages)
+          ) {
             followReply(int, { content: LMessages.music.botIsPlaying });
           }
           return;
@@ -46,7 +67,11 @@ module.exports = {
       }
     }
 
-    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+    if (
+      !int.channel
+        .permissionsFor(int.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    ) {
       return;
     }
 
@@ -71,7 +96,11 @@ module.exports = {
     }).then(async (result) => {
       const tracks = result.items.filter((x) => x.type == "video").slice(0, 10);
       if (!tracks) {
-        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+        if (
+          int.channel
+            .permissionsFor(int.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
+        ) {
           followReply(int, { content: LMessages.musicNothingFound });
         }
         return;
@@ -81,7 +110,11 @@ module.exports = {
         "```\n" +
         tracks.map((track) => `\n${++i}. ${decode(track.title)}`) +
         "\n```";
-      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+      if (
+        int.channel
+          .permissionsFor(int.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
+      ) {
         const row = new Discord.ActionRowBuilder().setComponents([
           new Discord.ButtonBuilder()
             .setCustomId("1")
@@ -176,7 +209,11 @@ module.exports = {
             .on("end", () => {
               if (smessage) {
                 if (smessage.deletable) {
-                  if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageMessages)) {
+                  if (
+                    int.guild.members.me.permissions.has(
+                      Discord.PermissionFlagsBits.ManageMessages
+                    )
+                  ) {
                     smessage.delete();
                   }
                 }
@@ -285,7 +322,9 @@ module.exports = {
                 }
                 music.queue.delete(int.guild.id);
                 if (
-                  int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+                  int.channel
+                    .permissionsFor(int.guild.members.me)
+                    .has(Discord.PermissionFlagsBits.SendMessages)
                 ) {
                   followReply(int, { content: LMessages.musicError });
                 }
@@ -319,9 +358,15 @@ module.exports = {
                 );
 
               if (
-                int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+                int.channel
+                  .permissionsFor(int.guild.members.me)
+                  .has(Discord.PermissionFlagsBits.SendMessages)
               ) {
-                if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)) {
+                if (
+                  int.guild.members.me.permissions.has(
+                    Discord.PermissionFlagsBits.EmbedLinks
+                  )
+                ) {
                   followReply(int, { embeds: [Embed] });
                 } else {
                   followReply(int, {

@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const error = require("../../utils/error");
 const template = require("string-placeholder");
 const Guild = require("../../models/guild");
@@ -15,15 +15,27 @@ module.exports = {
       !int.member.voice.channel ||
       int.member.voice.channel != int.guild.members.me.voice.channel
     ) {
-      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+      if (
+        int.channel
+          .permissionsFor(int.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
+      ) {
         followReply(int, { content: LMessages.music.need.toBeInVoiceWithBot });
       }
       return;
     }
     if (!int.options.get("volume").value) {
-      if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages))
+      if (
+        !int.channel
+          .permissionsFor(int.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
+      )
         return;
-      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+      if (
+        int.channel
+          .permissionsFor(int.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
+      ) {
         followReply(int, {
           content: template(
             LMessages.music.volume.currentVolume,
@@ -53,7 +65,11 @@ module.exports = {
           );
         }
 
-        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+        if (
+          int.channel
+            .permissionsFor(int.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
+        ) {
           followReply(int, {
             content: template(
               LMessages.music.volume.set,
@@ -79,7 +95,11 @@ module.exports = {
           );
         }
 
-        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+        if (
+          int.channel
+            .permissionsFor(int.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
+        ) {
           followReply(int, {
             content: template(
               LMessages.music.volume.set,
@@ -90,7 +110,11 @@ module.exports = {
         }
         return;
       } else {
-        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+        if (
+          int.channel
+            .permissionsFor(int.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
+        ) {
           followReply(int, { content: LMessages.music.volume.use });
         }
       }

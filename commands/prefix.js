@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const Guild = require("../models/guild.js");
 const template = require("string-placeholder");
 const error = require("../utils/error");
@@ -10,7 +10,9 @@ module.exports = {
   aliases: [],
   category: "settings",
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (message.member.permissions.has(Discord.PermissionFlagsBits.Administrator)) {
+    if (
+      message.member.permissions.has(Discord.PermissionFlagsBits.Administrator)
+    ) {
       if (args[0] == null) {
         message.channel.send(
           template(

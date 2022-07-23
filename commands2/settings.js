@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const Guild = require("../models/guild.js");
 const template = require("string-placeholder");
 const error = require("../utils/error");

@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const { bot } = require("../../bot");
 const template = require("string-placeholder");
@@ -11,13 +10,23 @@ module.exports = {
   aliases: ["q"],
   category: "music",
   execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages))
+    if (
+      !message.channel
+        .permissionsFor(message.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    )
       return;
-    if (!message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks))
+    if (
+      !message.guild.members.me.permissions.has(
+        Discord.PermissionFlagsBits.EmbedLinks
+      )
+    )
       return message.channel.send(LMessages.help.noPermission);
     if (!serverQueue) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.musicEmptyQueue);
       }
@@ -86,7 +95,9 @@ module.exports = {
             LMessages.music.queue.anotherPageUse,
         });
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send({ embeds: [Embed] });
       }
@@ -105,7 +116,9 @@ module.exports = {
 
       if (number > pages.length) {
         if (
-          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+          message.channel
+            .permissionsFor(message.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           message.channel.send(LMessages.music.queue.invalidPage);
         }
@@ -139,13 +152,17 @@ module.exports = {
             LMessages.music.queue.anotherPageUse,
         });
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send({ embeds: [Embed] });
       }
     } else {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.queue.invalidNumber);
       }

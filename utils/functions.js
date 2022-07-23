@@ -8,7 +8,11 @@ var moment = require("moment");
  */
 function addReactions(message, emojis) {
   if (emojis.length != 0) {
-    if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.AddReactions)) {
+    if (
+      message.guild.members.me.permissions.has(
+        Discord.PermissionFlagsBits.AddReactions
+      )
+    ) {
       message.react(emojis.shift()).then(() => {
         addReactions(message, emojis);
       });
@@ -51,12 +55,18 @@ function shout(content, guild) {
         .filter(
           (x) =>
             x.type == Discord.ChannelType.GuildText &&
-            x.permissionsFor(guild.members.me).has(Discord.PermissionFlagsBits.SendMessages) &&
+            x
+              .permissionsFor(guild.members.me)
+              .has(Discord.PermissionFlagsBits.SendMessages) &&
             x?.nsfw == false
         )
         .first();
       if (channel) {
-        if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+        if (
+          guild.members.me.permissions.has(
+            Discord.PermissionFlagsBits.SendMessages
+          )
+        ) {
           channel
             .send(content)
             .then((message) => {
@@ -85,7 +95,11 @@ function deleteMessages(messages) {
   messages.forEach(async (message) => {
     if (message) {
       if (message.deletable) {
-        if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageMessages)) {
+        if (
+          message.guild.members.me.permissions.has(
+            Discord.PermissionFlagsBits.ManageMessages
+          )
+        ) {
           await message.delete();
         }
       }

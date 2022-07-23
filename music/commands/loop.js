@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const error = require("../../utils/error");
 const Guild = require("../../models/guild");
 const LMessages = require(`../../messages/`);
@@ -14,7 +14,9 @@ module.exports = {
       message.member.voice.channel != message.guild.members.me.voice.channel
     ) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.need.toBeInVoiceWithBot);
       }
@@ -22,7 +24,9 @@ module.exports = {
     }
     if (!serverQueue) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.musicNothingPlaying);
       }
@@ -40,13 +44,17 @@ module.exports = {
 
     if (Gres.musicBotLoop == true) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.loop.disabled);
       }
     } else if (Gres.musicBotLoop == false) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.loop.enabled);
       }

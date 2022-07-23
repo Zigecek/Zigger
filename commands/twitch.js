@@ -1,4 +1,3 @@
-
 const Discord = require("discord.js");
 const Guild = require("../models/guild.js");
 const Streams = require("../models/streamguilds.js");
@@ -14,14 +13,20 @@ module.exports = {
   aliases: [],
   category: "twitch",
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (message.member.permissions.has(Discord.PermissionFlagsBits.Administrator)) {
+    if (
+      message.member.permissions.has(Discord.PermissionFlagsBits.Administrator)
+    ) {
       if (args[0] == "user") {
         if (args[1] == null) {
           var Gres = await Guild.findOne({
             guildID: message.guild.id,
           });
           if (Gres.streamUserName == null || Gres.streamUserID == null) {
-            if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+            if (
+              message.guild.members.me.permissions.has(
+                Discord.PermissionFlagsBits.SendMessages
+              )
+            ) {
               message.channel.send(LMessages.twitch.userNotSet);
             }
           } else {
@@ -31,8 +36,16 @@ module.exports = {
             );
             if (Tres) {
               if (Tres.users[0] != null && Tres.users[0] != undefined) {
-                if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
-                  if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)) {
+                if (
+                  message.guild.members.me.permissions.has(
+                    Discord.PermissionFlagsBits.SendMessages
+                  )
+                ) {
+                  if (
+                    message.guild.members.me.permissions.has(
+                      Discord.PermissionFlagsBits.EmbedLinks
+                    )
+                  ) {
                     const Embed2 = new Discord.EmbedBuilder()
                       .setColor(config.colors.purple)
                       .setTitle(Gres.streamUserName)
@@ -64,8 +77,16 @@ module.exports = {
                 );
 
                 if (Tres2) {
-                  if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
-                    if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)) {
+                  if (
+                    message.guild.members.me.permissions.has(
+                      Discord.PermissionFlagsBits.SendMessages
+                    )
+                  ) {
+                    if (
+                      message.guild.members.me.permissions.has(
+                        Discord.PermissionFlagsBits.EmbedLinks
+                      )
+                    ) {
                       const Embed2 = new Discord.EmbedBuilder()
                         .setColor(config.colors.purple)
                         .setTitle(Tres2.display_name)
@@ -100,13 +121,21 @@ module.exports = {
           if (args[2] != null) {
             let Tres = await getUsersByName(process.env.TWITCH_ID, args[2]);
             if (Tres.users[0] == undefined || Tres.users[0] == null) {
-              if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+              if (
+                message.guild.members.me.permissions.has(
+                  Discord.PermissionFlagsBits.SendMessages
+                )
+              ) {
                 message.channel.send(LMessages.twitch.userNotFound);
               }
 
               return;
             }
-            if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+            if (
+              message.guild.members.me.permissions.has(
+                Discord.PermissionFlagsBits.SendMessages
+              )
+            ) {
               message.channel.send(
                 template(
                   LMessages.twitch.userSet,
@@ -126,7 +155,11 @@ module.exports = {
               }
             );
           } else {
-            if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+            if (
+              message.guild.members.me.permissions.has(
+                Discord.PermissionFlagsBits.SendMessages
+              )
+            ) {
               message.channel.send(LMessages.twitch.userUse);
             }
           }
@@ -138,11 +171,19 @@ module.exports = {
           });
 
           if (Gres.streamNotifyChannelID == null) {
-            if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+            if (
+              message.guild.members.me.permissions.has(
+                Discord.PermissionFlagsBits.SendMessages
+              )
+            ) {
               message.channel.send(LMessages.twitch.channelNotSet);
             }
           } else {
-            if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+            if (
+              message.guild.members.me.permissions.has(
+                Discord.PermissionFlagsBits.SendMessages
+              )
+            ) {
               message.channel.send(
                 template(
                   LMessages.twitch.channelInfo,
@@ -155,7 +196,11 @@ module.exports = {
         } else if (args[1] == "set") {
           if (args[2] != null) {
             if (!message.mentions.channels.first()) {
-              if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+              if (
+                message.guild.members.me.permissions.has(
+                  Discord.PermissionFlagsBits.SendMessages
+                )
+              ) {
                 message.channel.send(LMessages.channels.notFoundOrNoMention);
               }
               return;
@@ -168,7 +213,11 @@ module.exports = {
                 streamNotifyChannelID: message.mentions.channels.first().id,
               }
             );
-            if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+            if (
+              message.guild.members.me.permissions.has(
+                Discord.PermissionFlagsBits.SendMessages
+              )
+            ) {
               message.channel.send(
                 template(
                   LMessages.twitch.channelSet,
@@ -180,7 +229,11 @@ module.exports = {
               );
             }
           } else {
-            if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+            if (
+              message.guild.members.me.permissions.has(
+                Discord.PermissionFlagsBits.SendMessages
+              )
+            ) {
               message.channel.send(LMessages.twitch.channelUse);
             }
             return;
@@ -194,11 +247,19 @@ module.exports = {
             { note: "555" },
             { $push: { guildIDs: message.guild.id } }
           );
-          if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+          if (
+            message.guild.members.me.permissions.has(
+              Discord.PermissionFlagsBits.SendMessages
+            )
+          ) {
             message.channel.send(LMessages.twitch.turnOn);
           }
         } else {
-          if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+          if (
+            message.guild.members.me.permissions.has(
+              Discord.PermissionFlagsBits.SendMessages
+            )
+          ) {
             message.channel.send(LMessages.twitch.isAlreadyOn);
           }
         }
@@ -211,11 +272,19 @@ module.exports = {
             { $pull: { guildIDs: message.guild.id } },
             { new: true }
           );
-          if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+          if (
+            message.guild.members.me.permissions.has(
+              Discord.PermissionFlagsBits.SendMessages
+            )
+          ) {
             message.channel.send(LMessages.twitch.turnOff);
           }
         } else {
-          if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+          if (
+            message.guild.members.me.permissions.has(
+              Discord.PermissionFlagsBits.SendMessages
+            )
+          ) {
             message.channel.send(LMessages.twitch.isAlreadyOff);
           }
         }

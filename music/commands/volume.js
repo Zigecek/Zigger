@@ -1,3 +1,4 @@
+const Discord = require("discord.js");
 const error = require("../../utils/error");
 const template = require("string-placeholder");
 const Guild = require("../../models/guild");
@@ -14,7 +15,9 @@ module.exports = {
       message.member.voice.channel != message.guild.members.me.voice.channel
     ) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.need.toBeInVoiceWithBot);
       }
@@ -22,11 +25,15 @@ module.exports = {
     }
     if (!args[0]) {
       if (
-        !message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        !message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       )
         return;
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(
           template(
@@ -59,7 +66,9 @@ module.exports = {
         }
 
         if (
-          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+          message.channel
+            .permissionsFor(message.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           message.channel.send(
             template(
@@ -87,7 +96,9 @@ module.exports = {
         }
 
         if (
-          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+          message.channel
+            .permissionsFor(message.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           message.channel.send(
             template(
@@ -100,7 +111,9 @@ module.exports = {
         return;
       } else {
         if (
-          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+          message.channel
+            .permissionsFor(message.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           message.channel.send(LMessages.music.volume.use);
         }

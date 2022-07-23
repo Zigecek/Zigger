@@ -1,3 +1,4 @@
+const Discord = require("discord.js");
 const { bot } = require("../bot");
 const error = require("./error");
 const Guild = require("../models/guild");
@@ -22,7 +23,11 @@ function callLoop() {
       if (Gres.counters != null) {
         let counters = Gres.counters;
         if (counters.length != 0) {
-          if (!guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
+          if (
+            !guild.members.me.permissions.has(
+              Discord.PermissionFlagsBits.ManageChannels
+            )
+          ) {
             functions.shout(
               `${LMessages.count.noPermission} \n${LMessages.rejoinRecommended}`,
               guild
@@ -33,7 +38,11 @@ function callLoop() {
             Gres.countersCategoryChannelID
           );
           if (!category) {
-            if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
+            if (
+              guild.members.me.permissions.has(
+                Discord.PermissionFlagsBits.ManageChannels
+              )
+            ) {
               guild.channels
                 .create(LMessages.countCategoryName, {
                   type: "GUILD_CATEGORY",
@@ -51,7 +60,11 @@ function callLoop() {
                 });
             }
           }
-          if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
+          if (
+            guild.members.me.permissions.has(
+              Discord.PermissionFlagsBits.ManageChannels
+            )
+          ) {
             category.setPosition(0);
           }
 
@@ -155,7 +168,11 @@ function callLoop() {
 
             if (channel) {
               if (channel.parent.id != category.id) {
-                if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
+                if (
+                  guild.members.me.permissions.has(
+                    Discord.PermissionFlagsBits.ManageChannels
+                  )
+                ) {
                   channel.setParent(category);
                 }
               }
@@ -164,12 +181,20 @@ function callLoop() {
                 var name = channel.name;
                 name = name.replace(/\d+/, count.toString());
                 if (name != channel.name) {
-                  if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
+                  if (
+                    guild.members.me.permissions.has(
+                      Discord.PermissionFlagsBits.ManageChannels
+                    )
+                  ) {
                     channel.setName(name);
                   }
                 }
               } else {
-                if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
+                if (
+                  guild.members.me.permissions.has(
+                    Discord.PermissionFlagsBits.ManageChannels
+                  )
+                ) {
                   channel.setName(channel.name + " " + count);
                 }
               }

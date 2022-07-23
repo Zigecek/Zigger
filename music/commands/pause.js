@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const error = require("../../utils/error");
 const Guild = require("../../models/guild");
 const LMessages = require(`../../messages/`);
@@ -11,7 +11,9 @@ module.exports = {
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
     if (!message.member.voice.channel) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.need.toBeInVoice);
       }
@@ -19,7 +21,9 @@ module.exports = {
     }
     if (serverQueue.songs?.length == 0) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.musicNothingPlaying);
       }
@@ -41,7 +45,11 @@ module.exports = {
         serverQueue.audioPlayer.pause(true);
       }
     }
-    if (message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+    if (
+      message.channel
+        .permissionsFor(message.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    ) {
       message.channel.send(LMessages.music.otherCmds.pause);
     }
   },

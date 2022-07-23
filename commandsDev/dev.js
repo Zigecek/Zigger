@@ -1,6 +1,6 @@
+const Discord = require("discord.js");
 const Config = require("../models/Config");
 const Guild = require("../models/guild.js");
-const Discord = require("discord.js");
 const { bot } = require("../bot");
 const error = require("../utils/error");
 const { exec } = require("child_process");
@@ -311,7 +311,9 @@ module.exports = {
               .filter(
                 (x) =>
                   x.type == Discord.ChannelType.GuildCategory &&
-                  x.permissionsFor(guild.members.me).has(Discord.PermissionFlagsBits.SendMessages) &&
+                  x
+                    .permissionsFor(guild.members.me)
+                    .has(Discord.PermissionFlagsBits.SendMessages) &&
                   x?.nsfw == false
               )
               .first();

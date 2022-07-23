@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const template = require("string-placeholder");
 const LMessages = require(`../messages/`);
 const { blake3 } = require("hash-wasm");
@@ -9,7 +9,11 @@ module.exports = {
   aliases: ["hg"],
   category: "fun",
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages))
+    if (
+      !message.channel
+        .permissionsFor(message.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    )
       return;
     if (args[0]) {
       if (

@@ -1,3 +1,4 @@
+const Discord = require("discord.js");
 const { bot } = require("../bot");
 const fs = require("fs");
 

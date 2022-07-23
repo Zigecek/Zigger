@@ -1,5 +1,5 @@
-const fetch = require("cross-fetch");
 const Discord = require("discord.js");
+const fetch = require("cross-fetch");
 const LMessages = require(`../messages/`);
 
 module.exports = {
@@ -14,7 +14,11 @@ module.exports = {
         .has(Discord.PermissionFlagsBits.SendMessages)
     )
       return;
-    if (!message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks))
+    if (
+      !message.guild.members.me.permissions.has(
+        Discord.PermissionFlagsBits.EmbedLinks
+      )
+    )
       return message.channel.send(LMessages.help.noPermission);
     if (!args[0]) {
       return message.channel.send(LMessages.urban.enterQuery);

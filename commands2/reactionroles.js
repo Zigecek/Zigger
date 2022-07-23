@@ -1,15 +1,4 @@
-/*****************************************************************************
-__/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_____/\\\\\\\\\\\\__/\\\\\\\\\\\\\\\_        
- _\////////////\\\__\/////\\\///____/\\\//////////__\/\\\///////////__       
-  ___________/\\\/_______\/\\\______/\\\_____________\/\\\_____________      
-   _________/\\\/_________\/\\\_____\/\\\____/\\\\\\\_\/\\\\\\\\\\\_____     
-    _______/\\\/___________\/\\\_____\/\\\___\/////\\\_\/\\\///////______    
-     _____/\\\/_____________\/\\\_____\/\\\_______\/\\\_\/\\\_____________   
-      ___/\\\/_______________\/\\\_____\/\\\_______\/\\\_\/\\\_____________  
-       __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_\//\\\\\\\\\\\\/__\/\\\\\\\\\\\\\\\_  
-        _\///////////////__\///////////___\////////////____\///////////////__
-*****************************************************************************/
-
+const Discord = require("discord.js");
 const Guild = require("../models/guild.js");
 const error = require("../utils/error");
 const template = require("string-placeholder");
@@ -24,7 +13,12 @@ module.exports = {
   aliases: ["rr"],
   category: "reactionroles",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) return;
+    if (
+      !int.channel
+        .permissionsFor(int.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    )
+      return;
 
     var content = "";
     var regexEmoji = /<a:.+?:\d+>|<:.+?:\d+>/;
@@ -42,7 +36,11 @@ module.exports = {
       int.member.permissions.has(Discord.PermissionFlagsBits.Administrator) ||
       int.member.permissions.has(Discord.PermissionFlagsBits.ManageRoles)
     ) {
-      if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
+      if (
+        int.guild.members.me.permissions.has(
+          Discord.PermissionFlagsBits.ManageRoles
+        )
+      ) {
         if (int.options.getSubcommand() == "create") {
           if (!int.options.get("channel").channel) {
             followReply(int, { content: LMessages.rr.invalidChannel });

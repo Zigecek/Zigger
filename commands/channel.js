@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const Guild = require("../models/guild");
 const error = require("../utils/error");
 const template = require("string-placeholder");
@@ -10,10 +10,16 @@ module.exports = {
   aliases: [],
   category: "moderation",
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages))
+    if (
+      !message.channel
+        .permissionsFor(message.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    )
       return;
     if (
-      message.member.permissions.has(Discord.PermissionFlagsBits.Administrator) ||
+      message.member.permissions.has(
+        Discord.PermissionFlagsBits.Administrator
+      ) ||
       message.member.permissions.has(Discord.PermissionFlagsBits.ManageChannels)
     ) {
       if (args[0] == "wel") {

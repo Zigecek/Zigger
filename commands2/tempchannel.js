@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const Guild = require("../models/guild.js");
 const error = require("../utils/error");
 const template = require("string-placeholder");
@@ -13,9 +13,15 @@ module.exports = {
   async execute(int, serverQueue, Gres) {
     if (int.options.getSubcommand() == "create") {
       if (
-        !int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels) ||
-        !int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles) ||
-        !int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ViewChannel)
+        !int.guild.members.me.permissions.has(
+          Discord.PermissionFlagsBits.ManageChannels
+        ) ||
+        !int.guild.members.me.permissions.has(
+          Discord.PermissionFlagsBits.ManageRoles
+        ) ||
+        !int.guild.members.me.permissions.has(
+          Discord.PermissionFlagsBits.ViewChannel
+        )
       ) {
         followReply(int, { content: LMessages.botNoPermission });
         return;
@@ -212,7 +218,11 @@ module.exports = {
         });
       }
     } else if (int.options.getSubcommand() == "add") {
-      if (!int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
+      if (
+        !int.guild.members.me.permissions.has(
+          Discord.PermissionFlagsBits.ManageChannels
+        )
+      ) {
         followReply(int, { content: LMessages.botNoPermission });
         return;
       }
@@ -245,7 +255,12 @@ module.exports = {
               tc.invitedUserIDs.forEach((e) => {
                 let constr = {
                   id: e,
-                  allow: [Discord.PermissionFlagsBits.ViewChannel, Discord.PermissionFlagsBits.ManageRoles, Discord.PermissionFlagsBits.Speak, Discord.PermissionFlagsBits.Stream],
+                  allow: [
+                    Discord.PermissionFlagsBits.ViewChannel,
+                    Discord.PermissionFlagsBits.ManageRoles,
+                    Discord.PermissionFlagsBits.Speak,
+                    Discord.PermissionFlagsBits.Stream,
+                  ],
                 };
 
                 overwrites.push(constr);
@@ -273,7 +288,11 @@ module.exports = {
         return;
       }
     } else if (int.options.getSubcommand() == "remove") {
-      if (!int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
+      if (
+        !int.guild.members.me.permissions.has(
+          Discord.PermissionFlagsBits.ManageChannels
+        )
+      ) {
         followReply(int, { content: LMessagesq.botNoPermission });
         return;
       }

@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const template = require("string-placeholder");
 const LMessages = require(`../messages/`);
 const { followReply } = require("../utils/functions");
@@ -10,10 +10,21 @@ module.exports = {
   aliases: ["hg"],
   category: "fun",
   async execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) return;
-    if (int.options.get("anything")?.value || int.options.get("anything")?.member) {
+    if (
+      !int.channel
+        .permissionsFor(int.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    )
+      return;
+    if (
+      int.options.get("anything")?.value ||
+      int.options.get("anything")?.member
+    ) {
       if (int.options.get("anything").member) {
-        const hg = await getScale(int.options.get("anything").member.id, [0, 100]);
+        const hg = await getScale(
+          int.options.get("anything").member.id,
+          [0, 100]
+        );
         followReply(int, {
           content: template(
             LMessages.fun.howGay.member,

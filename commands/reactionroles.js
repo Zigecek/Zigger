@@ -1,15 +1,4 @@
-/*****************************************************************************
-__/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_____/\\\\\\\\\\\\__/\\\\\\\\\\\\\\\_        
- _\////////////\\\__\/////\\\///____/\\\//////////__\/\\\///////////__       
-  ___________/\\\/_______\/\\\______/\\\_____________\/\\\_____________      
-   _________/\\\/_________\/\\\_____\/\\\____/\\\\\\\_\/\\\\\\\\\\\_____     
-    _______/\\\/___________\/\\\_____\/\\\___\/////\\\_\/\\\///////______    
-     _____/\\\/_____________\/\\\_____\/\\\_______\/\\\_\/\\\_____________   
-      ___/\\\/_______________\/\\\_____\/\\\_______\/\\\_\/\\\_____________  
-       __/\\\\\\\\\\\\\\\__/\\\\\\\\\\\_\//\\\\\\\\\\\\/__\/\\\\\\\\\\\\\\\_  
-        _\///////////////__\///////////___\////////////____\///////////////__
-*****************************************************************************/
-
+const Discord = require("discord.js");
 const Guild = require("../models/guild.js");
 const error = require("../utils/error");
 const template = require("string-placeholder");
@@ -23,7 +12,11 @@ module.exports = {
   aliases: ["rr"],
   category: "reactionroles",
   execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages))
+    if (
+      !message.channel
+        .permissionsFor(message.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    )
       return;
 
     var content = "";
@@ -42,10 +35,16 @@ module.exports = {
     };
 
     if (
-      message.member.permissions.has(Discord.PermissionFlagsBits.Administrator) ||
+      message.member.permissions.has(
+        Discord.PermissionFlagsBits.Administrator
+      ) ||
       message.member.permissions.has(Discord.PermissionFlagsBits.ManageRoles)
     ) {
-      if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
+      if (
+        message.guild.members.me.permissions.has(
+          Discord.PermissionFlagsBits.ManageRoles
+        )
+      ) {
         if (args[0] == "create") {
           msgsToDel.push(message);
 
@@ -189,8 +188,9 @@ module.exports = {
                             );
 
                             if (
-                              m.guild.members.me.roles.highest.comparePositionTo(role) >
-                              0
+                              m.guild.members.me.roles.highest.comparePositionTo(
+                                role
+                              ) > 0
                             ) {
                               reactionRoleIDs.push(
                                 m.mentions.roles.values().next().value.id

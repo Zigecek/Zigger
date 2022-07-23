@@ -39,6 +39,7 @@ const bot = new Discord.Client({
     Discord.GatewayIntentBits.GuildVoiceStates,
     Discord.GatewayIntentBits.GuildPresences,
     Discord.GatewayIntentBits.GuildEmojisAndStickers,
+    Discord.GatewayIntentBits.MessageContent,
   ],
 });
 
@@ -91,11 +92,15 @@ const guildCreate = (guild) => {
     .filter(
       (x) =>
         x.type == Discord.ChannelType.GuildText &&
-        x.permissionsFor(guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        x
+          .permissionsFor(guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
     )
     .first();
   if (channel) {
-    if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+    if (
+      guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)
+    ) {
       channel.send(
         template(
           LMessages.botJoinsGuild,
@@ -154,7 +159,11 @@ const guildMemberAdd = async (member) => {
         Gres.autoRoleIDs.splice(Gres.autoRoleIDs.indexOf(rID), 1);
       }
     });
-    if (member.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
+    if (
+      member.guild.members.me.permissions.has(
+        Discord.PermissionFlagsBits.ManageRoles
+      )
+    ) {
       try {
         await member.roles.add(Gres.autoRoleIDs);
       } catch (error) {
@@ -166,7 +175,12 @@ const guildMemberAdd = async (member) => {
 
   if (Gres.welChannelID != null) {
     let welChannel = bot.channels.cache.get(Gres.welChannelID);
-    if (welChannel && member.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+    if (
+      welChannel &&
+      member.guild.members.me.permissions.has(
+        Discord.PermissionFlagsBits.SendMessages
+      )
+    ) {
       welChannel.send(
         template(
           LMessages.joinMessage,
@@ -189,7 +203,11 @@ const guildMemberRemove = async (member) => {
       return;
     } else {
       let byeChannel = bot.channels.cache.get(Gres.byeChannelID);
-      if (member.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+      if (
+        member.guild.members.me.permissions.has(
+          Discord.PermissionFlagsBits.SendMessages
+        )
+      ) {
         if (byeChannel) {
           byeChannel.send(
             template(

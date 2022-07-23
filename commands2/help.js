@@ -10,9 +10,17 @@ module.exports = {
   aliases: [],
   category: "help",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages))
+    if (
+      !int.channel
+        .permissionsFor(int.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    )
       return;
-    if (!int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks))
+    if (
+      !int.guild.members.me.permissions.has(
+        Discord.PermissionFlagsBits.EmbedLinks
+      )
+    )
       return followReply(int, { content: LMessages.help.noPermission });
     if (args[0] == null) {
       const helpEmbed = new Discord.EmbedBuilder()

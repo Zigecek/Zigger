@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const LMessages = require(`../messages/`);
 const { followReply } = require("../utils/functions");
 
@@ -29,7 +29,11 @@ module.exports = {
           const messages = await int.channel.messages.fetch({
             limit: Number(int.options.get("amount").value),
           });
-          if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageMessages)) {
+          if (
+            int.guild.members.me.permissions.has(
+              Discord.PermissionFlagsBits.ManageMessages
+            )
+          ) {
             await msg.edit(LMessages.clear.deleting);
           } else {
             followReply(int, { content: LMessages.botNoPermission });
@@ -40,7 +44,11 @@ module.exports = {
               Date.now() - v.createdTimestamp < 1209595000 &&
               v.deletable == true
           );
-          if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageMessages)) {
+          if (
+            int.guild.members.me.permissions.has(
+              Discord.PermissionFlagsBits.ManageMessages
+            )
+          ) {
             int.channel.bulkDelete(secMessages).catch((err) => {
               if (err.code != 10008) {
                 console.error(err);
@@ -52,7 +60,11 @@ module.exports = {
           }
           if (msg) {
             if (msg.deletable) {
-              if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageMessages)) {
+              if (
+                int.guild.members.me.permissions.has(
+                  Discord.PermissionFlagsBits.ManageMessages
+                )
+              ) {
                 await msg.delete().catch((err) => {
                   if (err.code != 10008) {
                     console.error(err);
@@ -70,7 +82,11 @@ module.exports = {
             });
             if (msg2) {
               if (msg2.deletable) {
-                if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageMessages)) {
+                if (
+                  int.guild.members.me.permissions.has(
+                    Discord.PermissionFlagsBits.ManageMessages
+                  )
+                ) {
                   await msg2.delete({ timeout: 5000 }).catch((err) => {
                     if (err.code != 10008) {
                       console.error(err);

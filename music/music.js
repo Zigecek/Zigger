@@ -486,6 +486,8 @@ const play = async (guild, song, errored) => {
         }
       });
 
+    /*
+
     const converter = new Converter();
 
     // get a writable input stream and pipe an image file to it
@@ -536,6 +538,8 @@ const play = async (guild, song, errored) => {
         return;
       }
     }
+
+    */
 
     return stream;
   }

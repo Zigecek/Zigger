@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const Config = require("../models/Config");
 const error = require("../utils/error");
 const LMessages = require(`../messages/`);

@@ -69,7 +69,11 @@ module.exports = {
           .permissionsFor(message.guild.members.me)
           .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
-        if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)) {
+        if (
+          message.guild.members.me.permissions.has(
+            Discord.PermissionFlagsBits.EmbedLinks
+          )
+        ) {
           message.channel.send({ embeds: [Embed] });
         } else {
           message.channel.send(

@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const LMessages = require(`../../messages/`);
 
 module.exports = {
@@ -12,7 +12,9 @@ module.exports = {
       message.member.voice.channel != message.guild.members.me.voice.channel
     ) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.need.toBeInVoiceWithBot);
       }
@@ -21,7 +23,9 @@ module.exports = {
 
     if (!serverQueue) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.musicNothingPlaying);
       }
@@ -30,7 +34,11 @@ module.exports = {
 
     serverQueue.songs.splice(1, serverQueue.songs.length - 1);
 
-    if (message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+    if (
+      message.channel
+        .permissionsFor(message.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    ) {
       message.channel.send(LMessages.music.queue.cleared);
     }
   },

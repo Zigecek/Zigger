@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const { bot } = require("../bot");
 const template = require("string-placeholder");
 const LMessages = require(`../messages/`);
@@ -10,7 +10,12 @@ module.exports = {
   aliases: [],
   category: "other",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) return;
+    if (
+      !int.channel
+        .permissionsFor(int.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    )
+      return;
 
     followReply(int, { content: LMessages.pingingMessage }).then(
       (resultMessage) => {

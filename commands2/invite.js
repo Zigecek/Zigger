@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const template = require("string-placeholder");
 const LMessages = require(`../messages/`);
 const { followReply } = require("../utils/functions");
@@ -9,12 +9,19 @@ module.exports = {
   aliases: [],
   category: "other",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) return;
+    if (
+      !int.channel
+        .permissionsFor(int.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    )
+      return;
     if (
       !int.member.voice.channel
         ?.permissionsFor(int.guild.members.me)
         .has(Discord.PermissionFlagsBits.CreateInstantInvite) ||
-      !int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.CreateInstantInvite)
+      !int.guild.members.me.permissions.has(
+        Discord.PermissionFlagsBits.CreateInstantInvite
+      )
     ) {
       followReply(int, { content: LMessages.botNoPermission });
 

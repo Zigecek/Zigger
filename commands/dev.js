@@ -1,6 +1,6 @@
+const Discord = require("discord.js");
 const Config = require("../models/Config");
 const Guild = require("../models/guild.js");
-const Discord = require("discord.js");
 const { bot } = require("../bot");
 const error = require("../utils/error");
 const { exec } = require("child_process");
@@ -113,10 +113,7 @@ module.exports = {
           const guild = await bot.guilds.fetch(Gres.guildID);
 
           let channel = guild.channels.cache
-            .filter(
-              (x) =>
-                x.type != Discord.ChannelType.GuildCategory
-            )
+            .filter((x) => x.type != Discord.ChannelType.GuildCategory)
             .first();
 
           var owner = await guild.fetchOwner();
@@ -171,7 +168,9 @@ module.exports = {
             .filter(
               (x) =>
                 x.type == Discord.ChannelType.GuildText &&
-                x.permissionsFor(guild.members.me).has(Discord.PermissionFlagsBits.SendMessages) &&
+                x
+                  .permissionsFor(guild.members.me)
+                  .has(Discord.PermissionFlagsBits.SendMessages) &&
                 x?.nsfw == false
             )
             .first();

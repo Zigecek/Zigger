@@ -1,3 +1,4 @@
+const Discord = require("discord.js");
 const { bot } = require("../bot");
 const functions = require("../utils/functions");
 const error = require("./error");
@@ -34,7 +35,11 @@ const messageReactionAdd = async (react, user) => {
         let role = await reaction.message.guild.roles.fetch(e.roleIDs[index]);
         if (role) {
           if (member) {
-            if (reaction.message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
+            if (
+              reaction.message.guild.members.me.permissions.has(
+                Discord.PermissionFlagsBits.ManageRoles
+              )
+            ) {
               member.roles.add(role);
             }
           }
@@ -73,7 +78,11 @@ const messageReactionRemove = async (react, user) => {
           if (role) {
             if (member) {
               if (member.roles.cache.has(role.id)) {
-                if (reaction.message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
+                if (
+                  reaction.message.guild.members.me.permissions.has(
+                    Discord.PermissionFlagsBits.ManageRoles
+                  )
+                ) {
                   member.roles.remove(role);
                 }
               }

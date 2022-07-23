@@ -1,3 +1,4 @@
+const Discord = require("discord.js");
 const { bot } = require("../bot");
 const error = require("./error");
 const Guild = require("../models/guild");
@@ -50,7 +51,11 @@ const voiceStateUpdate = async (oldMember, newMember) => {
       var chan = oldMember.guild.channels.cache.get(tc2.channelID);
       if (chan) {
         if (chan.members.size < 1) {
-          if (chan.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
+          if (
+            chan.guild.members.me.permissions.has(
+              Discord.PermissionFlagsBits.ManageChannels
+            )
+          ) {
             chan.delete();
           }
           await Guild.updateOne(

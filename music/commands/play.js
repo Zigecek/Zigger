@@ -26,13 +26,19 @@ module.exports = {
       return;
     }
     if (
-      !voiceChannel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.ManageRoles) ||
-      !voiceChannel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.Speak) ||
+      !voiceChannel
+        .permissionsFor(message.guild.members.me)
+        .has(Discord.PermissionFlagsBits.ManageRoles) ||
+      !voiceChannel
+        .permissionsFor(message.guild.members.me)
+        .has(Discord.PermissionFlagsBits.Speak) ||
       !voiceChannel.joinable ||
       !voiceChannel.viewable
     ) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.musicBotHasNoPermission);
       }
@@ -41,7 +47,8 @@ module.exports = {
     if (message.guild.members.me.voice.channel) {
       if (Gres.musicBotPlaying) {
         if (
-          message.guild.members.me.voice.channel.id != message.member.voice.channel.id
+          message.guild.members.me.voice.channel.id !=
+          message.member.voice.channel.id
         ) {
           if (
             message.channel
@@ -56,7 +63,9 @@ module.exports = {
     }
     if (args.join(" ") == "" || args.join(" ") == " ") {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.musicNoQuery);
       }
@@ -72,7 +81,11 @@ module.exports = {
       }
     );
 
-    if (message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+    if (
+      message.channel
+        .permissionsFor(message.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    ) {
       message.channel.send(
         template(
           LMessages.musicSearching,
@@ -251,7 +264,9 @@ module.exports = {
         }
       } else {
         if (
-          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+          message.channel
+            .permissionsFor(message.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           message.channel.send(LMessages.musicWrongUrl);
         }
@@ -262,7 +277,9 @@ module.exports = {
       song = await createSongNonURL();
       if (song == null) {
         if (
-          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+          message.channel
+            .permissionsFor(message.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           message.channel.send(LMessages.musicNothingFound);
         }
@@ -327,9 +344,15 @@ module.exports = {
             );
         }
         if (
-          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+          message.channel
+            .permissionsFor(message.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
         ) {
-          if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)) {
+          if (
+            message.guild.members.me.permissions.has(
+              Discord.PermissionFlagsBits.EmbedLinks
+            )
+          ) {
             message.channel.send({ embeds: [Embed] });
           } else {
             if (mode == 2) {
@@ -402,7 +425,9 @@ module.exports = {
           }
         );
         if (
-          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+          message.channel
+            .permissionsFor(message.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           message.channel.send(
             template(
@@ -446,7 +471,9 @@ module.exports = {
 
         //music.queue.delete(message.guild.id);
         if (
-          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+          message.channel
+            .permissionsFor(message.guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           message.channel.send(LMessages.musicError);
         }

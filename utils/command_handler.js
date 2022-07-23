@@ -1,3 +1,4 @@
+const Discord = require("discord.js");
 const { bot } = require("../bot");
 const error = require("./error");
 const mongoose = require("mongoose");
@@ -8,7 +9,6 @@ const fs = require("fs");
 const template = require("string-placeholder");
 const LMessages = require(`../messages/`);
 const { followReply } = require("./functions");
-const Discord = require("discord.js");
 const functions = require("./functions");
 
 bot.commands = new Discord.Collection();
@@ -55,7 +55,10 @@ bot.commandsDev = new Discord.Collection();
 /////////// ///////////
 
 const messageCreate = async (message) => {
-  if (message.channel.type != Discord.ChannelType.DM && message.author != bot.user) {
+  if (
+    message.channel.type != Discord.ChannelType.DM &&
+    message.author != bot.user
+  ) {
     if (message.author != bot.user && message.author.bot == false) {
       let res = await Guild.exists({ guildID: message.guild.id });
 
@@ -124,7 +127,11 @@ const messageCreate = async (message) => {
 
         if (args == null || args == [] || args[0] == "") {
           if (mention) {
-            if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+            if (
+              message.guild.members.me.permissions.has(
+                Discord.PermissionFlagsBits.SendMessages
+              )
+            ) {
               message.channel.send(
                 template(
                   LMessages.mention,
@@ -189,7 +196,11 @@ const messageCreate = async (message) => {
               }
             );
           } else {
-            if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+            if (
+              int.guild.members.me.permissions.has(
+                Discord.PermissionFlagsBits.SendMessages
+              )
+            ) {
               int.channel.send(
                 template(
                   LMessages.cooldownMess,
@@ -266,7 +277,11 @@ const interactionCreate = async (int) => {
     }
 
     if (elapsedFloor < mapNextValue.cooldown) {
-      if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
+      if (
+        int.guild.members.me.permissions.has(
+          Discord.PermissionFlagsBits.SendMessages
+        )
+      ) {
         return followReply(int, {
           content: template(
             LMessages.cooldownMess,

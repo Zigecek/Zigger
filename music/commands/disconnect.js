@@ -1,7 +1,7 @@
-
+const Discord = require("discord.js");
 const music = require("../music");
 const LMessages = require(`../../messages/`);
-const voice = require('@discordjs/voice');
+const voice = require("@discordjs/voice");
 
 module.exports = {
   name: "disconnect",
@@ -14,7 +14,9 @@ module.exports = {
       message.member.voice.channel != message.guild.members.me.voice.channel
     ) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
+        message.channel
+          .permissionsFor(message.guild.members.me)
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.need.toBeInVoiceWithBot);
       }
@@ -32,7 +34,11 @@ module.exports = {
       }
     }
 
-    if (message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+    if (
+      message.channel
+        .permissionsFor(message.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    ) {
       message.channel.send(LMessages.music.otherCmds.disconnect);
     }
   },

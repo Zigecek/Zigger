@@ -1,4 +1,4 @@
-
+const Discord = require("discord.js");
 const Guild = require("../models/guild.js");
 const botFile = require("../bot");
 const error = require("../utils/error");
@@ -13,7 +13,12 @@ module.exports = {
   aliases: [],
   category: "moderation",
   async execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) return;
+    if (
+      !int.channel
+        .permissionsFor(int.guild.members.me)
+        .has(Discord.PermissionFlagsBits.SendMessages)
+    )
+      return;
     if (
       int.member.permissions.has(Discord.PermissionFlagsBits.Administrator) ||
       int.member.permissions.has(Discord.PermissionFlagsBits.ManageRoles)
