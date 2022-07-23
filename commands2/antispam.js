@@ -14,8 +14,8 @@ module.exports = {
   aliases: ["as"],
   category: "moderation",
   async execute(int, serverQueue, Gres) {
-    if (int.member.permissions.has("ADMINISTRATOR")) {
-      if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES"))
+    if (int.member.permissions.has(Discord.PermissionFlagsBits.Administrator)) {
+      if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages))
         return;
       if (int.options.getSubcommand() == "info") {
         const embed = new Discord.EmbedBuilder()
@@ -49,8 +49,8 @@ module.exports = {
               inline: true,
             }
           );
-        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
-          if (int.guild.members.me.permissions.has("EMBED_LINKS")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+          if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)) {
             followReply(int, { embeds: [embed] });
           } else {
             followReply(int, {
@@ -87,7 +87,7 @@ module.exports = {
             var roleZ = int.guild.members.me.roles.cache
               .filter((x) => x.managed == true)
               .first();
-            if (int.guild.members.me.permissions.has("MANAGE_ROLES")) {
+            if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
               role = await int.guild.roles.create({
                 data: {
                   name: "Muted",
@@ -146,7 +146,7 @@ module.exports = {
           var roleZ = int.guild.members.me.roles.cache
             .filter((x) => x.managed == true)
             .first();
-          if (int.guild.members.me.permissions.has("MANAGE_ROLES")) {
+          if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
             role = await int.guild.roles.create({
               data: {
                 name: "Muted",
@@ -202,7 +202,7 @@ module.exports = {
         }
         var role = await int.guild.roles.fetch(Gres.spamMuteRoleID);
         if (role) {
-          if (int.guild.members.me.permissions.has("MANAGE_ROLES")) {
+          if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
             role.delete("Antispam function disabling.");
           } else {
             followReply(int, { content: LMessages.botNoPermission });

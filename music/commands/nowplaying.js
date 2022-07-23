@@ -16,7 +16,7 @@ module.exports = {
     if (
       !message.channel
         .permissionsFor(message.guild.members.me)
-        .has("SEND_MESSAGES")
+        .has(Discord.PermissionFlagsBits.SendMessages)
     )
       return;
     if (serverQueue) {
@@ -67,9 +67,9 @@ module.exports = {
       if (
         message.channel
           .permissionsFor(message.guild.members.me)
-          .has("SEND_MESSAGES")
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
-        if (message.guild.members.me.permissions.has("EMBED_LINKS")) {
+        if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)) {
           message.channel.send({ embeds: [Embed] });
         } else {
           message.channel.send(
@@ -87,7 +87,7 @@ module.exports = {
       if (
         message.channel
           .permissionsFor(message.guild.members.me)
-          .has("SEND_MESSAGES")
+          .has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.musicNothingPlaying);
       }

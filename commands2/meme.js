@@ -10,8 +10,8 @@ module.exports = {
   cooldown: 2,
   category: "fun",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
-    if (!int.guild.members.me.permissions.has("EMBED_LINKS"))
+    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) return;
+    if (!int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks))
       return followReply(int, { content: LMessages.help.noPermission });
     meme(int);
   },

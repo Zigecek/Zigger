@@ -12,11 +12,11 @@ module.exports = {
   aliases: ["q"],
   category: "music",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
-    if (!int.guild.members.me.permissions.has("EMBED_LINKS"))
+    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) return;
+    if (!int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks))
       return followReply(int, { content: LMessages.help.noPermission });
     if (!serverQueue) {
-      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
         followReply(int, { content: LMessages.musicEmptyQueue });
       }
       return;
@@ -83,7 +83,7 @@ module.exports = {
             "\n" +
             LMessages.music.queue.anotherPageUse,
         });
-      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
         followReply(int, { embeds: [Embed] });
       }
     } else if (int.options.get("page").value == "clear") {
@@ -96,7 +96,7 @@ module.exports = {
       var number = Number(int.options.get("page").value);
 
       if (number > pages.length) {
-        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
           followReply(int, { content: LMessages.music.queue.invalidPage });
         }
         return;
@@ -128,11 +128,11 @@ module.exports = {
             "\n" +
             LMessages.music.queue.anotherPageUse,
         });
-      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
         followReply(int, { embeds: [Embed] });
       }
     } else {
-      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
         followReply(int, { content: LMessages.music.queue.invalidNumber });
       }
       return;

@@ -87,10 +87,10 @@ function callLoop() {
 
                   if (chan) {
                     if (
-                      chan.guild.members.me.permissions.has("SEND_MESSAGES")
+                      chan.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)
                     ) {
                       if (
-                        chan.guild.members.me.permissions.has("EMBED_LINKS")
+                        chan.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)
                       ) {
                         var message = await chan.send({
                           embeds: [streamEmbed],
@@ -159,7 +159,7 @@ function callLoop() {
                   );
                   if (channel) {
                     if (
-                      channel.guild.members.me.permissions.has("EMBED_LINKS")
+                      channel.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)
                     ) {
                       let message = channel.messages.cache.get(
                         e.streamMessageID
@@ -167,8 +167,8 @@ function callLoop() {
                       if (message) {
                         if (
                           message.guild.members.me.permissions.has([
-                            "MANAGE_MESSAGES",
-                            "SEND_MESSAGES",
+                            Discord.PermissionFlagsBits.ManageMessages,
+                            Discord.PermissionFlagsBits.SendMessages,
                           ])
                         ) {
                           message.edit({ embeds: [streamEmbed] });

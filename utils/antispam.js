@@ -35,7 +35,7 @@ const messageCreate = async (message) => {
   }
 
   if (Gres.spamIgnoreAdmins) {
-    if (message.member.permissions.has("ADMINISTRATOR")) {
+    if (message.member.permissions.has(Discord.PermissionFlagsBits.Administrator)) {
       return;
     }
   }
@@ -73,7 +73,7 @@ const messageCreate = async (message) => {
         delMesss(sp.lastMesss);
         sp.lastMesss = [];
 
-        if (message.guild.members.me.permissions.has("SEND_MESSAGES")) {
+        if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
           message.reply(LMessages.antispam.util.stopSpaming);
         }
 
@@ -101,7 +101,7 @@ const messageCreate = async (message) => {
           let mRole = message.guild.roles.cache.get(Gres.spamMuteRoleID);
           if (mRole) {
             if (!message.member.roles.cache.has(mRole.id)) {
-              if (message.guild.members.me.permissions.has("MANAGE_ROLES")) {
+              if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
                 message.member.roles.add(mRole);
               }
               setTimeout(async () => {
@@ -116,7 +116,7 @@ const messageCreate = async (message) => {
                 if (spam.length > 0) {
                   if (spam[0].mutes == sp.mutes) {
                     if (message.member.roles.cache.has(mRole.id)) {
-                      if (message.guild.members.me.permissions.has("MANAGE_ROLES")) {
+                      if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
                         message.member.roles.remove(mRole);
                       }
                     }
@@ -148,7 +148,7 @@ const messageCreate = async (message) => {
           let mRole = message.guild.roles.cache.get(Gres.spamMuteRoleID);
           if (mRole) {
             if (!message.member.roles.cache.has(mRole.id)) {
-              if (message.guild.members.me.permissions.has("MANAGE_ROLES")) {
+              if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
                 message.member.roles.add(mRole);
               }
               setTimeout(async () => {
@@ -163,7 +163,7 @@ const messageCreate = async (message) => {
                 if (spam.length > 0) {
                   if (spam[0].mutes == sp.mutes) {
                     if (message.member.roles.cache.has(mRole.id)) {
-                      if (message.guild.members.me.permissions.has("MANAGE_ROLES")) {
+                      if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
                         message.member.roles.remove(mRole);
                       }
                     }
@@ -195,7 +195,7 @@ const messageCreate = async (message) => {
             { $pull: { spam: spam[0] } }
           );
           if (message.member.kickable) {
-            if (message.guild.members.me.permissions.has("KICK_MEMBERS")) {
+            if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.KickMembers)) {
               message.member.kick("Spam.");
             }
           }
@@ -232,7 +232,7 @@ function delMesss(array) {
   array.forEach(async (e) => {
     var channel = await bot.channels.fetch(e[1]);
     try {
-      if (channel.guild.members.me.permissions.has("MANAGE_MESSAGES")) {
+      if (channel.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageMessages)) {
         await channel.messages.delete(e[0]);
       }
     } catch (error) {
@@ -256,7 +256,7 @@ const channelCreate = async (channel) => {
     let mRole = channel.guild.roles.cache.get(Gres.spamMuteRoleID);
 
     if (mRole) {
-      if (channel.guild.members.me.permissions.has("MANAGE_ROLES")) {
+      if (channel.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
         channel.createOverwrite(
           mRole,
           {
@@ -293,10 +293,10 @@ const channelUpdate = async (channel) => {
     if (mRole) {
       if (channel.permissionsFor(mRole)) {
         if (
-          channel.permissionsFor(mRole).has("SEND_MESSAGES") &&
+          channel.permissionsFor(mRole).has(Discord.PermissionFlagsBits.SendMessages) &&
           channel.permissionsFor(mRole).has("SEND_TTS_MESSAGES")
         ) {
-          if (channel.guild.members.me.permissions.has("MANAGE_ROLES")) {
+          if (channel.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
             channel.createOverwrite(
               mRole,
               {
@@ -367,8 +367,8 @@ const roleUpdate = async (role) => {
       return;
     }
     if (role.id == Gres.spamMuteRoleID) {
-      if (role.guild.members.me.permissions.has("MANAGE_ROLES")) {
-        role.permissions.remove("SEND_MESSAGES", "SEND_TTS_MESSAGES");
+      if (role.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
+        role.permissions.remove(Discord.PermissionFlagsBits.SendMessages, "SEND_TTS_MESSAGES");
       }
     }
   }

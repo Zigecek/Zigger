@@ -12,7 +12,7 @@ module.exports = {
   aliases: [],
   category: "counters",
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.members.members.me).has("SEND_MESSAGES"))
+    if (!message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages))
       return;
     let counterTypes = [
       "all",
@@ -36,16 +36,16 @@ module.exports = {
     ];
 
     if (
-      message.member.permissions.has("ADMINISTRATOR") ||
-      message.member.permissions.has("MANAGE_CHANNELS")
+      message.member.permissions.has(Discord.PermissionFlagsBits.Administrator) ||
+      message.member.permissions.has(Discord.PermissionFlagsBits.ManageChannels)
     ) {
-      if (!message.guild.members.members.me.permissions.has("MANAGE_CHANNELS")) {
+      if (!message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
         message.channel.send(LMessages.count.botHasNoPermission);
 
         return;
       }
 
-      const m = await message.guild.members.members.fetch();
+      const m = await message.guild.members.fetch();
       const r = await message.guild.roles.fetch();
       const c = await message.guild.channels.fetch();
       const em = await message.guild.emojis.fetch();
@@ -193,12 +193,12 @@ module.exports = {
 
       if (args[0] == "setup") {
         if (
-          !message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+          !message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           return;
         }
 
-        if (!message.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
+        if (!message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
           message.channel.send(LMessages.botNoPermission);
           return;
         }
@@ -249,12 +249,12 @@ module.exports = {
         }
       } else if (args[0] == "create") {
         if (
-          !message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+          !message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           return;
         }
 
-        if (!message.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
+        if (!message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
           message.channel.send(LMessages.botNoPermission);
           return;
         }
@@ -299,7 +299,7 @@ module.exports = {
                 .on("end", (collected) => {
                   if (smessage) {
                     if (smessage.deletable) {
-                      if (message.guild.members.me.permissions.has("MANAGE_MESSAGES")) {
+                      if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageMessages)) {
                         smessage.delete();
                       }
                     }
@@ -311,12 +311,12 @@ module.exports = {
         message.channel.send(LMessages.countCustomize);
       } else if (args[0] == "reset") {
         if (
-          !message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+          !message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           return;
         }
 
-        if (!message.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
+        if (!message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
           message.channel.send(LMessages.botNoPermission);
           return;
         }

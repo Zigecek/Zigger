@@ -10,7 +10,7 @@ module.exports = {
   aliases: [],
   category: "fun",
   async execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
+    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) return;
     if (
       int.options.get("anything")?.value ||
       int.options.get("anything")?.member

@@ -11,10 +11,10 @@ module.exports = {
   aliases: [],
   category: "moderation",
   async execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
+    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) return;
     if (
-      int.member.permissions.has("ADMINISTRATOR") ||
-      int.member.permissions.has("MANAGE_CHANNELS")
+      int.member.permissions.has(Discord.PermissionFlagsBits.Administrator) ||
+      int.member.permissions.has(Discord.PermissionFlagsBits.ManageChannels)
     ) {
       if (int.options.getSubcommandGroup() == "wel") {
         if (int.options.getSubcommand() == "info") {

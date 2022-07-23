@@ -15,7 +15,7 @@ module.exports = {
     let voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.need.toBeInVoice);
       }
@@ -35,7 +35,7 @@ module.exports = {
           if (
             message.channel
               .permissionsFor(message.guild.members.me)
-              .has("SEND_MESSAGES")
+              .has(Discord.PermissionFlagsBits.SendMessages)
           ) {
             message.channel.send(LMessages.music.otherCmds.alreadyInTheChannel);
           }
@@ -44,7 +44,7 @@ module.exports = {
           if (
             message.channel
               .permissionsFor(message.guild.members.me)
-              .has("SEND_MESSAGES")
+              .has(Discord.PermissionFlagsBits.SendMessages)
           ) {
             message.channel.send(
               template(
@@ -66,7 +66,7 @@ module.exports = {
         }
       } else {
         if (
-          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           message.channel.send(
             template(
@@ -86,7 +86,7 @@ module.exports = {
           }
         );
       }
-      if (voiceChannel.permissionsFor(message.guild.members.me).has("CONNECT")) {
+      if (voiceChannel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.ManageRoles)) {
         if (!serverQueue) {
           music.queue.set(voiceChannel.guild.id, {
             connection: null,
@@ -120,7 +120,7 @@ module.exports = {
           if (
             message.channel
               .permissionsFor(message.guild.members.me)
-              .has("SEND_MESSAGES")
+              .has(Discord.PermissionFlagsBits.SendMessages)
           ) {
             message.channel.send(LMessages.musicError);
           }
@@ -133,7 +133,7 @@ module.exports = {
       music.queue.delete(message.guild.id);
 
       if (
-        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.musicError);
       }

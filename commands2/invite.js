@@ -9,12 +9,12 @@ module.exports = {
   aliases: [],
   category: "other",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) return;
+    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) return;
     if (
       !int.member.voice.channel
         ?.permissionsFor(int.guild.members.me)
-        .has("CREATE_INSTANT_INVITE") ||
-      !int.guild.members.me.permissions.has("CREATE_INSTANT_INVITE")
+        .has(Discord.PermissionFlagsBits.CreateInstantInvite) ||
+      !int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.CreateInstantInvite)
     ) {
       followReply(int, { content: LMessages.botNoPermission });
 

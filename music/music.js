@@ -58,7 +58,11 @@ const play = async (guild, song, errored) => {
       let channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
       if (channel) {
         if (Gres.annouce == 1) {
-          if (guild.members.me.permissions.has("EMBED_LINKS")) {
+          if (
+            guild.members.me.permissions.has(
+              Discord.PermissionFlagsBits.EmbedLinks
+            )
+          ) {
             const Embed = new Discord.EmbedBuilder()
               .setColor(config.colors.red)
               .setTitle(LMessages.musicNowPlaying)
@@ -104,16 +108,17 @@ const play = async (guild, song, errored) => {
               ")`**",
           };
         }
+
         var controlRow = new Discord.ActionRowBuilder().setComponents([
           new Discord.ButtonBuilder()
             .setCustomId("pauseResume")
             .setLabel("⏯")
-            .setStyle("DANGER")
+            .setStyle(Discord.ButtonStyle.Danger)
             .setDisabled(false),
           new Discord.ButtonBuilder()
             .setCustomId("skip")
             .setLabel("⏭")
-            .setStyle("PRIMARY")
+            .setStyle(Discord.ButtonStyle.Primary)
             .setDisabled(false),
         ]);
         if (song.sDur != "LIVE!") {
@@ -146,7 +151,7 @@ const play = async (guild, song, errored) => {
                   if (
                     interact.channel
                       .permissionsFor(interact.guild.members.me)
-                      .has("SEND_MESSAGES")
+                      .has(Discord.PermissionFlagsBits.SendMessages)
                   ) {
                     followReply(interact, {
                       content: LMessages.music.skip.differentUUID,
@@ -185,7 +190,7 @@ const play = async (guild, song, errored) => {
                   if (
                     interact.channel
                       .permissionsFor(interact.guild.members.me)
-                      .has("SEND_MESSAGES")
+                      .has(Discord.PermissionFlagsBits.SendMessages)
                   ) {
                     followReply(interact, {
                       content: LMessages.music.otherCmds.resume,
@@ -217,7 +222,7 @@ const play = async (guild, song, errored) => {
                   if (
                     interact.channel
                       .permissionsFor(interact.guild.members.me)
-                      .has("SEND_MESSAGES")
+                      .has(Discord.PermissionFlagsBits.SendMessages)
                   ) {
                     followReply(interact, {
                       content: LMessages.music.otherCmds.pause,
@@ -231,7 +236,7 @@ const play = async (guild, song, errored) => {
                   if (
                     interact.channel
                       .permissionsFor(interact.guild.members.me)
-                      .has("SEND_MESSAGES")
+                      .has(Discord.PermissionFlagsBits.SendMessages)
                   ) {
                     followReply(interact, {
                       content: LMessages.music.skip.differentUUID,
@@ -249,7 +254,7 @@ const play = async (guild, song, errored) => {
                 if (
                   interact.channel
                     .permissionsFor(interact.guild.members.me)
-                    .has("SEND_MESSAGES")
+                    .has(Discord.PermissionFlagsBits.SendMessages)
                 ) {
                   followReply(interact, {
                     content: LMessages.music.skip.FSkipped,
@@ -385,7 +390,8 @@ const play = async (guild, song, errored) => {
         );
 
         if (
-          guild.members.me.voice.channel?.members.filter((x) => !x.user.bot).size > 0
+          guild.members.me.voice.channel?.members.filter((x) => !x.user.bot)
+            .size > 0
         ) {
           const uid = short.generate();
           await Guild.updateOne(
@@ -443,7 +449,11 @@ const play = async (guild, song, errored) => {
         let channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
 
         if (err.statusCode == 410) {
-          if (channel.permissionsFor(guild.members.me).has("SEND_MESSAGES")) {
+          if (
+            channel
+              .permissionsFor(guild.members.me)
+              .has(Discord.PermissionFlagsBits.SendMessages)
+          ) {
             channel.send(
               template(
                 LMessages.music.error,
@@ -465,7 +475,11 @@ const play = async (guild, song, errored) => {
         } else {
           console.error(err);
           error.sendError(err);
-          if (channel.permissionsFor(guild.members.me).has("SEND_MESSAGES")) {
+          if (
+            channel
+              .permissionsFor(guild.members.me)
+              .has(Discord.PermissionFlagsBits.SendMessages)
+          ) {
             channel.send(LMessages.musicError);
           }
           return;
@@ -497,7 +511,11 @@ const play = async (guild, song, errored) => {
           guildID: guild.id,
         });
         let channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
-        if (channel.permissionsFor(guild.members.me).has("SEND_MESSAGES")) {
+        if (
+          channel
+            .permissionsFor(guild.members.me)
+            .has(Discord.PermissionFlagsBits.SendMessages)
+        ) {
           channel.send(
             template(
               LMessages.music.error,

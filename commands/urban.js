@@ -11,10 +11,10 @@ module.exports = {
     if (
       !message.channel
         .permissionsFor(message.guild.members.me)
-        .has("SEND_MESSAGES")
+        .has(Discord.PermissionFlagsBits.SendMessages)
     )
       return;
-    if (!message.guild.members.me.permissions.has("EMBED_LINKS"))
+    if (!message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks))
       return message.channel.send(LMessages.help.noPermission);
     if (!args[0]) {
       return message.channel.send(LMessages.urban.enterQuery);
@@ -43,12 +43,12 @@ async function get(message, args) {
       new Discord.ButtonBuilder()
         .setCustomId("prev")
         .setLabel("←")
-        .setStyle("PRIMARY")
+        .setStyle(Discord.ButtonStyle.Primary)
         .setDisabled(ind == 0 ? true : false),
       new Discord.ButtonBuilder()
         .setCustomId("next")
         .setLabel("→")
-        .setStyle("PRIMARY")
+        .setStyle(Discord.ButtonStyle.Primary)
         .setDisabled(index == bod.length - 1 ? true : false),
     ]);
   }

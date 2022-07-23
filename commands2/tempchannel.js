@@ -13,9 +13,9 @@ module.exports = {
   async execute(int, serverQueue, Gres) {
     if (int.options.getSubcommand() == "create") {
       if (
-        !int.guild.members.me.permissions.has("MANAGE_CHANNELS") ||
-        !int.guild.members.me.permissions.has("MANAGE_ROLES") ||
-        !int.guild.members.me.permissions.has("VIEW_CHANNEL")
+        !int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels) ||
+        !int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles) ||
+        !int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ViewChannel)
       ) {
         followReply(int, { content: LMessages.botNoPermission });
         return;
@@ -65,12 +65,12 @@ module.exports = {
               permissionOverwrites: [
                 {
                   id: int.guild.members.me,
-                  allow: ["VIEW_CHANNEL"],
+                  allow: [Discord.PermissionFlagsBits.ViewChannel],
                   type: "member",
                 },
                 {
                   id: int.guild.roles.everyone,
-                  deny: ["VIEW_CHANNEL"],
+                  deny: [Discord.PermissionFlagsBits.ViewChannel],
                   type: "role",
                 },
               ],
@@ -117,17 +117,17 @@ module.exports = {
               permissionOverwrites: [
                 {
                   id: int.guild.roles.everyone,
-                  deny: ["VIEW_CHANNEL"],
+                  deny: [Discord.PermissionFlagsBits.ViewChannel],
                   type: "role",
                 },
                 {
                   id: int.member,
-                  allow: ["VIEW_CHANNEL"],
+                  allow: [Discord.PermissionFlagsBits.ViewChannel],
                   type: "member",
                 },
                 {
                   id: int.guild.members.me,
-                  allow: ["VIEW_CHANNEL"],
+                  allow: [Discord.PermissionFlagsBits.ViewChannel],
                   type: "member",
                 },
               ],
@@ -212,7 +212,7 @@ module.exports = {
         });
       }
     } else if (int.options.getSubcommand() == "add") {
-      if (!int.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
+      if (!int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
         followReply(int, { content: LMessages.botNoPermission });
         return;
       }
@@ -245,7 +245,7 @@ module.exports = {
               tc.invitedUserIDs.forEach((e) => {
                 let constr = {
                   id: e,
-                  allow: ["VIEW_CHANNEL", "CONNECT", "SPEAK", "STREAM"],
+                  allow: [Discord.PermissionFlagsBits.ViewChannel, Discord.PermissionFlagsBits.ManageRoles, Discord.PermissionFlagsBits.Speak, Discord.PermissionFlagsBits.Stream],
                 };
 
                 overwrites.push(constr);
@@ -273,7 +273,7 @@ module.exports = {
         return;
       }
     } else if (int.options.getSubcommand() == "remove") {
-      if (!int.guild.members.me.permissions.has("MANAGE_CHANNELS")) {
+      if (!int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
         followReply(int, { content: LMessagesq.botNoPermission });
         return;
       }

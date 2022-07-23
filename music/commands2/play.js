@@ -28,12 +28,12 @@ module.exports = {
       return;
     }
     if (
-      !voiceChannel.permissionsFor(int.guild.members.me).has("CONNECT") ||
-      !voiceChannel.permissionsFor(int.guild.members.me).has("SPEAK") ||
+      !voiceChannel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.ManageRoles) ||
+      !voiceChannel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.Speak) ||
       !voiceChannel.joinable ||
       !voiceChannel.viewable
     ) {
-      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
         followReply(int, { content: LMessages.musicBotHasNoPermission });
       }
       return;
@@ -41,7 +41,7 @@ module.exports = {
     if (int.guild.members.me.voice.channel) {
       if (Gres.musicBotPlaying) {
         if (int.guild.members.me.voice.channel.id != int.member.voice.channel.id) {
-          if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+          if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
             followReply(int, { content: LMessages.music.botIsPlaying });
           }
           return;
@@ -58,7 +58,7 @@ module.exports = {
       }
     );
 
-    if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+    if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
       followReply(int, {
         content: template(
           LMessages.musicSearching,
@@ -226,13 +226,13 @@ module.exports = {
           playlist = pl.items;
           playlistInfo = pl.info;
         } else {
-          if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+          if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
             followReply(int, { content: LMessages.musicWrongUrl });
           }
           return;
         }
       } else {
-        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
           followReply(int, { content: LMessages.musicWrongUrl });
         }
         return;
@@ -241,7 +241,7 @@ module.exports = {
       mode = 1;
       song = await createSongNonURL();
       if (song == null) {
-        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
           followReply(int, { content: LMessages.musicNothingFound });
         }
         return;
@@ -304,8 +304,8 @@ module.exports = {
                         }*/
             );
         }
-        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
-          if (int.guild.members.me.permissions.has("EMBED_LINKS")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
+          if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)) {
             followReply(int, { embeds: [Embed] });
           } else {
             if (mode == 2) {
@@ -381,7 +381,7 @@ module.exports = {
             musicBotQueueLoop: false,
           }
         );
-        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
           followReply(int, {
             content: template(
               LMessages.music.otherCmds.joined,
@@ -417,7 +417,7 @@ module.exports = {
           error.sendError(err);
         }
 
-        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
           followReply(int, { content: LMessages.musicError });
         }
         return;

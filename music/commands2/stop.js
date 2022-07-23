@@ -13,7 +13,7 @@ module.exports = {
       !int.member.voice.channel ||
       int.member.voice.channel != int.guild.members.me.voice.channel
     ) {
-      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
         followReply(int, { content: LMessages.music.need.toBeInVoiceWithBot });
       }
       return;
@@ -26,7 +26,7 @@ module.exports = {
         serverQueue.audioPlayer.unpause();
       }
     } else {
-      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
         followReply(int, { content: LMessages.musicNothingPlaying });
       }
     }
@@ -40,7 +40,7 @@ module.exports = {
       }
     );
 
-    if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+    if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
       followReply(int, { content: LMessages.music.otherCmds.stopped });
     }
   },

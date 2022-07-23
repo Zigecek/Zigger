@@ -30,11 +30,11 @@ const messageReactionAdd = async (react, user) => {
     if (e.messageID == reaction.message.id) {
       if (e.emojis.includes(emoji2)) {
         var index = e.emojis.indexOf(emoji2);
-        let member = await reaction.message.guild.members.members.fetch(user);
+        let member = await reaction.message.guild.members.fetch(user);
         let role = await reaction.message.guild.roles.fetch(e.roleIDs[index]);
         if (role) {
           if (member) {
-            if (reaction.message.guild.members.me.permissions.has("MANAGE_ROLES")) {
+            if (reaction.message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
               member.roles.add(role);
             }
           }
@@ -68,12 +68,12 @@ const messageReactionRemove = async (react, user) => {
           functions.addReactions(reaction.message, e.emojis);
         } else {
           var index = e.emojis.indexOf(emoji2);
-          let member = await reaction.message.guild.members.members.fetch(user);
+          let member = await reaction.message.guild.members.fetch(user);
           let role = await reaction.message.guild.roles.fetch(e.roleIDs[index]);
           if (role) {
             if (member) {
               if (member.roles.cache.has(role.id)) {
-                if (reaction.message.guild.members.me.permissions.has("MANAGE_ROLES")) {
+                if (reaction.message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
                   member.roles.remove(role);
                 }
               }

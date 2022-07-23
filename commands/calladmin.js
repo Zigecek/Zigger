@@ -14,7 +14,7 @@ module.exports = {
       number: 1,
     });
 
-    let admin = message.guild.members.members.cache.get(Gres.botAdminDiscordID[0]);
+    let admin = message.guild.members.cache.get(Gres.botAdminDiscordID[0]);
 
     if (admin) {
       admin.send(

@@ -91,11 +91,11 @@ const guildCreate = (guild) => {
     .filter(
       (x) =>
         x.type == Discord.ChannelType.GuildText &&
-        x.permissionsFor(guild.members.members.me).has("SEND_MESSAGES")
+        x.permissionsFor(guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
     )
     .first();
   if (channel) {
-    if (guild.members.me.permissions.has("SEND_MESSAGES")) {
+    if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
       channel.send(
         template(
           LMessages.botJoinsGuild,
@@ -154,7 +154,7 @@ const guildMemberAdd = async (member) => {
         Gres.autoRoleIDs.splice(Gres.autoRoleIDs.indexOf(rID), 1);
       }
     });
-    if (member.guild.members.members.me.permissions.has("MANAGE_ROLES")) {
+    if (member.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
       try {
         await member.roles.add(Gres.autoRoleIDs);
       } catch (error) {
@@ -166,7 +166,7 @@ const guildMemberAdd = async (member) => {
 
   if (Gres.welChannelID != null) {
     let welChannel = bot.channels.cache.get(Gres.welChannelID);
-    if (welChannel && member.guild.members.members.me.permissions.has("SEND_MESSAGES")) {
+    if (welChannel && member.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
       welChannel.send(
         template(
           LMessages.joinMessage,
@@ -189,7 +189,7 @@ const guildMemberRemove = async (member) => {
       return;
     } else {
       let byeChannel = bot.channels.cache.get(Gres.byeChannelID);
-      if (member.guild.members.members.me.permissions.has("SEND_MESSAGES")) {
+      if (member.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
         if (byeChannel) {
           byeChannel.send(
             template(

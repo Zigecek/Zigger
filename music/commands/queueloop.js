@@ -14,7 +14,7 @@ module.exports = {
       message.member.voice.channel != message.guild.members.me.voice.channel
     ) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.need.toBeInVoiceWithBot);
       }
@@ -22,7 +22,7 @@ module.exports = {
 
     if (!serverQueue) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.musicNothingPlaying);
       }
@@ -40,13 +40,13 @@ module.exports = {
 
     if (Gres.musicBotQueueLoop == true) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.loop.queue.disabled);
       }
     } else if (Gres.musicBotQueueLoop == false) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.loop.queue.enabled);
       }

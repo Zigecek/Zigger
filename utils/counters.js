@@ -22,7 +22,7 @@ function callLoop() {
       if (Gres.counters != null) {
         let counters = Gres.counters;
         if (counters.length != 0) {
-          if (!guild.members.me.permissions.has("MANAGE_CHANNELS")) {
+          if (!guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
             functions.shout(
               `${LMessages.count.noPermission} \n${LMessages.rejoinRecommended}`,
               guild
@@ -33,7 +33,7 @@ function callLoop() {
             Gres.countersCategoryChannelID
           );
           if (!category) {
-            if (guild.members.me.permissions.has("MANAGE_CHANNELS")) {
+            if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
               guild.channels
                 .create(LMessages.countCategoryName, {
                   type: "GUILD_CATEGORY",
@@ -51,11 +51,11 @@ function callLoop() {
                 });
             }
           }
-          if (guild.members.me.permissions.has("MANAGE_CHANNELS")) {
+          if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
             category.setPosition(0);
           }
 
-          var m = await guild.members.members.fetch({ withPresences: true });
+          var m = await guild.members.fetch({ withPresences: true });
           var r = guild.roles.cache;
           var c = await guild.channels.fetch();
           var em = await guild.emojis.fetch();
@@ -118,19 +118,29 @@ function callLoop() {
                 count = c.size;
                 break;
               case "text":
-                count = c.filter((x) => x.type == Discord.ChannelType.GuildText).size;
+                count = c.filter(
+                  (x) => x.type == Discord.ChannelType.GuildText
+                ).size;
                 break;
               case "voice":
-                count = c.filter((x) => x.type == Discord.ChannelType.GuildVoice).size;
+                count = c.filter(
+                  (x) => x.type == Discord.ChannelType.GuildVoice
+                ).size;
                 break;
               case "categories":
-                count = c.filter((x) => x.type == Discord.ChannelType.GuildCategory).size;
+                count = c.filter(
+                  (x) => x.type == Discord.ChannelType.GuildCategory
+                ).size;
                 break;
               case "announcement":
-                count = c.filter((x) => x.type == Discord.ChannelType.GuildNews).size;
+                count = c.filter(
+                  (x) => x.type == Discord.ChannelType.GuildNews
+                ).size;
                 break;
               case "stages":
-                count = c.filter((x) => x.type == Discord.ChannelType.GuildStageVoice).size;
+                count = c.filter(
+                  (x) => x.type == Discord.ChannelType.GuildStageVoice
+                ).size;
                 break;
               case "emojis":
                 count = em.size;
@@ -145,7 +155,7 @@ function callLoop() {
 
             if (channel) {
               if (channel.parent.id != category.id) {
-                if (guild.members.me.permissions.has("MANAGE_CHANNELS")) {
+                if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
                   channel.setParent(category);
                 }
               }
@@ -154,12 +164,12 @@ function callLoop() {
                 var name = channel.name;
                 name = name.replace(/\d+/, count.toString());
                 if (name != channel.name) {
-                  if (guild.members.me.permissions.has("MANAGE_CHANNELS")) {
+                  if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
                     channel.setName(name);
                   }
                 }
               } else {
-                if (guild.members.me.permissions.has("MANAGE_CHANNELS")) {
+                if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageChannels)) {
                   channel.setName(channel.name + " " + count);
                 }
               }

@@ -15,7 +15,7 @@ module.exports = {
   async execute(int, serverQueue, Gres) {
     let voiceChannel = int.member.voice.channel;
     if (!voiceChannel) {
-      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
         followReply(int, { content: LMessages.music.need.toBeInVoice });
       }
       return;
@@ -31,14 +31,14 @@ module.exports = {
     try {
       if (int.guild.members.me.voice.channel) {
         if (int.guild.members.me.voice.channel.id == voiceChannel.id) {
-          if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+          if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
             followReply(int, {
               content: LMessages.musicAlreadyInTheChannel,
             });
           }
         }
         if (int.guild.members.me.voice.channel.id != voiceChannel.id) {
-          if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+          if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
             followReply(int, {
               content: template(
                 LMessages.music.otherCmds.joined,
@@ -58,7 +58,7 @@ module.exports = {
           );
         }
       } else {
-        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
           followReply(int, {
             content: template(
               LMessages.music.otherCmds.joined,
@@ -77,7 +77,7 @@ module.exports = {
           }
         );
       }
-      if (voiceChannel.permissionsFor(int.guild.members.me).has("CONNECT")) {
+      if (voiceChannel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.ManageRoles)) {
         if (!serverQueue) {
           music.queue.set(voiceChannel.guild.id, {
             connection: null,
@@ -108,7 +108,7 @@ module.exports = {
             error.sendError(err);
           }
           music.queue.delete(int.guild.id);
-          if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+          if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
             followReply(int, { content: LMessages.musicError });
           }
           return;
@@ -119,7 +119,7 @@ module.exports = {
       error.sendError(err);
       music.queue.delete(int.guild.id);
 
-      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
         followReply(int, { content: LMessages.musicError });
       }
       return;

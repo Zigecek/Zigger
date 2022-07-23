@@ -23,7 +23,7 @@ module.exports = {
   aliases: ["rr"],
   category: "reactionroles",
   execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (!message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES"))
+    if (!message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages))
       return;
 
     var content = "";
@@ -42,10 +42,10 @@ module.exports = {
     };
 
     if (
-      message.member.permissions.has("ADMINISTRATOR") ||
-      message.member.permissions.has("MANAGE_ROLES")
+      message.member.permissions.has(Discord.PermissionFlagsBits.Administrator) ||
+      message.member.permissions.has(Discord.PermissionFlagsBits.ManageRoles)
     ) {
-      if (message.guild.members.me.permissions.has("MANAGE_ROLES")) {
+      if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.ManageRoles)) {
         if (args[0] == "create") {
           msgsToDel.push(message);
 

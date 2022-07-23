@@ -10,7 +10,7 @@ module.exports = {
   aliases: [],
   category: "settings",
   async execute(message, serverQueue, args, Gres, prefix, command, isFS) {
-    if (message.member.permissions.has("ADMINISTRATOR")) {
+    if (message.member.permissions.has(Discord.PermissionFlagsBits.Administrator)) {
       if (args[0] == "defaultvolume") {
         if (args[1]) {
           if (Number(args[1]) >= 1 && Number(args[1]) <= 100) {

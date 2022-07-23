@@ -9,9 +9,9 @@ module.exports = {
   cooldown: 3,
   category: "fun",
   execute(int, serverQueue, Gres) {
-    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES"))
+    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages))
       return;
-    if (!int.guild.members.me.permissions.has("EMBED_LINKS"))
+    if (!int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks))
       return followReply(int, { content: LMessages.help.noPermission });
     get(int);
   },
@@ -37,12 +37,12 @@ async function get(int) {
       new Discord.ButtonBuilder()
         .setCustomId("prev")
         .setLabel("←")
-        .setStyle("PRIMARY")
+        .setStyle(Discord.ButtonStyle.Primary)
         .setDisabled(ind == 0 ? true : false),
       new Discord.ButtonBuilder()
         .setCustomId("next")
         .setLabel("→")
-        .setStyle("PRIMARY")
+        .setStyle(Discord.ButtonStyle.Primary)
         .setDisabled(index == bod.length - 1 ? true : false),
     ]);
   }

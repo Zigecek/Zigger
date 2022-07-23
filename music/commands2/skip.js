@@ -13,14 +13,14 @@ module.exports = {
       !int.member.voice.channel ||
       int.member.voice.channel != int.guild.members.me.voice.channel
     ) {
-      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
         followReply(int, { content: LMessages.music.need.toBeInVoiceWithBot });
       }
       return;
     }
 
     if (!serverQueue) {
-      if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+      if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
         followReply(int, { content: LMessages.musicNothingPlaying });
       }
       return;
@@ -37,7 +37,7 @@ module.exports = {
           serverQueue.songs = [song1].concat(serverQueue.songs);
         }
       } else {
-        if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+        if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
           followReply(int, { content: LMessages.music.invalidNumber });
         }
         return;
@@ -51,7 +51,7 @@ module.exports = {
       }
     }
 
-    if (int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")) {
+    if (int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
       followReply(int, { content: LMessages.music.skip.FSkipped });
     }
   },

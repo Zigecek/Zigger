@@ -11,7 +11,7 @@ module.exports = {
   aliases: [],
   category: "settings",
   async execute(int, serverQueue, Gres) {
-    if (int.member.permissions.has("ADMINISTRATOR")) {
+    if (int.member.permissions.has(Discord.PermissionFlagsBits.Administrator)) {
       if (int.options.getSubcommand() == "info") {
         followReply(int, {
           content: template(

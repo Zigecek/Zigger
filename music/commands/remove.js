@@ -13,7 +13,7 @@ module.exports = {
       message.member.voice.channel != message.guild.members.me.voice.channel
     ) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.need.toBeInVoiceWithBot);
       }
@@ -22,7 +22,7 @@ module.exports = {
 
     if (!serverQueue) {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.musicNothingPlaying);
       }
@@ -35,7 +35,7 @@ module.exports = {
           if (
             message.channel
               .permissionsFor(message.guild.members.me)
-              .has("SEND_MESSAGES")
+              .has(Discord.PermissionFlagsBits.SendMessages)
           ) {
             message.channel.send(
               template(
@@ -50,7 +50,7 @@ module.exports = {
           if (
             message.channel
               .permissionsFor(message.guild.members.me)
-              .has("SEND_MESSAGES")
+              .has(Discord.PermissionFlagsBits.SendMessages)
           ) {
             message.channel.send(LMessages.music.remove.songNotExist);
           }
@@ -58,7 +58,7 @@ module.exports = {
         }
       } else {
         if (
-          message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+          message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
         ) {
           message.channel.send(LMessages.music.remove.invalidNumber);
         }
@@ -66,7 +66,7 @@ module.exports = {
       }
     } else {
       if (
-        message.channel.permissionsFor(message.guild.members.me).has("SEND_MESSAGES")
+        message.channel.permissionsFor(message.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         message.channel.send(LMessages.music.remove.use);
       }

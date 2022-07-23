@@ -124,7 +124,7 @@ const messageCreate = async (message) => {
 
         if (args == null || args == [] || args[0] == "") {
           if (mention) {
-            if (message.guild.members.me.permissions.has("SEND_MESSAGES")) {
+            if (message.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
               message.channel.send(
                 template(
                   LMessages.mention,
@@ -189,7 +189,7 @@ const messageCreate = async (message) => {
               }
             );
           } else {
-            if (int.guild.members.me.permissions.has("SEND_MESSAGES")) {
+            if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
               int.channel.send(
                 template(
                   LMessages.cooldownMess,
@@ -266,7 +266,7 @@ const interactionCreate = async (int) => {
     }
 
     if (elapsedFloor < mapNextValue.cooldown) {
-      if (int.guild.members.me.permissions.has("SEND_MESSAGES")) {
+      if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.SendMessages)) {
         return followReply(int, {
           content: template(
             LMessages.cooldownMess,

@@ -14,7 +14,7 @@ module.exports = {
     const end = "╡";
     const prog = "═";
     const curs = "🔘";
-    if (!int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES"))
+    if (!int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages))
       return;
     if (serverQueue) {
       const fourPer = serverQueue.songs[0].sDur / 25;
@@ -62,9 +62,9 @@ module.exports = {
         ]);
       }
       if (
-        int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")
+        int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
       ) {
-        if (int.guild.members.me.permissions.has("EMBED_LINKS")) {
+        if (int.guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)) {
           followReply(int, { embeds: [Embed] });
         } else {
           int.channel.send(
@@ -80,7 +80,7 @@ module.exports = {
       }
     } else {
       if (
-        int.channel.permissionsFor(int.guild.members.me).has("SEND_MESSAGES")
+        int.channel.permissionsFor(int.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)
       ) {
         followReply(int, { content: LMessages.musicNothingPlaying });
       }

