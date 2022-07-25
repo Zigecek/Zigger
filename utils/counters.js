@@ -85,6 +85,8 @@ function callLoop() {
             const channel = c.get(e.channelID);
             var count = 0;
 
+            console.log(e.type);
+
             switch (e.type) {
               case "all":
                 count = guild.members.memberCount;
@@ -165,6 +167,8 @@ function callLoop() {
                 count = guild.premiumTier;
                 break;
             }
+
+            console.log(count);
 
             if (channel) {
               if (channel.parent.id != category.id) {
