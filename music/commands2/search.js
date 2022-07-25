@@ -177,7 +177,7 @@ module.exports = {
               interact.component.setStyle(Discord.ButtonStyle.Danger);
               interact.message.components.forEach((row) => {
                 row.components.forEach((butt) => {
-                  butt.setDisabled();
+                  Discord.ButtonBuilder.from(butt).setDisabled();
                 });
               });
 

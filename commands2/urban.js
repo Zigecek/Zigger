@@ -108,7 +108,7 @@ async function get(int) {
         if (msg) {
           msg.components.forEach((r) => {
             r.components.forEach((b) => {
-              b.setDisabled(true);
+              Discord.ButtonBuilder.from(b).setDisabled(true);
             });
           });
         }

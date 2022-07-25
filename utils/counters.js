@@ -89,7 +89,7 @@ function callLoop() {
 
             switch (e.type) {
               case "all":
-                count = guild.members.memberCount;
+                count = guild.memberCount;
                 break;
               case "bots":
                 count = m.filter((x) => x.user.bot).size;
