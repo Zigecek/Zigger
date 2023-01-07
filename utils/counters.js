@@ -34,9 +34,15 @@ function callLoop() {
             );
             return;
           }
-          let category = await bot.channels.fetch(
-            Gres.countersCategoryChannelID
-          );
+          let category;
+          try {
+            category = await bot.channels.fetch(
+              Gres.countersCategoryChannelID
+            );
+          } catch (error) {
+            category = null;
+          }
+          
           if (!category) {
             if (
               guild.members.me.permissions.has(

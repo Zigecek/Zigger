@@ -38,6 +38,9 @@ const ready = async () => {
 
 const play = async (guild, song, errored) => {
   let serverQueue = queue.get(guild.id);
+  if (!serverQueue) {
+    stopET(guild.id);
+  }
   if (!song) {
     await Guild.updateOne(
       {
