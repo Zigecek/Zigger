@@ -5,3 +5,4 @@ git fetch
 git pull
 npm run install
 npm run reload
+chmod +x ~/zigger/*.sh

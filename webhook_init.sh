@@ -6,8 +6,8 @@ cd webhook
 touch webhook.yaml
 echo "
 - id: zigger
-  execute-command: /home/$USER/zigger/git_pull.sh
-  command-working-directory: /home/$USER/zigger
+  execute-command: $HOME/zigger/git_pull.sh
+  command-working-directory: $HOME/zigger
   response-message: \"Zigger webhook executed successfully\"
 " >> webhook.yaml
 touch /etc/systemd/system/webhook.service
@@ -21,7 +21,7 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=always
 User=$USER
-ExecStart=/usr/bin/webhook --hooks /home/$USER/webhook/webhook.yaml --port 9000 -verbose
+ExecStart=/usr/bin/webhook --hooks $HOME/webhook/webhook.yaml --port 9000 -verbose
 
 [Install]
 WantedBy=multi-user.target
@@ -29,3 +29,4 @@ WantedBy=multi-user.target
 systemctl daemon-reload
 systemctl enable webhook
 systemctl start webhook
+system status webhook
