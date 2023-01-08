@@ -29,4 +29,5 @@ WantedBy=multi-user.target
 systemctl daemon-reload
 systemctl enable webhook
 systemctl start webhook
-system status webhook
+systemctl restart webhook
+systemctl status webhook
