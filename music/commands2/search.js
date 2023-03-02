@@ -175,9 +175,6 @@ module.exports = {
             .on("collect", (interact) => {
               if (!interact.isButton()) return;
               var id = Number(interact.component.customId);
-              console.log(id);
-              console.log(interact);
-              console.log(interact.component);
               Discord.ButtonBuilder.from(interact.component).setStyle(Discord.ButtonStyle.Danger);
               interact.message.components.forEach((row) => {
                 row.components.forEach((butt) => {
