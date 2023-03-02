@@ -115,7 +115,7 @@ async function followReply(interaction, content) {
       : await interaction.reply(content);
     return message;
   } catch (error) {
-    console.error(error);
+    console.error(error + " - " + interaction.replied ? "followUp" : "reply");
     return undefined;
   }
 }

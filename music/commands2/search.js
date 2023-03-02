@@ -75,6 +75,7 @@ module.exports = {
       return;
     }
 
+    console.log("fafas");
     followReply(int, {
       content: template(
         LMessages.musicSearching,
@@ -174,7 +175,10 @@ module.exports = {
             .on("collect", (interact) => {
               if (!interact.isButton()) return;
               var id = Number(interact.component.customId);
-              interact.component.setStyle(Discord.ButtonStyle.Danger);
+              console.log(id);
+              console.log(interact);
+              console.log(interact.component);
+              Discord.ButtonBuilder.from(interact.component).setStyle(Discord.ButtonStyle.Danger);
               interact.message.components.forEach((row) => {
                 row.components.forEach((butt) => {
                   Discord.ButtonBuilder.from(butt).setDisabled();

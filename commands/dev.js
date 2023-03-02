@@ -273,19 +273,6 @@ module.exports = {
         message.channel.send("**:x: Failed.**");
       }
     } else if (args[0] == "test") {
-      var gGuilds = await Guild.find({});
-      gGuilds.forEach(async (Gres) => {
-        if (Gres.autoRoleID != null) {
-          await Guild.updateOne(
-            {
-              guildID: Gres.guildID,
-            },
-            {
-              $push: { autoRoleIDs: Gres.autoRoleID },
-            }
-          );
-        }
-      });
     }
   },
 };

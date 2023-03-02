@@ -19,14 +19,6 @@ const configSchema = mongoose.Schema({
     default: null,
     type: Number
   },
-  SteambotLogged: {
-    default: null,
-    type: Boolean
-  },
-  SteambotWhoWhenPlaying: {
-    default: null,
-    type: String
-  }
 });
 
 module.exports = mongoose.model("Config", configSchema, "config");

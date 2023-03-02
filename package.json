@@ -1,8 +1,8 @@
 {
   "version": "1.44.7",
   "scripts": {
-    "install": "npm i opusscript@latest node-opus@latest axios@latest body-parser@latest discord.js@latest dotenv@latest emoji-regex@latest express@latest fs@latest ffmpeg-stream@latest is-url@latest moment@latest mongoose@latest ms-to-timecode@latest sourcebin@latest string-placeholder@latest ytdl-core@latest ytpl@latest ytsr@latest ent@latest request@latest sec2human@latest m3u8stream@latest child_process@latest axios@latest @discordjs/voice@latest tweetnacl@latest topgg-autoposter@latest systeminformation@latest short-uuid@latest discord-api-types@latest @discordjs/rest@latest cross-fetch@latest hash-wasm@latest zlib-sync@latest erlpack@latest bufferutil@latest utf-8-validate@latest",
-    "uninstall": "npm uni opusscript node-opus uninstall axios body-parser discord.js dotenv emoji-regex express fs ffmpeg-stream is-url moment mongoose ms-to-timecode sourcebin string-placeholder ytdl-core ytpl ytsr ent request sec2human m3u8stream child_process topgg-autoposter systeminformation @discordjs/voice axios tweetnacl short-uuid discord-api-types @discordjs/rest cross-fetch hash-wasm zlib-sync erlpack bufferutil utf-8-validate",
+    "install": "npm i opusscript@latest node-opus@latest body-parser@latest discord.js@latest dotenv@latest express@latest fs@latest ffmpeg-stream@latest is-url@latest moment@latest mongoose@latest sourcebin@latest string-placeholder@latest ytdl-core@latest ytpl@latest ytsr@latest ent@latest sec2human@latest m3u8stream@latest child_process@latest @discordjs/voice@latest tweetnacl@latest topgg-autoposter@latest systeminformation@latest short-uuid@latest discord-api-types@latest @discordjs/rest@latest zlib-sync@latest erlpack@latest",
+    "uninstall": "npm uni opusscript node-opus body-parser discord.js dotenv express fs ffmpeg-stream is-url moment mongoose sourcebin string-placeholder ytdl-core ytpl ytsr ent sec2human m3u8stream child_process @discordjs/voice tweetnacl topgg-autoposter systeminformation short-uuid discord-api-types @discordjs/rest zlib-sync erlpack",
     "start": "pm2 start ./bot.js --time -- trace-warnings",
     "start_local": "node ./bot.js",
     "stop": "pm2 stop bot",
@@ -10,7 +10,37 @@
     "reload": "pm2 reload bot",
     "update": "./git_pull.sh"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@discordjs/rest": "^1.5.0",
+    "@discordjs/voice": "^0.14.0",
+    "body-parser": "^1.20.2",
+    "child_process": "^1.0.2",
+    "discord-api-types": "^0.37.35",
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
+    "ent": "^2.2.0",
+    "erlpack": "^0.1.4",
+    "express": "^4.18.2",
+    "ffmpeg-stream": "^0.7.0",
+    "fs": "^0.0.1-security",
+    "is-url": "^1.2.4",
+    "m3u8stream": "^0.8.6",
+    "moment": "^2.29.4",
+    "mongoose": "^7.0.0",
+    "node-opus": "^0.3.3",
+    "opusscript": "^0.0.8",
+    "sec2human": "^1.0.4",
+    "short-uuid": "^4.2.2",
+    "sourcebin": "^5.0.0",
+    "string-placeholder": "^1.0.2",
+    "systeminformation": "^5.17.12",
+    "topgg-autoposter": "^2.0.1",
+    "tweetnacl": "^1.0.3",
+    "ytdl-core": "^4.11.2",
+    "ytpl": "^2.3.0",
+    "ytsr": "^3.8.0",
+    "zlib-sync": "^0.1.8"
+  },
   "eslintConfig": {
     "parserOptions": {
       "ecmaVersion": 2021

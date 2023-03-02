@@ -2,13 +2,7 @@ module.exports = {
   /// KATEGORIE ///
   /**
    * music
-   * fun
-   * moderation
    * settings
-   * twitch
-   * reactionroles
-   * counters
-   * tempchannel
    * other
    */
 
@@ -33,80 +27,13 @@ module.exports = {
     "**<:tickNo:870239550163779604> I have not permissions to do this.**",
 
   adminNotified: "**<:tickYes:870238031603462154> Admin has been called.**",
-
   nsfwBlocked: "**<:tickNo:870239550163779604> NSFW isn't allowed !!!**",
-
-  /// CHANNELS ///
-  channels: {
-    notFoundOrNoMention:
-      "**<:tickNo:870239550163779604> Channel not found, use `#` to mention.**",
-
-    // - WEL
-    wel: {
-      notSet: "**:thumbsdown: Welcome channel isn't set.**",
-      whatIs: "**:label: Welcome channel is:** %log%", // %log% for channel mention
-      set: "**<:tickYes:870238031603462154> Welcome channel has been set to:** %log%", // %log% for channel mention
-      use: "**:scroll: Use:** \n```\n%prefix%channel wel set <#kanál>\n```",
-    },
-
-    // - BYE
-    bye: {
-      notSet: "**:thumbsdown: Bye channel isn't set.**",
-      whatIs: "**:label: Bye channel is:** %bye%", // %bye% for channel mention
-      set: "**<:tickYes:870238031603462154> Bye channel has been set to:** %bye%", // %bye% for channel mention
-      use: "**:scroll: Use:** \n```\n%prefix%channel bye set <#kanál>\n```",
-    },
-  },
-
-  /// FUN ///
-  fun: {
-    // - HOWGAY
-    howGay: {
-      anything: "%thing% is **%percent%%** gay!", // %thing% for thing mention, %percent% for percent value
-      member: "%member% is **%percent%%** gay!", //%precent% for percent value, %member% for member mention
-      author: "%mention%, you are **%percent%%** gay!", // %percent% for percent value
-    },
-
-    // - PENIS
-    penis: {
-      anything: "%thing% has **%lenght%cm** long dick!", // %thing% for thing mention, %lenght% for lenght of penis
-      member: "%member% has **%lenght%cm** long dick!", // %lenght% for lenght of penis, %member% for member mention
-      author: "%mention%, you have **%lenght%cm** long dick!", // %lenght% for lenght of penis
-    },
-  },
 
   /// PREFIX ///
   prefix: {
     info: "**Current prefix for this guild is: `%prefix%`**", // %guild% for guild name, %prefix% for prefix
     use: "**Use: `prefix set <prefix>`**",
     set: "**<:tickYes:870238031603462154> Prefix for guild `%guild%` has been set to** `%prefix%`", // %guild% for guild name, %prefix% for prefix
-  },
-
-  /// TWITCH ///
-  twitch: {
-    userNotSet: "**:warning: Twitch user isn't set up.**",
-    userSet:
-      "**<:tickYes:870238031603462154> Twitch user has been set to:** `%user%`", // %user% for user
-    userNotFound: "**<:tickNo:870239550163779604> Twitch user not found.**",
-    userUse: "**Usage:** `twitch user set <twitch jméno>`",
-
-    channelNotSet: "**:warning: Twitch notify channel isn't set up.**",
-    channelInfo:
-      "**<:tickYes:870238031603462154> Twitch notify channel is:** %channel%", // %channel% for channel mention
-    channelSet:
-      "**<:tickYes:870238031603462154> Twitch notify channel has been set to:** %channel%", // %channel% for channel mention
-    channelUse: "**Use:** `twitch notifychannel set <#channel>`",
-
-    turnOn: "**<:tickYes:870238031603462154> Notification on.**",
-    isAlreadyOn:
-      "**<:tickYes:870238031603462154> Notification is already on.**",
-
-    turnOff: "**<:tickYes:870238031603462154> Notification off.**",
-    isAlreadyOff:
-      "**<:tickYes:870238031603462154> Notification is already off.**",
-
-    userProbablyDeletedAcc:
-      "**<:tickNo:870239550163779604> User has probably deleted his account.**",
   },
 
   /// HELP ///
@@ -119,15 +46,9 @@ module.exports = {
       "**<:tickNo:870239550163779604> This command doesn't exist.**",
 
     categories: {
-      twitch: {
-        label: "Twitch",
-        commands:
-          "```\n• twitch on/off\n• twitch user\n• twitch user set [twitch user]\n• twitch notifychannel\n• twitch notifychannel set [#channel]\n```",
-      },
-
       other: {
         label: "Other",
-        commands: "```\n• ping\n• clear [quantity]\n• invite\n• calladmin\n```",
+        commands: "```\n• ping\n• calladmin\n```",
       },
 
       music: {
@@ -136,38 +57,10 @@ module.exports = {
           "```\n• play [query/url]\n• search [query]\n• stop\n• volume\n• volume [volume]\n• queue\n• queue [page]\n• skip\n• forceskip\n• nowplaying\n• pause\n• resume\n• loop\n• queueloop\n• shuffle\n• join\n• leave\n• clearqueue\n• remove [index]\n• defaultvolume\n• defaultvolume [volume]\n```",
       },
 
-      fun: {
-        label: "Fun",
-        commands: "```\n• penis \n• howgay\n• meme\n• urban\n```",
-      },
-
       settings: {
         label: "Settings",
         commands:
           "```\n• prefix\n• prefix set\n• settings annouce\n• settings annouce on/off/short\n• settings defaultvolume\n• settings defaultvolume [volume]\n• settings blacklist [#channel]\n```",
-      },
-
-      counters: {
-        label: "Counters",
-        commands:
-          "```\n• counters setup\n• counters create\n• counters customize\n• counters reset\n```",
-      },
-
-      reactionroles: {
-        label: "ReactionRoles",
-        commands: "```\n• reactionroles create\n```",
-      },
-
-      tempchannel: {
-        label: "Temp Channels",
-        commands:
-          "```\n• tempchannel create\n• tempchannel add\n• tempchannel remove \n```",
-      },
-
-      moderation: {
-        label: "Moderation",
-        commands:
-          "```\n• autorole\n• autorole add [@role]\n• autorole on/off\n• channel wel/bye\n• channel wel/bye set [#channel]\n• antispam\n• antispam enable\n• antispam disable\n• antispam reset [@member]\n• antispam delay\n• antispam delay [miliseconds]\n• antispam ignoreadmins\n• antispam ignoreadmins true/false\n```",
       },
     },
 
@@ -398,28 +291,6 @@ module.exports = {
         exception: "",
         category: "```\nmusic\n```",
       },
-      autorole: {
-        aliases: "",
-        permissions: "```\nADMINISTRATOR\nor MANAGE_ROLES\n```",
-        usage: "```\nautorole\nautorole add [@role]\nautorole on/off\n```",
-        params: "",
-        description:
-          "Autorole - the role that is automatically assigned to every new user in the server. \nShows the current autoroles. \n Adds the autorole. \nEnables or disables role adding.",
-        required: "",
-        exception: "",
-        category: "```\nmoderation\n```",
-      },
-      channel: {
-        aliases: "",
-        permissions: "```\nADMINISTRATOR\nor MANAGE_CHANNELS\n```",
-        usage: "```\nchannel wel/bye\nchannel wel/bye set [#kanál]\n```",
-        params: "```\nwel/bye - Determines the channel.\n```",
-        description:
-          "Shows the current wel/bye channel.\nSets new wel/bye channel.\n\n**Channel types:** \n`wel` - welcome channel, where new members are announced\n`bye` - bye channel, where is announced abandonment of members",
-        required: "",
-        exception: "",
-        category: "```\nmoderation\n```",
-      },
       ping: {
         aliases: "",
         permissions: "",
@@ -429,18 +300,6 @@ module.exports = {
         required: "",
         exception: "",
         category: "```\nother\n```",
-      },
-      twitch: {
-        aliases: "",
-        permissions: "```\nADMINISTRATOR\n```",
-        usage:
-          "```\ntwitch user\ntwitch user set [twitch uživatel]\ntwitch notifichannel/nc\ntwitch notifychannel/nc set [#channel]\ntwitch on/off\n```",
-        params: "```\n\n```",
-        description:
-          "Shows current twitch user for announcing his streams.\nSet new twitch user for announcing his streams.\nShows current channel, that is used to send the announcements to streams.\nSets new channel, that is used to send the announcements to streams.\nEnables or disables stream announcements.",
-        required: "",
-        exception: "",
-        category: "```\ntwitch\n```",
       },
       help: {
         aliases: "",
@@ -463,54 +322,6 @@ module.exports = {
         required: "",
         exception: "",
         category: "```\nsettings\n```",
-      },
-      penis: {
-        aliases: "",
-        permissions: "",
-        usage: "```\npenis\npenis [@member]\npenis [anything]\n```",
-        params:
-          "```\n[@member] - The mention of any member from the server.\n[anything] - Anything.\n```",
-        description:
-          'Mentions the author and generates random number (1 - 35) for "lenght" of his pen*s.\nGenerates random number (1 - 35) for "lenght" of mentioned member\'s pen*s.\n\nEverything is meant only for fun without the purpose of offending anyone or anything.',
-        required: "",
-        exception: "",
-        category: "```\nfun\n```",
-      },
-      howgay: {
-        aliases: "```\nhg\n```",
-        permissions: "",
-        usage: "```\nhowgay\nhowgay [@member]\nhowgay [anything]\n```",
-        params:
-          "```\n[@member] - The mention of any member from the server.\n[cokoliv] - Anything.\n```",
-        description:
-          'Mentions the author and generates random percents for "how much is gay".\nGenerates random percents for "how much is gay" mentioned member or thing.\n\nEverything is meant only for fun without the purpose of offending anyone or anything.',
-        required: "",
-        exception: "",
-        category: "```\nfun\n```",
-      },
-      hg: {
-        aliases: "```\nhowgay\n```",
-        permissions: "",
-        usage: "```\nhg\nhg [@member]\nhg [anything]\n```",
-        params:
-          "```\n[@member] - The mention of any member from the server.\n[anything] - Anything.\n```",
-        description:
-          'Mentions the author and generates random percents for "how much is gay".\nGenerates random percents for "how much is gay" mentioned member or thing.\n\nEverything is meant only for fun without the purpose of offending anyone or anything.',
-        required: "",
-        exception: "",
-        category: "```\nfun\n```",
-      },
-      counters: {
-        aliases: "",
-        permissions: "```\nADMINISTRATOR\nMANAGE_CHANNELS\n```",
-        usage:
-          "```\ncounters setup\ncounters create\ncounters reset\ncounters customize\n```",
-        params: "",
-        description:
-          "Makes required setup of counters (category, 3 basic counters). \nCreated new counter if the setup is maked. \nRemoves all channels and categories associated with counters.",
-        required: "",
-        exception: "",
-        category: "```\ncounters\n```",
       },
       clear: {
         aliases: "```\nc\n```",
@@ -555,72 +366,6 @@ module.exports = {
         required: "",
         exception: "",
         category: "```\ndev\n```",
-      },
-      meme: {
-        aliases: "",
-        permissions: "",
-        usage: "```\nmeme\n```",
-        params: "",
-        description: "Sends random meme picture from internet.",
-        required: "",
-        exception: "",
-        category: "```\nfun\n```",
-      },
-      rr: {
-        aliases: "```\nreactionroles\n```",
-        permissions: "```\nADMINISTRATOR\n```",
-        usage: "```\nreactionroles create\n```",
-        params: "",
-        description:
-          "Starts a program to create a reaction role message for adding roles. The bot automatically adds a role to whoever react to the created message. At the same time, removing the reaction removes the role.",
-        required: "",
-        exception: "",
-        category: "```\nmoderation\n```",
-      },
-      reactionroles: {
-        aliases: "```\nrr\n```",
-        permissions: "```\nADMINISTRATOR\n```",
-        usage: "```\nrr create\n```",
-        params: "",
-        description:
-          "Starts a program to create a reaction role message for adding roles. The bot automatically adds a role to whoever react to the created message. At the same time, removing the reaction removes the role.",
-        required: "",
-        exception: "",
-        category: "```\nmoderation\n```",
-      },
-      tc: {
-        aliases: "```\ntempchannel\ntempchan\n```",
-        permissions: "",
-        usage: "```\ntc create\ntc add\ntc remove\n```",
-        params: "",
-        description:
-          "Creates private channel (you will find it on the bottom of all channels). \nGrants permissions to see the channel and join to the member / members. \nRemoves permissions to see the channel and join to the member / members.",
-        required: "",
-        exception: "",
-        category: "```\ntempchannel\n```",
-      },
-      tempchan: {
-        aliases: "```\ntempchannel\ntc\n```",
-        permissions: "",
-        usage: "```\ntempchan create\ntempchan add\ntempchan remove\n```",
-        params: "",
-        description:
-          "Creates private channel (you will find it on the bottom of all channels). \nGrants permissions to see the channel and join to the member / members. \nRemoves permissions to see the channel and join to the member / members.",
-        required: "",
-        exception: "",
-        category: "```\ntempchannel\n```",
-      },
-      tempchannel: {
-        aliases: "```\ntc\ntempchan\n```",
-        permissions: "",
-        usage:
-          "```\ntempchannel create\ntempchannel add\ntempchannel remove\n```",
-        params: "",
-        description:
-          "Creates private channel (you will find it on the bottom of all channels). \nGrants permissions to see the channel and join to the member / members. \nRemoves permissions to see the channel and join to the member / members.",
-        required: "",
-        exception: "",
-        category: "```\ntempchannel\n```",
       },
       queueloop: {
         aliases: "```\nloopqueue\n```",
@@ -685,30 +430,6 @@ module.exports = {
         required: "",
         exception: "",
         category: "```\nother\n```",
-      },
-      antispam: {
-        aliases: "```\nas\n```",
-        permissions: "```\nADMINISTRATOR\n```",
-        usage:
-          "```\nantispam enable\nantispam disable\nantispam delay\nantispam delay [ms]\nantispam reset [@member]\nantispam ignoreadmins\nantispam ignoreadmins [true/false]\n```",
-        params: "[ms] - Delay in milliseconds. (1 second = 1000 milliseconds)",
-        description:
-          "Enables antispam protection.\nDisables antispam protection.\nTells the current delay.\nSets the delay.\nResets records for certain member, is able to mention multiple members or everyone.\n-\nEnables or disables admin ignoring.\n\nDelay: Delay between sent messages, what the bot will treat as spam, simplified, it is speed of sending messages (the smaller the number, the higher the speed).",
-        required: "",
-        exception: "",
-        category: "```\nmoderation\n```",
-      },
-      as: {
-        aliases: "```\nantispam\n```",
-        permissions: "```\nADMINISTRATOR\n```",
-        usage:
-          "```\nas enable\nas disable\nas delay\nas delay [ms]\nas reset [@member]\nas ignoreadmins\nas ignoreadmins [true/false]\n```",
-        params: "[ms] - Delay in milliseconds. (1 second = 1000 milliseconds)",
-        description:
-          "Enables antispam protection.\nDisables antispam protection.\nTells the current delay.\nSets the delay.\nResets records for certain member, is able to mention multiple members or everyone.\n-\nEnables or disables admin ignoring.\n\nDelay: Delay between sent messages, what the bot will treat as spam, simplified, it is speed of sending messages (the smaller the number, the higher the speed).",
-        required: "",
-        exception: "",
-        category: "```\nmoderation\n```",
       },
       clearqueue: {
         aliases: "```\nqueueclear\n```",
@@ -853,103 +574,6 @@ module.exports = {
     },
   },
 
-  /// AUTOROLE ///
-  autorole: {
-    enabled:
-      "**<:tickYes:870238031603462154> Autorole adding has been enabled.**",
-    disabled: "**:warning: Autorole adding has been disabled.**",
-    enabledButNotSet:
-      "*:warning: No one is set. Use `autorole add [@role]` to set the autorole.*",
-  },
-  autoroleInfo: "**:thumbsup: Current autoroles are:** %roles% ", // %role% for roles list
-  autoroleSetDoesntExist:
-    "<:tickNo:870239550163779604> The autorole no longer exists.",
-  autoroleNotSet: "**:thumbsdown: Autorole aren't set.**",
-  autoroleUse: "**Use:** `autorole add <role>`",
-  autoroleAdd:
-    "**:thumbsup: These roles have been added to the autoroles:** %roles%", // %role% for role mention
-  autoroleRemove:
-    "**:thumbsup: These roles have been removed from the autoroles:** %roles%", // %role% for role mention
-  autoroleNotFoundOrNoMention:
-    "**<:tickNo:870239550163779604> Role not found, use `@` to mention.**",
-
-  /// COUNTERS ///
-  countSetupFinished:
-    "**<:tickYes:870238031603462154> The setup has finished and will update counters *every 10 minutes*.** \n*Type in* `%prefix%counters create` *to create new counter.*", // %prefix% for prefix
-  countCategoryName: "📈 Server Stats 📊",
-  countAllName: "👥 All members: %count%",
-  countOnlyMembersName: "👤 Members: %count%",
-  countOnlyBotsName: "👮 Bots: %count%",
-  countOnlineMembers: "✅ Online Members: %count%",
-  countOfflineMembers: "✖️ Offline Members: %count%",
-  countIdleMembers: "💤 Idle Members: %count%",
-  countDndMembers: "⛔ DnD Members: %count%",
-  countNotOfflineMembers: "✔️ Not Offline Members: %count%",
-  countRoles: "🎨 Roles: %count%",
-  countChannels: "🏷️ Channels: %count%",
-  countText: "📃 Text channels: %count%",
-  countVoice: "🎤 Voice channels: %count%",
-  countCategories: "🔖 Categories: %count%",
-  countStages: "🎙️ Stages: %count%",
-  countAnnouncement: "📰 Announcement channels: %count%",
-  countEmojis: "🤪 Emojis: %count%",
-  countBoosters: "🚀 Server Boosters: %count%",
-  countTier: "🔮 Server Tier: %count%",
-
-  countSetupAlreadyDone:
-    "**<:tickNo:870239550163779604> The setup is already finished, use** `%prefix%counters reset` **to reset the setup.**",
-  countSetupNotDone:
-    "**<:tickNo:870239550163779604> The setup isn't yet finished, use** `%prefix%counters setup` **to create the setup.**",
-  countCustomize:
-    "**You can freely customize channels and categories, just don't move channels from category, when you delete the category, it will be created agai. When renaming use any number, it will be automatically set to the correct values!**",
-  countChooseTypeOfCounter:
-    "**From following list choose type of the counter and type it in the chat**\n`all`, `members`, `bots`, `online`, `idle`, `dnd`, `roles`, `channels`, `text`, `voice`, `categories`, `announcement`, `stages`, `emojis`, `boosters`, `tier` \n**on** `cancel` **to cancel action.**",
-  countCounterCreated:
-    "**<:tickYes:870238031603462154> Counter has been created.**",
-  countResetSuccesful:
-    "**<:tickYes:870238031603462154> All counters have been removed.**",
-  count: {
-    botHasNoPermission:
-      "**<:tickNo:870239550163779604> I need permission to **`MANAGE_CHANNELS`",
-    noPermission:
-      "**:warning: Counters - I need permissions to **`MANAGE_CHANNELS`**. Without them I cannot edit the statistics.**",
-    invalidType: "**<:tickNo:870239550163779604> This type isn't supported.**",
-  },
-
-  /// REACTION ROLES ///
-  rr: {
-    atLeastOnePair:
-      "**<:tickNo:870239550163779604> You need to specify at least one pair of the role and emoji.**",
-    invalidChannel:
-      "**<:tickNo:870239550163779604> Channel not found, use `#` to mention.**",
-    invalidEmoji:
-      "**<:tickNo:870239550163779604> Use correct unicode emoji, or discord emoji.**",
-    invalidRole:
-      "**<:tickNo:870239550163779604> Role not found, use `@` to mention.**",
-    botCannotAddThisRole:
-      "**<:tickNo:870239550163779604> I cannot use this role, because it is higher then mine.** \n**:thumbsup: Use another one.**",
-    botHasNoPermission:
-      "**<:tickNo:870239550163779604> I don't have permission to **`MANAGE_ROLES`**!**",
-    succesfulCreated:
-      "<:tickYes:870238031603462154> **Reaction role message has been succesfully created. \n** %url%",
-  },
-
-  tc: {
-    channelCreated:
-      "**<:tickYes:870238031603462154> Your channel has been created (you will find it all the way down), invite your friend using: `tc add [@member]`**",
-    voiceName: "🔈 Temp channel for %username%",
-    categoryName: "🗣 Temp channels 👥",
-    noChannelForUser:
-      "**<:tickNo:870239550163779604> You haven't channel yet.**",
-    alreadyCreated:
-      "**<:tickNo:870239550163779604> You have created one yet, you can create just one.**",
-    added:
-      "**<:tickYes:870238031603462154> Your friend or friends have been added.**",
-    removed: "**:wastebasket: Your friend or friends have been removed.**",
-    mentionAtLeastOne:
-      "**<:tickNo:870239550163779604> You need to mention at least ONE member with `@`.**",
-  },
-
   /// CLEAR ///
   clear: {
     wrongNumber:
@@ -959,45 +583,6 @@ module.exports = {
     deleting: ":wastebasket: **Deleting...**",
     oldMessages:
       ":warning: **Some messages cannot be deleted because they are older than 14 days.**",
-  },
-
-  /// ANTISPAM ///
-  antispam: {
-    cmds: {
-      notFoundOrNoMention:
-        "**<:tickNo:870239550163779604> Member not found, use `@` to mention.**",
-      allReset:
-        "<:tickYes:870238031603462154> **Everyone's spam data has been deleted.**",
-      reset:
-        "<:tickYes:870238031603462154> **Spam data has been deleted for %count% members.**",
-      enabled:
-        "<:tickYes:870238031603462154> **Antispam function has been enabled.**\n*I recommend to move %role% high as possible, otherwise it might not work properly.*",
-      disabled: ":warning: **Antispam function has been disabled.**",
-      alreadyEnabled:
-        "<:tickNo:870239550163779604> **Antispam function is already enabled.**",
-      alreadyDisabled:
-        "<:tickNo:870239550163779604> **Antispam function is already disabled.**",
-      resetUse:
-        "<:tickNo:870239550163779604> **Usage: `antispam reset [@member / @everyone]`**",
-      invalidNumber: "**<:tickNo:870239550163779604> Use valid number.**",
-      delaySet:
-        "<:tickYes:870238031603462154> **Delay has been set to `%delay%ms`.**",
-      delay: "<:tickYes:870238031603462154> **Delay is set to `%delay%ms`.**",
-      ignoreAdminsSet:
-        "<:tickYes:870238031603462154> **Admin ignoring has been set to `%boolean%`.**",
-      useBoolean: "<:tickNo:870239550163779604> **Use `false` or `true`.**",
-      ignoreAdmins:
-        "<:tickYes:870238031603462154> **Admn ignoring is set to `%boolean%`.**",
-      antispam: "Antispam",
-      tracking: "`Tracking:`",
-      users: " users",
-      dela: "`Delay:`",
-      ignor: "`Admin ignoring:`",
-      enabledLabel: "`Enabled:`",
-    },
-    util: {
-      stopSpaming: ":warning: **Stop spaming, you might be muted.**",
-    },
   },
 
   /// SETTINGS ///
@@ -1026,10 +611,5 @@ module.exports = {
       mode: "**:gear: Announcement mode is set to `%mode%`**",
       use: "**:warning: Usage: `settings announce on/off/short`**",
     },
-  },
-
-  urban: {
-    enterQuery: ":x: **You need to enter some search query.**",
-    nothingFound: ":mag: **Nothing has been found.**",
   },
 };

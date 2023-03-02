@@ -61,11 +61,7 @@ const play = async (guild, song, errored) => {
       let channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
       if (channel) {
         if (Gres.annouce == 1) {
-          if (
-            guild.members.me.permissions.has(
-              Discord.PermissionFlagsBits.EmbedLinks
-            )
-          ) {
+          if (guild.members.me.permissions.has(Discord.PermissionFlagsBits.EmbedLinks)) {
             const Embed = new Discord.EmbedBuilder()
               .setColor(config.colors.red)
               .setTitle(LMessages.musicNowPlaying)
@@ -87,42 +83,18 @@ const play = async (guild, song, errored) => {
             content = { embeds: [Embed] };
           } else {
             content = {
-              content:
-                "**" +
-                LMessages.musicNowPlaying +
-                "** " +
-                "`" +
-                song.title +
-                "` **`(" +
-                song.duration +
-                ")`**",
+              content: "**" + LMessages.musicNowPlaying + "** " + "`" + song.title + "` **`(" + song.duration + ")`**",
             };
           }
         } else if (Gres.annouce == 3) {
           content = {
-            content:
-              "**" +
-              LMessages.musicNowPlaying +
-              "** " +
-              "`" +
-              song.title +
-              "` **`(" +
-              song.duration +
-              ")`**",
+            content: "**" + LMessages.musicNowPlaying + "** " + "`" + song.title + "` **`(" + song.duration + ")`**",
           };
         }
 
         var controlRow = new Discord.ActionRowBuilder().setComponents([
-          new Discord.ButtonBuilder()
-            .setCustomId("pauseResume")
-            .setLabel("⏯")
-            .setStyle(Discord.ButtonStyle.Danger)
-            .setDisabled(false),
-          new Discord.ButtonBuilder()
-            .setCustomId("skip")
-            .setLabel("⏭")
-            .setStyle(Discord.ButtonStyle.Primary)
-            .setDisabled(false),
+          new Discord.ButtonBuilder().setCustomId("pauseResume").setLabel("⏯").setStyle(Discord.ButtonStyle.Danger).setDisabled(false),
+          new Discord.ButtonBuilder().setCustomId("skip").setLabel("⏭").setStyle(Discord.ButtonStyle.Primary).setDisabled(false),
         ]);
         if (song.sDur != "LIVE!") {
           content.components = [controlRow];
@@ -136,11 +108,7 @@ const play = async (guild, song, errored) => {
               if (!interact.isButton()) return;
               if (!interact.member.voice.channelId) return;
               if (!interact.guild.members.me.voice.channelId) return;
-              if (
-                interact.member.voice.channelId !=
-                interact.guild.members.me.voice.channelId
-              )
-                return;
+              if (interact.member.voice.channelId != interact.guild.members.me.voice.channelId) return;
               let id = interact.component.customId;
 
               Gres = await Guild.findOne({
@@ -151,11 +119,7 @@ const play = async (guild, song, errored) => {
                 if (serverQueue.songs[0]?.uuid != songUUID) {
                   collector.stop();
 
-                  if (
-                    interact.channel
-                      .permissionsFor(interact.guild.members.me)
-                      .has(Discord.PermissionFlagsBits.SendMessages)
-                  ) {
+                  if (interact.channel.permissionsFor(interact.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
                     followReply(interact, {
                       content: LMessages.music.skip.differentUUID,
                     });
@@ -173,9 +137,7 @@ const play = async (guild, song, errored) => {
                       musicBotPaused: false,
                       musicBotPlaying: true,
                       musicBotPauseElapsed: 0,
-                      musicBotPlayTime: new Date(
-                        Date.now() - Gres.musicBotPauseElapsed
-                      ),
+                      musicBotPlayTime: new Date(Date.now() - Gres.musicBotPauseElapsed),
                     }
                   );
                   if (serverQueue) {
@@ -183,18 +145,12 @@ const play = async (guild, song, errored) => {
                       serverQueue.audioPlayer.unpause();
                     }
                   }
-                  let timerMS =
-                    serverQueue.songs[0].sDur * 1000 -
-                    (Date.now() - Gres.musicBotPlayTime.getTime());
+                  let timerMS = serverQueue.songs[0].sDur * 1000 - (Date.now() - Gres.musicBotPlayTime.getTime());
                   collector.resetTimer({
                     time: timerMS,
                   });
 
-                  if (
-                    interact.channel
-                      .permissionsFor(interact.guild.members.me)
-                      .has(Discord.PermissionFlagsBits.SendMessages)
-                  ) {
+                  if (interact.channel.permissionsFor(interact.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
                     followReply(interact, {
                       content: LMessages.music.otherCmds.resume,
                     });
@@ -222,11 +178,7 @@ const play = async (guild, song, errored) => {
                     }
                   }
 
-                  if (
-                    interact.channel
-                      .permissionsFor(interact.guild.members.me)
-                      .has(Discord.PermissionFlagsBits.SendMessages)
-                  ) {
+                  if (interact.channel.permissionsFor(interact.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
                     followReply(interact, {
                       content: LMessages.music.otherCmds.pause,
                     });
@@ -236,11 +188,7 @@ const play = async (guild, song, errored) => {
                 if (serverQueue.songs[0]?.uuid != songUUID) {
                   collector.stop();
 
-                  if (
-                    interact.channel
-                      .permissionsFor(interact.guild.members.me)
-                      .has(Discord.PermissionFlagsBits.SendMessages)
-                  ) {
+                  if (interact.channel.permissionsFor(interact.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
                     followReply(interact, {
                       content: LMessages.music.skip.differentUUID,
                     });
@@ -254,11 +202,7 @@ const play = async (guild, song, errored) => {
                   }
                 }
 
-                if (
-                  interact.channel
-                    .permissionsFor(interact.guild.members.me)
-                    .has(Discord.PermissionFlagsBits.SendMessages)
-                ) {
+                if (interact.channel.permissionsFor(interact.guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
                   followReply(interact, {
                     content: LMessages.music.skip.FSkipped,
                   });
@@ -311,10 +255,7 @@ const play = async (guild, song, errored) => {
             const serverQueue = queue.get(guild.id);
             if (serverQueue) {
               if (serverQueue.connection) {
-                if (
-                  serverQueue.connection.state.status !==
-                  voice.VoiceConnectionStatus.Destroyed
-                ) {
+                if (serverQueue.connection.state.status !== voice.VoiceConnectionStatus.Destroyed) {
                   serverQueue.connection.destroy();
                 }
               }
@@ -335,10 +276,7 @@ const play = async (guild, song, errored) => {
             musicBotLastUUID: "nothing",
           }
         );
-      } else if (
-        newState.status === voice.AudioPlayerStatus.Idle &&
-        oldState.status !== voice.AudioPlayerStatus.Idle
-      ) {
+      } else if (newState.status === voice.AudioPlayerStatus.Idle && oldState.status !== voice.AudioPlayerStatus.Idle) {
         //  on finish
         const uid = short.generate();
         await Guild.updateOne(
@@ -358,10 +296,7 @@ const play = async (guild, song, errored) => {
             const serverQueue = queue.get(guild.id);
             if (serverQueue) {
               if (serverQueue.connection) {
-                if (
-                  serverQueue.connection.state.status !==
-                  voice.VoiceConnectionStatus.Destroyed
-                ) {
+                if (serverQueue.connection.state.status !== voice.VoiceConnectionStatus.Destroyed) {
                   serverQueue.connection.destroy();
                 }
               }
@@ -388,14 +323,9 @@ const play = async (guild, song, errored) => {
         let Gres = await Guild.findOne({
           guildID: guild.id,
         });
-        serverQueue.audioPlayer.state?.resource?.volume.setVolume(
-          Number(Gres.musicBotVolume) / 100
-        );
+        serverQueue.audioPlayer.state?.resource?.volume.setVolume(Number(Gres.musicBotVolume) / 100);
 
-        if (
-          guild.members.me.voice.channel?.members.filter((x) => !x.user.bot)
-            .size > 0
-        ) {
+        if (guild.members.me.voice.channel?.members.filter((x) => !x.user.bot).size > 0) {
           const uid = short.generate();
           await Guild.updateOne(
             {
@@ -412,10 +342,7 @@ const play = async (guild, song, errored) => {
           },
           {
             musicBotPlaying: true,
-            musicBotPlayTime:
-              song.seek == null
-                ? new Date()
-                : new Date(Date.now() - song.seek * 1000),
+            musicBotPlayTime: song.seek == null ? new Date() : new Date(Date.now() - song.seek * 1000),
           }
         );
       }
@@ -432,7 +359,14 @@ const play = async (guild, song, errored) => {
   async function createSafeYTDL(url, guild) {
     let stream = null;
     await ytdl
-      .getInfo(url)
+      .getInfo(url, {
+        requestOptions: {
+          headers: {
+            cookie:
+              "YSC=2137NMYnqug; CONSENT=PENDING+024; PREF=tz=Europe.Prague; SOCS=CAISFggDEgk1MTMwODE1NTEaBWVuLUdCIAEaBgiAzv-fBg; VISITOR_INFO1_LIVE=iAAEJxZlnfk; GPS=1; CONSISTENCY=AEhaiyuSWpPpbFnpBD6m_Vvi6y50wnNYmX5vK6ow-PcTJwUr3x6OMGxquX3kHXYKphqLi1rH50TF-GDz_xGzfGVSxnKIbgDMMoO92vXikhFz7EeavbgcVw7mFqTwGb8D7nMw9rptFqOCIm8Ocbg9w3Q",
+          },
+        },
+      })
       .then((info) => {
         if (!info) return;
         stream = ytdl.downloadFromInfo(info, {
@@ -452,11 +386,7 @@ const play = async (guild, song, errored) => {
         let channel = await bot.channels.fetch(Gres.musicBotTxtChannelID);
 
         if (err.statusCode == 410) {
-          if (
-            channel
-              .permissionsFor(guild.members.me)
-              .has(Discord.PermissionFlagsBits.SendMessages)
-          ) {
+          if (channel.permissionsFor(guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
             channel.send(
               template(
                 LMessages.music.error,
@@ -478,11 +408,7 @@ const play = async (guild, song, errored) => {
         } else {
           console.error(err);
           error.sendError(err);
-          if (
-            channel
-              .permissionsFor(guild.members.me)
-              .has(Discord.PermissionFlagsBits.SendMessages)
-          ) {
+          if (channel.permissionsFor(guild.members.me).has(Discord.PermissionFlagsBits.SendMessages)) {
             channel.send(LMessages.musicError);
           }
           return;
@@ -565,10 +491,7 @@ const voiceStateUpdate = async (oldVoice, newVoice) => {
       const serverQueue = queue.get(newVoice.guild.id);
       if (serverQueue) {
         if (serverQueue.connection) {
-          if (
-            serverQueue.connection.state.status !==
-            voice.VoiceConnectionStatus.Destroyed
-          ) {
+          if (serverQueue.connection.state.status !== voice.VoiceConnectionStatus.Destroyed) {
             serverQueue.connection.destroy();
           }
         }
@@ -593,10 +516,7 @@ const voiceStateUpdate = async (oldVoice, newVoice) => {
             const serverQueue = queue.get(newVoice.guild.id);
             if (serverQueue) {
               if (serverQueue.connection) {
-                if (
-                  serverQueue.connection.state.status !==
-                  voice.VoiceConnectionStatus.Destroyed
-                ) {
+                if (serverQueue.connection.state.status !== voice.VoiceConnectionStatus.Destroyed) {
                   serverQueue.connection.destroy();
                 }
               }
@@ -654,22 +574,11 @@ async function stopET(id, serverQueue) {
 function stateChange(serverQueue, guild) {
   serverQueue.connection.on("stateChange", async (_, newState) => {
     if (newState.status == voice.VoiceConnectionStatus.Disconnected) {
-      if (
-        newState.reason ==
-          voice.VoiceConnectionDisconnectReason.WebSocketClose &&
-        newState.closeCode == 4014
-      ) {
+      if (newState.reason == voice.VoiceConnectionDisconnectReason.WebSocketClose && newState.closeCode == 4014) {
         try {
-          await voice.entersState(
-            serverQueue.connection,
-            voice.VoiceConnectionStatus.Connecting,
-            5000
-          );
+          await voice.entersState(serverQueue.connection, voice.VoiceConnectionStatus.Connecting, 5000);
         } catch {
-          if (
-            serverQueue.connection.state.status !==
-            voice.VoiceConnectionStatus.Destroyed
-          ) {
+          if (serverQueue.connection.state.status !== voice.VoiceConnectionStatus.Destroyed) {
             serverQueue.connection.destroy();
           }
         }
@@ -677,10 +586,7 @@ function stateChange(serverQueue, guild) {
         await wait((serverQueue.connection.rejoinAttempts + 1) * 5000);
         serverQueue.connection.rejoin();
       } else {
-        if (
-          serverQueue.connection.state.status !==
-          voice.VoiceConnectionStatus.Destroyed
-        ) {
+        if (serverQueue.connection.state.status !== voice.VoiceConnectionStatus.Destroyed) {
           serverQueue.connection.destroy();
         }
       }
@@ -689,21 +595,11 @@ function stateChange(serverQueue, guild) {
       stopET(guild.id, serverQueue);
 
       // connecting & signalling //
-    } else if (
-      newState.status == voice.VoiceConnectionStatus.Connecting ||
-      newState.status == voice.VoiceConnectionStatus.Signalling
-    ) {
+    } else if (newState.status == voice.VoiceConnectionStatus.Connecting || newState.status == voice.VoiceConnectionStatus.Signalling) {
       try {
-        await voice.entersState(
-          serverQueue.connection,
-          voice.VoiceConnectionStatus.Ready,
-          10000
-        );
+        await voice.entersState(serverQueue.connection, voice.VoiceConnectionStatus.Ready, 10000);
       } catch {
-        if (
-          serverQueue.connection.state.status !==
-          voice.VoiceConnectionStatus.Destroyed
-        ) {
+        if (serverQueue.connection.state.status !== voice.VoiceConnectionStatus.Destroyed) {
           serverQueue.connection.destroy();
         }
       }
